@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+<body>
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">RIA 统一开发平台</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- static server config -->
+    <div class="container">
+      	<div class="jumbotron">
+	      	<div>
+		      	<h3>静态服务器配置</h3>
+		      	<div class="server_cw">
+					<p>默认开启：127.0.0.1 端口：80</p>    
+				</div>
+		      	<button type="button" class="btn btn-sm btn-info" id="setRuleGroup">创建规则组</button>
+	      	</div>
+	      	<!-- 已经创建的规则组 -->
+	      	<div class="panel panel-success">
+            	<div class="panel-heading">
+              		<h3 class="panel-title">已创建的规则组</h3>
+           		</div>
+	            <div class="panel-body" id="groupBtnWrap">
+	              	
+	            </div>
+          	</div>
+          	<!-- 每个规则组面板集合-->
+          	<div id="allGroupPanel">
+	          	
+	        </div>
+     	</div>
+    </div>
+
+    <!-- dymatic server config -->
+    <div class="container">
+      	<div class="jumbotron">
+	      	<div>
+		      	<h3>动态服务器配置</h3>
+		      	<div class="server_cw">
+					<p>默认开启：127.0.0.1 端口：8080</p>    
+				</div>
+				<table class="table table-condensed" id="serverWrap">
+				</table>
+	      		<button type="button" class="btn btn-info" id="staticServer">添加</button>	
+	      	</div>
+
+	      	<div></div>
+     	</div>
+    </div>
+
+    <!-- mask -->
+    <div id="mask" class="black_overlay" style="display:none;">
+	</div>
+	<!-- dialogue -->
+	<div class="dialogOuter" id="dialogWrap" style="display:none;">
+		<span class="dialogClose" id="closeDialog">关闭</span>
+		<div class="dialogBox">
+			<div class="dialogTitle">添加配置规则</div>
+			<div class="dialogInner">
+				<div class="dialogC">
+					<div class="dialogU">
+						<label class="dialogT" for="srcUrl" style="display:none;" >原url:</label>
+						<label class="dialogT" for="srcUrl" style="display:none;">域名</label>
+						<div class="dialogB"><textarea id="srcUrl" class="form-control" rows="3"></textarea></div>
+					</div>
+					<div class="dialogU">
+						<label class="dialogT" for="urlTo" style="display:none;">转向到: </label>
+						<label class="dialogT" for="urlTo" style="display:none;">本地路径</label>
+						<div class="dialogB"><textarea id="urlTo" class="form-control" rows="3"></textarea></div>
+					</div>
+				</div>
+				<div class="dialogF">
+					<button type="button" class="btn btn-xs btn-info" id="saveRule">保存</button> &nbsp; &nbsp; &nbsp;
+					<button type="button" class="btn btn-xs btn-info" id="cancelRule">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="/javascripts/lithe.js"
+		data-config="/config.js"
+		data-main="conf/main.js"
+		data-timestamp="1">
+	</script>
+  </body>
+</html>
