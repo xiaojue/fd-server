@@ -13,6 +13,7 @@ var routes = require('./routes');
 var saveHosts = require('./routes/saveHosts');
 var http = require('http');
 var path = require('path');
+var flash = require('connect-flash');
 
 //数据库设置
 var MongoStore = require('connect-mongo')(express);
@@ -34,6 +35,8 @@ app.configure(function(){
 	app.use(express.bodyParser());
 	//用于支持定制的http方法
 	app.use(express.methodOverride());
+	//支持flash
+	app.use(flash());
 	//用于cookie解析的中间键
 	app.use(express.cookieParser());
 	//提供会话支持，设置它的 store 参数为 MongoStore 实例，把会话信息存储到数据库中，

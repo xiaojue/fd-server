@@ -48,7 +48,7 @@ User.get = function get(username, callback){
 				return callback(err);
 			}
 			//查找name属性为username的文档
-			collection.findone({srcUrl:username}, function(err, doc){
+			collection.findOne({srcUrl:username}, function(err, doc){
 				mongodb.close();
 				if(doc){
 					//封装文档为user对象
