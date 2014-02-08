@@ -209,6 +209,7 @@ define('conf/main',function(require,exports,module){
                     url: 'http://localhost:3000/saveHosts',
                     data: exports.data,
                     success:function(){
+                        alert('11');
                     }
                 });
 

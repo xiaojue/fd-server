@@ -44,7 +44,6 @@ app.configure(function(){
 			db: settings.db
 		})
 	}));
-
 	//提供路由支持
 	app.use(app.router);
 	// app.use(express.router(routes));
@@ -64,8 +63,6 @@ app.configure('production', function(){
 		next();
 	});
 })
-
-
 
 // development only
 if ('development' == app.get('env')) {

@@ -1,7 +1,8 @@
-var mongodb = require('./db');
 
+var mongodb = require('./db');
 function User(user){
-	this.name = user.name;
+	this.srcUrl = user.srcUrl;
+	this.urlTo = user.urlTo;
 }
 
 module.exports = User;
@@ -9,7 +10,8 @@ module.exports = User;
 User.prototype.save = function save(callback){
 	//存入mongodb的文档
 	var user = {
-		name : this.name
+		srcUrl : this.srcUrl,
+		urlTo : this.urlTo
 	}
 	mongodb.open(function(err, db){
 		if(err){
@@ -22,7 +24,9 @@ User.prototype.save = function save(callback){
 				return callback(err);
 			};
 			//为name属性添加索引
-			collection.ensureIndex('name', {unique : true});
+			collection.ensureIndex('srcUrl', {unique : true});
+			collection.ensureIndex('urlTo', {unique : true});
+
 			//写入user文档
 			collection.insert(user, {safe:true}, function(err, user){
 				mongodb.close();
@@ -44,7 +48,7 @@ User.get = function get(username, callback){
 				return callback(err);
 			}
 			//查找name属性为username的文档
-			collection.findone({name:username}, function(err, doc){
+			collection.findone({srcUrl:username}, function(err, doc){
 				mongodb.close();
 				if(doc){
 					//封装文档为user对象
