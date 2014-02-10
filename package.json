@@ -9,9 +9,9 @@
       "express": "3.4.8",
       "ejs": "*",
       "connect-flash":">= 0.1.1",
-      "hostile":">= 0.2.0"
-      // "connect-mongo": ">= 0.1.7",
-      // "mongodb": ">= 0.9.9",
-      // "sqlite3": ">= 2.2.0"
+      "hostile":">= 0.2.0",
+      "bouncy": ">= 3.2.1",
+      "node-static": ">= 0.7.3",
+      "nproxy":">= 1.4.3" 
     }
 }
