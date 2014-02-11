@@ -19,18 +19,14 @@ define('conf/main',function(require,exports,module){
     //此值在做模板更新的时候 编辑删除按钮所在组和第几条规则
     //判断是否刷新页面 本地存储数据是否在刷新页面的时候变更 flag=1;
     var z = 0;
-    var type, gN, localData, nameLocal, serverLocal, json = {}, flag = 1, serverJson = {}, s=0;
+    var type, gN, localData, nameLocal, serverLocal, json = {}, flag = 1, serverJson = {}, proxyConfig = {}, s=0, y = 0;
     var gtpl = '', rtpl = '', stpl = '';
     var allnamelist = [];
 
-    var requestChannel = {
-        'saveRule':'',
-        'openRule':'',
-        'cancelRule':''
-    }
-    
+    var url = "http://localhost:3000/saveHosts";
     var exports = {
         data :{},
+        send :{},
         init : function(){
             // localStorage.removeItem("proxyRule");
             // localStorage.removeItem("serverRule");
@@ -138,30 +134,38 @@ define('conf/main',function(require,exports,module){
             }
             //启用代理规则
             if(target.nodeName.toLowerCase() === 'input' && target.checked){
+                var proxyNum = target.value.split('_');
+                proxyConfig[target.value] = json["group" + proxyNum[0]]["rule" + proxyNum[1]];
                 $.ajax({
-                    type: "GET",
-                    url: requestChannel.openRule,
-                    data: '',
-                    success:function(){
-                        
-                    }
+                    type: "POST",
+                    url: url,
+                    data: {
+                        type : "openProxy",
+                        rule :  JSON.stringify(proxyConfig)
+                    },
+                    success:function(){}
                 })
             }
             //取消代理规则
             if(target.nodeName.toLowerCase() === 'input' && !target.checked){
+                var cancelNum = target.value.split('_');
+                delete proxyConfig[target.value];
+                console.log(proxyConfig);
                 $.ajax({
-                    type: "GET",
-                    url: requestChannel.cancelRule,
-                    data: '',
-                    success:function(){
-                        
-                    }
+                    type: "POST",
+                    url: url,
+                    data: {
+                        type : "cancelProxy",
+                        rule :  JSON.stringify(proxyConfig)
+                    },
+                    success:function(){}
                 })
             }
         },
         deleteServer : function(event){
             var target = event.target;
             var serverNum = parseInt(target.getAttribute('severrule')); 
+            exports.send = {};
             if(serverNum){
                 serverNum = serverNum -1;
                 var total = $('#serverWrap').find('button').length;
@@ -175,6 +179,16 @@ define('conf/main',function(require,exports,module){
                 if(serverNum < total-1){
                     delete serverJson['vhost' + (total-1)];
                 }
+                exports.send.type = "dh";
+                exports.send.dh = JSON.stringify(serverJson);
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: exports.send,
+                    success:function(){
+                        console.log('1111');
+                    }
+                });
                 localStorage.setItem('serverRule', JSON.stringify(serverJson));
                 exports.updateServerListFunc(serverJson);
             }
@@ -189,10 +203,24 @@ define('conf/main',function(require,exports,module){
                 localStorage.setItem('proxyRuleName', allnamelist);
             }
         },
+        verifyRule : function(){
+            var reg1 =  /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+.?/g;
+            var pattern =/[A-Za-z]:\/(?\/)?/g;
+
+            if($('#srcUrl').val().test(reg1) && $('#urlTo').val().test(pattern)){
+                return true;
+            }
+            return false;    
+        },
         /*对话框保存规则事件*/
         saveRuleFunc : function(from,to){
+            // if(!exports.verifyRule()){
+            //     return;
+            // }
+            exports.send = {};
             exports.data.srcUrl = $('#srcUrl').val();
             exports.data.urlTo  = $('#urlTo').val();
+            exports.send.type = "sh";
             if($('#srcUrl').parent().prev().css('display') != 'none'){
                 serverJson['vhost' + (s++)] = [exports.data.srcUrl,exports.data.urlTo];
                 var severTpl = ['<tr>'+
@@ -200,61 +228,55 @@ define('conf/main',function(require,exports,module){
                                     '<td>'+ exports.data.urlTo +'</td>'+
                                     '<td><button type="button" class="btn btn-xs btn-info" severRule = "'+ s +'">delete</button></td>'+
                                 '</tr>'].join('');
-                                
+                // exports.data.num = s.toString();               
                 $('#serverWrap').append(severTpl);
                 exports.hideDialog();
                 localStorage.setItem('serverRule', JSON.stringify(serverJson));
+                exports.send.sh = JSON.stringify(serverJson);
                 $.ajax({
-                    type: "GET",
-                    url: 'http://localhost:3000/saveHosts',
-                    data: exports.data,
+                    type: "POST",
+                    url: url,
+                    data: exports.send,
                     success:function(){
                         console.log('1111');
                     }
                 });
 
             }else{
-                $.ajax({
-                    type: "GET",
-                    url: requestChannel.saveRule,
-                    data: exports.data,
-                    success:function(){
-                        exports.hideDialog();
-                        var item = $('#saveRule').attr("srcEdit");
-                        if(parseInt(item)){
-                            item = item.split('_');
-                            //编辑规则的时候，更新json数据
-                            json['group' + item[0]]['rule' + item[1]] =[exports.data.srcUrl,exports.data.urlTo];
-                            exports.updateGroupListFunc(json);
-                        }else{
-                            if(m != 0){
-                                //对已经存在的组添加规则
-                                json['group' + type]['rule' + m] =[exports.data.srcUrl,exports.data.urlTo];
-                            }else{
-                                //此处禁止连续添加新组 而不添加规则
-                                //添加新组，添加新的规则 
-                                //此处有个bug 删除了一个规则组的所有规则之后，在新添加规则有bug
-                                gN = type ? type : i;
-                                json['group' + gN]['rule' + m] =[exports.data.srcUrl,exports.data.urlTo];
-                            }
-                            var ruleTpl = [
-                                '<tr>',
-                                    '<td class="ipt_pl"><input type="checkbox" value="'+ gN + '_' + m +'"></td>',
-                                    '<td>' + exports.data.srcUrl + '</td>',
-                                    '<td>' + exports.data.urlTo + '</td>',
-                                    '<td>',
-                                        '<button type="button" class="btn btn-xs btn-info Wpr" editRule='+ gN + '_' + m +'>edit</button>',
-                                        '<button type="button" class="btn btn-xs btn-info" deleteRule='+ gN + '_' + m +'>delete</button>',
-                                    '</td>',
-                                '</tr>'
-                            ].join('');
-                            //每次修改一个组对其新增规则的时候，在其对应组下添加规则
-                            $('#allGroupPanel table').eq(type - 1).append(ruleTpl);
-                            $("#saveRule").attr("srcEdit",0);
-                        }
-                        localStorage.setItem('proxyRule', JSON.stringify(json));
+                exports.hideDialog();
+                var item = $('#saveRule').attr("srcEdit");
+                if(parseInt(item)){
+                    item = item.split('_');
+                    //编辑规则的时候，更新json数据
+                    json['group' + item[0]]['rule' + item[1]] =[exports.data.srcUrl,exports.data.urlTo];
+                    exports.updateGroupListFunc(json, allnamelist);
+                }else{
+                    if(m != 0){
+                        //对已经存在的组添加规则
+                        json['group' + type]['rule' + m] =[exports.data.srcUrl,exports.data.urlTo];
+                    }else{
+                        //此处禁止连续添加新组 而不添加规则
+                        //添加新组，添加新的规则 
+                        //此处有个bug 删除了一个规则组的所有规则之后，在新添加规则有bug
+                        gN = type ? type : i;
+                        json['group' + gN]['rule' + m] =[exports.data.srcUrl,exports.data.urlTo];
                     }
-                })
+                    var ruleTpl = [
+                        '<tr>',
+                            '<td class="ipt_pl"><input type="checkbox" value="'+ gN + '_' + m +'"></td>',
+                            '<td>' + exports.data.srcUrl + '</td>',
+                            '<td>' + exports.data.urlTo + '</td>',
+                            '<td>',
+                                '<button type="button" class="btn btn-xs btn-info Wpr" editRule='+ gN + '_' + m +'>edit</button>',
+                                '<button type="button" class="btn btn-xs btn-info" deleteRule='+ gN + '_' + m +'>delete</button>',
+                            '</td>',
+                        '</tr>'
+                    ].join('');
+                    //每次修改一个组对其新增规则的时候，在其对应组下添加规则
+                    $('#allGroupPanel table').eq(type - 1).append(ruleTpl);
+                    $("#saveRule").attr("srcEdit",0);
+                }
+                localStorage.setItem('proxyRule', JSON.stringify(json));
             }
            
            
