@@ -58,9 +58,11 @@ app.configure('production', function(){
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-
 app.get('/index', routes.index);
 app.all('/saveHosts', saveHosts.list);
+
+//供外部调用打开端口
+module.exports = app;
 
 if(!module.parent){
 	http.createServer(app).listen(app.get('port'), function(){

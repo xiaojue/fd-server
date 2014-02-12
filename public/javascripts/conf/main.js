@@ -204,19 +204,43 @@ define('conf/main',function(require,exports,module){
             }
         },
         verifyRule : function(){
+            //域名匹配
             var reg1 =  /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+.?/g;
-            var pattern =/[A-Za-z]:\/(?\/)?/g;
+            //url匹配
+            var reg2 = /^([a-zA-Z]\:)\w/g;
+            var reg3 = /^(http|https|ftp)\:/g;
 
-            if($('#srcUrl').val().test(reg1) && $('#urlTo').val().test(pattern)){
-                return true;
+            var text1 = $('#srcUrl').val();
+            var text2 = $('#urlTo').val();
+
+            if($('#srcUrl').parent().prev().css('display') != 'none'){
+                //服务器配置
+                if(reg1.test(text1) && reg2.test(text2)){
+                    return true;
+                }
+                return false;  
+            }else{
+                //代理配置(全部匹配http的时候有问题)
+                if(reg3.test(text1) && (reg2.test(text2)||reg3.test(text2))){
+                    return true;
+                }
+                return false;  
             }
-            return false;    
+              
         },
         /*对话框保存规则事件*/
         saveRuleFunc : function(from,to){
-            // if(!exports.verifyRule()){
-            //     return;
-            // }
+            var errSrc = $("#errorTip");
+            if($('#srcUrl').val() === '' || $('#urlTo').val() === ''){
+                errSrc.show();
+                errSrc.text("规则不能为空");
+                return;
+            }
+            if(!exports.verifyRule()){
+                errSrc.show();
+                errSrc.text("输入规则不正确");
+                return;
+            }
             exports.send = {};
             exports.data.srcUrl = $('#srcUrl').val();
             exports.data.urlTo  = $('#urlTo').val();
