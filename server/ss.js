@@ -10,6 +10,15 @@ function getPort(){
     return parseInt(Math.random()*1000+8000);
 }
 
+function ss(type, options){
+    var fn = {
+        "start": startServer,
+        "close": closeServer,
+        "restart": startServer
+    };
+    
+    fn[type] && fn[type](options);
+}
 //开启一个server
 function startServer(options){
     var port = options.port;//端口
@@ -22,7 +31,7 @@ function startServer(options){
            return obj.port;
         }
         
-        closeServer(obj["server"]);
+        closeServer(obj);
     }
     port = port || getPort();
     obj = {};
@@ -50,10 +59,14 @@ function startServer(options){
 }
 
 //关闭server
-function closeServer(server){
-    server.close();
+function closeServer(options){
+    var server = options["server"] || serverMap[options["path"]];
+    
+    server && server.close();
 }
 
+process.on("message", function (m){
+    ss(m.type, m.options);
+});
 
-exports.start = startServer;
-exports.close = closeServer;
+exports.ss = ss;

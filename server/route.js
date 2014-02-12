@@ -1,15 +1,37 @@
 var bouncy = require('bouncy');
 var fs = require("fs");
 
+function route(type, options){
+    var fn = {
+        "start": start,
+        "close": close,
+        "add": add,
+        "remove": remove
+    };
+    
+    fn[type] && fn[type](options);
+
+    /* if(type === "start"){
+        options && options["routes"] && start(options["routes"]);
+    }
+    
+    if(type === "close"){
+        close();
+    } */
+}
+
 var server = null;
-function route(data){
+var routeList = {};
+
+function start(options){
+    routeList = options["list"];
     if(server){
         server.close(function (){
-            console.log("close route: " + arguments);
+            console.log("close route (restart): " + arguments);
         });
     }
     server = bouncy(function (req, res, bounce){
-        var port = data[req.headers.host];
+        var port = routeList[req.headers.host];
         console.log("route: "+req.headers.host);
         if(port){
             console.log("route: "+port);
@@ -22,7 +44,36 @@ function route(data){
     server.listen(80);
 }
 
-function start(routes){
+//添加指定的domain指向
+function add(options){
+    var port = options.port;
+    var domain = options.domain;
+    var _port = routeList[domain];
+    if(_port && _port == port){
+        return;
+    }
+    routeList[domain] = port;
+    start(routeList);
+}
+
+//移除指定的domain指向
+function remove(options){
+    var domain = options.domain;
+    if(routeList[domain]){
+        delete routeList[domain];
+        start(routeList);
+    }
+}
+
+function close(){
+    server && server.close(function (){
+        console.log("close route: " + arguments);
+        routeList = {};
+    });
+    routeList = {};
+}
+
+/* function start(routes){
     if(routes){
         route(routes);
     }else{
@@ -41,6 +92,10 @@ function start(routes){
             }
         });
     }
-}
+} */
 
-exports.start = start;
+process.on("message", function (m){
+    route(m.type, m.options);
+});
+
+exports.route = route;

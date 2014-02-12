@@ -1,17 +1,1 @@
-{
-    server: [
-        {
-            domain: "www.test-m1.com",
-            path: "E:/workspace/UnifiedWebDevEnv/staticServer/public"
-        },{
-            domain: "www.test-m2.com",
-            path: "E:/workspace/UnifiedWebDevEnv/staticServer/public2"
-        },{
-            domain: "www.test-m3.com",
-            path: "E:/workspace/UnifiedWebDevEnv/staticServer/public"
-        },{
-            domain: "www.test-m4.com",
-            path: "E:/workspace/UnifiedWebDevEnv/staticServer/public2"
-        }
-    ]
-}
+{"server":[{"domain":"www.test-m1.com"}],"vhost":{"vhost0":["oijoij","iuiu"],"vhost1":["sfdsf","E:\\workspace\\express_fdserver"],"vhost2":["jtdtr","E:\\sina\\统一前端开发环境"],"vhost3":["fdgdfg","dfgfdgfdgfdg"],"vhost4":["rtrt","trytrytry"],"vhost5":["gfdsg","fdsgfdgf"]},"proxy":{"1_0":["gftfdsgfd","fdgdgdfgf"]}}
