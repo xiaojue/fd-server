@@ -34,3 +34,4 @@ function start(){
 }
 
 start();
+console.log("process: " + process.pid);

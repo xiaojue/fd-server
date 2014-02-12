@@ -1,1 +1,17 @@
-{"vhost0":["afdsf","sdfasdfasdfsf"],"vhost1":["sdfasdf","asdfsdf"]}
+{
+    server: [
+        {
+            domain: "www.test-m1.com",
+            path: "E:/workspace/UnifiedWebDevEnv/staticServer/public"
+        },{
+            domain: "www.test-m2.com",
+            path: "E:/workspace/UnifiedWebDevEnv/staticServer/public2"
+        },{
+            domain: "www.test-m3.com",
+            path: "E:/workspace/UnifiedWebDevEnv/staticServer/public"
+        },{
+            domain: "www.test-m4.com",
+            path: "E:/workspace/UnifiedWebDevEnv/staticServer/public2"
+        }
+    ]
+}
