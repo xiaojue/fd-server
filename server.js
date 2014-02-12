@@ -16,7 +16,7 @@ function deal(data){
 }
 
 function start(){
-    var path = "./config.json";
+    var path = "./test-config.json";
     fs.exists(path, function (t){
         if(t){
             fs.readFile(path, function (err, data){
@@ -34,3 +34,4 @@ function start(){
 }
 
 start();
+console.log("process: " + process.pid);
