@@ -15,13 +15,6 @@ var http = require('http');
 var path = require('path');
 var flash = require('connect-flash');
 
-//数据库设置
-// var sqlite3 = require('sqlite3').verbose();
-// var db = new sqlite3.Database('fdserver_data');
-
-// var MongoStore = require('connect-mongo')(express);
-// var settings = require('./setting');
-
 var app = express();
 
 // all environments
@@ -42,14 +35,6 @@ app.configure(function(){
 	app.use(flash());
 	//用于cookie解析的中间键
 	app.use(express.cookieParser());
-	//提供会话支持，设置它的 store 参数为 MongoStore 实例，把会话信息存储到数据库中，
-	//以避免丢失。
-	// app.use(express.session({
-	// 	secret: settings.cookieSecret,
-	// 	store: new MongoStore({
-	// 		db: settings.db
-	// 	})
-	// }));
 	//提供路由支持
 	app.use(app.router);
 	// app.use(express.router(routes));
@@ -60,8 +45,6 @@ app.configure(function(){
 app.configure('development', function(){
 	
 })
-
-
 //生产环境
 app.configure('production', function(){
 	app.error(function(err, req, res, next){
@@ -77,7 +60,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/saveHosts', saveHosts.list);
+app.all('/saveHosts', saveHosts.list);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
