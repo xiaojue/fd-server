@@ -23,7 +23,7 @@ define('conf/main',function(require,exports,module){
     var gtpl = '', rtpl = '', stpl = '';
     var allnamelist = [];
 
-    var url = "http://localhost:3000/saveHosts";
+    var url = "/saveHosts";
     var exports = {
         data :{},
         send :{},
