@@ -1,0 +1,1 @@
+require("./server/server.js").start("test-config.json");

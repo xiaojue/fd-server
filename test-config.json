@@ -1,5 +1,5 @@
 {
-    server: [
+    vhosts: [
         {
             domain: "www.test-m1.com",
             path: "E:/workspace/UnifiedWebDevEnv/staticServer/public"
