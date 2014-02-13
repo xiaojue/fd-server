@@ -26,14 +26,13 @@ define('conf/main',function(require,exports,module){
     var url = "/saveHosts";
     var exports = {
         data :{},
-        send :{},
         init : function(){
-            // localStorage.removeItem("proxyRule");
-            // localStorage.removeItem("serverRule");
             localData = JSON.parse(localStorage.getItem("proxyRule"));
             nameLocal = localStorage.getItem("proxyRuleName");
-            if(nameLocal){
+            if(!exports.isEmptyObject(localData) && nameLocal){
                 nameLocal = nameLocal.split(',');
+            }else{
+                localStorage.removeItem("proxyRuleName");
             }
             serverLocal = JSON.parse(localStorage.getItem("serverRule"));
             if(window.localStorage && localData && nameLocal){
@@ -87,7 +86,7 @@ define('conf/main',function(require,exports,module){
                 m = $('#group' + type).find("tr").length;
             }
             //编辑每条规则按钮
-            if(target.getAttribute('editRule')){
+            if(target.getAttribute('editRule') && $(target).hasClass("btn-info")){
                 exports.showDialog();
                 $('#srcUrl').val($(target).parent().prev().prev().text());
                 $('#urlTo').val($(target).parent().prev().text());
@@ -118,7 +117,7 @@ define('conf/main',function(require,exports,module){
                 exports.updateGroupListFunc(json,allnamelist,'d');
             }
             //删除每条规则按钮
-            if(target.getAttribute('deleteRule')){
+            if(target.getAttribute('deleteRule') && $(target).hasClass("btn-info")){
                 var arr = target.getAttribute('deleteRule').split('_');
                 delete json['group' + arr[0]]['rule' + arr[1]];
                 var rNum = $('#group' + arr[0]).find('tr').length;
@@ -132,65 +131,44 @@ define('conf/main',function(require,exports,module){
                 localStorage.setItem('proxyRule', JSON.stringify(json));
                 exports.updateGroupListFunc(json, allnamelist);
             }
-
-
             //启用代理规则
             if(target.nodeName.toLowerCase() === 'input' && target.checked){
                 var proxyNum = target.value.split('_');
-                proxyConfig[target.value] = json["group" + proxyNum[0]]["rule" + proxyNum[1]];
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: {
-                        type : "openProxy",
-                        rule :  JSON.stringify(proxyConfig)
-                    },
-                    success:function(){}
-                })
+                var openRule = json["group" + proxyNum[0]]["rule" + proxyNum[1]];
+                proxyConfig[openRule[0]] = openRule[1]; 
+                exports.requestAjax({
+                    type : "openProxy",
+                    rule :  JSON.stringify(proxyConfig)
+                });
+                var lastchild =  $(target).parent().parent().children().last()[0];
+                $(lastchild.children[0]).removeClass('btn-info');
+                $(lastchild.children[1]).removeClass('btn-info');
+                // $("#group" + proxyNum[0]).prev().children().last().removeClass("btn-info");
             }
             //取消代理规则
             if(target.nodeName.toLowerCase() === 'input' && !target.checked){
                 var cancelNum = target.value.split('_');
-                delete proxyConfig[target.value];
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: {
-                        type : "cancelProxy",
-                        rule :  JSON.stringify(proxyConfig)
-                    },
-                    success:function(){}
-                })
+                var cancelRule = json["group" + cancelNum[0]]["rule" + cancelNum[1]];
+                delete proxyConfig[cancelRule[0]];
+                exports.requestAjax({
+                    type : "cancelProxy",
+                    rule :  JSON.stringify(proxyConfig)
+                });
+                var lastchild =  $(target).parent().parent().children().last()[0];
+                $(lastchild.children[0]).addClass('btn-info');
+                $(lastchild.children[1]).addClass('btn-info');
+                // $("#group" + cancelNum[0]).prev().children().last().addClass("btn-info");
             }
 
         },
         deleteServer : function(event){
             var target = event.target;
-            var serverNum = parseInt(target.getAttribute('severrule')); 
-            
+            var serverNum = target.getAttribute('severrule'); 
             if(serverNum){
-                exports.send = {};
-                serverNum = serverNum -1;
-                var total = $('#serverWrap').find('button').length;
-                delete serverJson['vhost' + serverNum];
-                for(var item in serverJson){
-                    var grN = parseInt(item.replace(/vhost/g,''));
-                    if( grN > serverNum){
-                        serverJson['vhost' + (grN-1)] = serverJson['vhost' + grN];
-                    }
-                }
-                if(serverNum < total-1){
-                    delete serverJson['vhost' + (total-1)];
-                }
-                exports.send.type = "dh";
-                exports.send.dh = JSON.stringify(serverJson);
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: exports.send,
-                    success:function(){
-                        console.log('1111');
-                    }
+                delete serverJson[serverNum];
+                exports.requestAjax({
+                    type : 'dh',
+                    dh : JSON.stringify(serverJson)
                 });
                 localStorage.setItem('serverRule', JSON.stringify(serverJson));
                 exports.updateServerListFunc(serverJson);
@@ -198,14 +176,20 @@ define('conf/main',function(require,exports,module){
             //禁用某条规则
             if(target.getAttribute('disablerule')){
                 var el = $(target);
-                var itm = parseInt(el.attr("disablerule"));
+                var itm = el.attr("disablerule");
                 if(el.hasClass('btn-info')){
                     el.removeClass('btn-info');
+                    exports.requestAjax({
+                        type : "disable",
+                        disrule :  itm
+                    });
                 }else{
+                    exports.requestAjax({
+                        type : "sh",
+                        sh :  JSON.stringify(serverJson)
+                    });
                     el.addClass('btn-info');
-                    serverJson['vhost' + (itm-1)].push(1);
                 }
-                localStorage.setItem('serverRule', JSON.stringify(serverJson));
             }
         },
         saveGroupName : function(event){
@@ -262,39 +246,31 @@ define('conf/main',function(require,exports,module){
             //唯一性验证
             exports.data.srcUrl = $('#srcUrl').val();
             exports.data.urlTo  = $('#urlTo').val();
-            exports.send = {};
-            exports.send.type = "sh";
             if($('#srcUrl').parent().prev().css('display') != 'none'){
+                //稍后要做修改 由于本地存储数据的变更
                 for(var i in serverJson){
-                    if(serverJson[i][0] === exports.data.srcUrl){
+                    if(i === exports.data.srcUrl){
                         errSrc.show();
                         errSrc.text("域名重复");
                         return;
                     }
                 }
-                serverJson['vhost' + (s++)] = [exports.data.srcUrl,exports.data.urlTo];
+                serverJson[exports.data.srcUrl] = exports.data.urlTo;
                 var severTpl = ['<tr>'+
                                     '<td>'+ exports.data.srcUrl +'</td>'+
                                     '<td>'+ exports.data.urlTo +'</td>'+
                                     '<td>'+
-                                        '<button type="button" class="btn btn-xs btn-info Wpr" severRule = "'+ s +'">delete</button>'+
-                                        '<button type="button" class="btn" disableRule = "'+ s +'">disabled</button>'+
+                                        '<button type="button" class="btn btn-xs btn-info Wpr" severRule = "'+ exports.data.srcUrl +'">delete</button>'+
+                                        '<button type="button" class="btn btn-xs btn-info" disableRule = "'+ exports.data.srcUrl +'">disabled</button>'+
                                     '</td>'+
-                                '</tr>'].join('');
-                // exports.data.num = s.toString();               
+                                '</tr>'].join('');           
                 $('#serverWrap').append(severTpl);
                 exports.hideDialog();
                 localStorage.setItem('serverRule', JSON.stringify(serverJson));
-                exports.send.sh = JSON.stringify(serverJson);
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: exports.send,
-                    success:function(){
-                        console.log('1111');
-                    }
+                exports.requestAjax({
+                    type : "sh",
+                    sh : JSON.stringify(serverJson)
                 });
-
             }else{
                 for(var i in json){
                     for(var j in json[i]){
@@ -386,20 +362,25 @@ define('conf/main',function(require,exports,module){
         },
         updateServerListFunc : function(data){
             stpl = '';
-            h=0;
             for(var i in data){
-                h++;
                 stpl += '<tr>'+
-                            '<td>'+ data[i][0] +'</td>'+
-                            '<td>'+ data[i][1] +'</td>'+
+                            '<td>'+ i +'</td>'+
+                            '<td>'+ data[i]+'</td>'+
                             '<td>'+
-                                '<button type="button" class="btn btn-xs btn-info Wpr" severRule = "'+ h +'">delete</button>'+
-                                '<button type="button" class="btn btn-xs btn-info" disableRule = "'+ h +'">disabled</button>'+
+                                '<button type="button" class="btn btn-xs btn-info Wpr" severRule = "'+ i +'">delete</button>'+
+                                '<button type="button" class="btn btn-xs btn-info" disableRule = "'+ i +'">disabled</button>'+
                             '</td>'+
                         '</tr>';
             }
-            s = h;
             $('#serverWrap').html(stpl);
+        },
+        requestAjax : function(data){
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: data,
+                success:function(){}
+            });
         },
         hideDialog : function(){
             $("#mask").hide();
