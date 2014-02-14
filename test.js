@@ -1,1 +1,1 @@
-require("./server/server.js").start("test-config.json");
+require("./server").start("test-config.json");

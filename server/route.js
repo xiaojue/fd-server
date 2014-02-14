@@ -2,23 +2,18 @@ var bouncy = require('bouncy');
 var fs = require("fs");
 var hosts = require("./hosts");
 
-var server = null;
-var routeList = {};
+var server = null;//当前开启的路由服务对象
+var routeList = {};//路由域名端口列表
 
+/**
+*@description 开启/重启路由服务
+*@param list 路由域名端口列表
+*  问题： 目前关闭路由服务时（server.close），并不能立即关闭，等所有连接断开时才会真正触发close关闭服务。
+*/
 function start(list){
     //判断路由列表是否发生变化
     if(!isChange(list)){
         return;
-    }
-    //存在已有的路由，则先关闭
-    if(server){
-        console.log("重启路由中...");
-        server.close(function (){
-            route(list);
-        });
-    }else{
-        //开启路由
-        route(list);
     }
     
     //更新绑定hosts
@@ -35,6 +30,17 @@ function start(list){
             hosts.set(dm);
         }
     }
+    
+    //是否已开启过服务，有则关闭重启
+    if(server){
+        console.log("重启路由中...");
+        close(function (){
+            route(list);
+        });
+    }else{
+        route(list);
+    }
+    
     routeList = list;
 }
 
@@ -63,7 +69,11 @@ function route(list){
     server.listen(80);
 }
 
-//判断路由列表是否发生变化
+/**
+*@description 判断路由列表是否发生变化
+*@param list 当前需要启用的路由列表
+*@return true/false
+*/
 function isChange(list){
     var n1 = (JSON.stringify(list).match(/,/g) || []).length;//list个数
     var n2 = (JSON.stringify(routeList).match(/,/g) || []).length;//routeList个数
@@ -86,6 +96,7 @@ function isChange(list){
     }
     return false;
 }
+
 //添加指定的domain指向
 function add(port, domain){
     var _port = routeList[domain];
@@ -104,11 +115,11 @@ function remove(domain){
     }
 }
 
-function close(){
-    server && server.close(function (){
-        console.log("close route: " + arguments);
-        routeList = {};
-    });
+//关闭路由服务
+function close(callback){
+    if(server){
+        server.close(callback);
+    }
     routeList = {};
 }
 

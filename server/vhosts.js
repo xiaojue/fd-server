@@ -5,12 +5,18 @@ var route = require("./route");
 var serverMap = {};//存放开启的server对象,key为path
 var routeList = {};//路由列表 key为domain value为port
 
-//随机生成一个未被占用的端口号
+/**
+*@description 随机生成一个未被占用的端口号
+*@return 一个未被占用的端口号
+*   端口是否被占用目前不知道如何实现，因此并未验证。目前生成的端口范围是8000~9000
+*/
 function getPort(){
-    /** 生成端口号 尚未验证是否占用 */
     return parseInt(Math.random()*1000+8000);
 }
 
+/**
+*@description vhosts入口方法
+*/
 function vhosts(methodName, options){
     var fn = {
         // "start": startServer,
@@ -29,6 +35,7 @@ function vhosts(methodName, options){
 *                   ext: {} //服务扩展参数 可选
 *                }
 *       flag {Boolean}: true/false 是否要启动/重启路由，默认true
+*@return port 服务监听的端口号
 */
 function startServer(options, flag){
     var port = options.port;//端口
