@@ -58,6 +58,9 @@ app.configure('production', function(){
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+
+
+
 app.get('/index', routes.index);
 app.all('/saveHosts', saveHosts.list);
 
