@@ -34,6 +34,7 @@ function startup(path){
                 if(err){
                     throw err;
                 }
+                vhosts.list = [];
                 eval('var obj = ' + data);
                 if(parseData(obj)){
                     updateServer();
@@ -48,7 +49,7 @@ function startup(path){
 function updateServer(){
     vhosts.process = vhosts.process || child_process.fork(vhosts.module);
     vhosts.process.send({
-        method: "batchStart",
+        method: "update",
         options: [vhosts.list]
     });
 }
@@ -56,7 +57,6 @@ function updateServer(){
 function parseData(data){
     if(data){
         var vhostsCfg = data.vhosts;
-        console.log(typeof data);
         for(var i = 0; i < vhostsCfg.length; i++){
             var item = vhostsCfg[i];
             vhosts.list.push({

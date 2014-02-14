@@ -1,10 +1,9 @@
 var SS = require('node-static');
 var http = require('http');
 var route = require("./route");
-var hosts = require("./hosts");
 
-var serverMap = {};//存放开启的server对象
-var routeList = {};//路由列表
+var serverMap = {};//存放开启的server对象,key为path
+var routeList = {};//路由列表 key为domain value为port
 
 //随机生成一个未被占用的端口号
 function getPort(){
@@ -14,34 +13,29 @@ function getPort(){
 
 function vhosts(methodName, options){
     var fn = {
-        "start": startServer,
-        "batchStart": batchStart,
-        "close": closeServer,
-        "restart": startServer
+        // "start": startServer,
+        // "close": close,
+        // "restart": startServer,
+        "update": update
     };
-    console.log(methodName);
     fn[methodName] && fn[methodName].apply(null,options);
 }
 
-//开启一个server 返回监听的端口号
+/**
+*@description 开启一个server 返回监听的端口号
+*@param options {Object}: {
+*                   path: "服务路径",
+*                   domain: "域名",
+*                   ext: {} //服务扩展参数 可选
+*                }
+*       flag {Boolean}: true/false 是否要启动/重启路由，默认true
+*/
 function startServer(options, flag){
     var port = options.port;//端口
     var path = options.path;//路径
     var domain = options.domain;//域名
     var obj = serverMap[path] || {};
     var flag = typeof flag === "undefined" || flag;
-    
-    //判断是否已经开启了指定域名的server，若是则再判断配置是否完全相同，同则直接返回，否则关闭重启一个
-    /* if(obj){
-        //暂不处理端口修改
-        if(!port || port == obj.port){
-           port = obj.port;
-        }else{
-            closeServer(obj);
-            obj.server = null;
-        }
-    } */
-    
     
     //是否指定端口，没有则生成一个
     port = obj.port || port || getPort();
@@ -59,31 +53,47 @@ function startServer(options, flag){
                 });
             }).resume();
         }).listen(port); 
+        console.log("Server runing at port: " + port + ". path: " + path);
         
         //将开启的server对象存放在map中
         obj.server = server;
         obj.path = path;
         obj.port = port;
-        obj.domains = {};
+        obj.domains = "";
         obj.ext = options.ext;
         serverMap[path] = obj;
-        console.log("Server runing at port: " + port + ". path: " + path);
     }
-    obj.domains[domain] = 1;
+    if(obj.domains.indexOf(domain) === -1){
+        obj.domains = obj.domains + domain + ";";
+    }
     routeList[domain] = port;
+    console.log(domain + ": "+ port);
     flag ? routeStart() : '';
-    hosts.set(domain);//绑定hosts
     return port;
 }
 
-function batchStart(list){
+/**
+*@description 启动/更新服务
+*@param list {Array} 要启动的服务列表
+*/
+function update(list){
     if(list && list instanceof Array){
+        //将不需要的已开启服务关闭
+        var listStr = JSON.stringify(list);
+        for(var path in serverMap){
+            if(listStr.indexOf(path) === -1){
+                close(path);
+            }
+        }
+        
+        routeList = {};
+        //循环开启服务
         for(var i = 0; i < list.length; i++){
             var item = list[i];
-            var port = startServer(item, false);
-            port ? routeList[item["domain"]] = port : '';
+            startServer(item, false);
         }
     }
+    //启动路由服务
     routeStart();
 }
 
@@ -92,17 +102,16 @@ function routeStart(){
     route.start(routeList);
 }
 
-//关闭server
-function closeServer(options){
-    var server = options["server"] || serverMap[options["path"]];
-    if(server){
-        server.close();
+/**
+*@description 关闭服务
+*@param path {String} 需要关闭的服务路径 
+*/
+function close(path){
+    if(path && serverMap[path] && serverMap[path].server){
+        serverMap[path].server.close();
+        delete serverMap[path];
     }
-    hosts.remove(domain);
-    route.remove(domain);
 }
-
-
 
 process.on("message", function (m){
     vhosts(m.method, m.options);

@@ -132,6 +132,8 @@ define('conf/main',function(require,exports,module){
                 localStorage.setItem('proxyRule', JSON.stringify(json));
                 exports.updateGroupListFunc(json, allnamelist);
             }
+
+
             //启用代理规则
             if(target.nodeName.toLowerCase() === 'input' && target.checked){
                 var proxyNum = target.value.split('_');
@@ -150,7 +152,6 @@ define('conf/main',function(require,exports,module){
             if(target.nodeName.toLowerCase() === 'input' && !target.checked){
                 var cancelNum = target.value.split('_');
                 delete proxyConfig[target.value];
-                console.log(proxyConfig);
                 $.ajax({
                     type: "POST",
                     url: url,
@@ -161,12 +162,14 @@ define('conf/main',function(require,exports,module){
                     success:function(){}
                 })
             }
+
         },
         deleteServer : function(event){
             var target = event.target;
             var serverNum = parseInt(target.getAttribute('severrule')); 
-            exports.send = {};
+            
             if(serverNum){
+                exports.send = {};
                 serverNum = serverNum -1;
                 var total = $('#serverWrap').find('button').length;
                 delete serverJson['vhost' + serverNum];
@@ -192,6 +195,18 @@ define('conf/main',function(require,exports,module){
                 localStorage.setItem('serverRule', JSON.stringify(serverJson));
                 exports.updateServerListFunc(serverJson);
             }
+            //禁用某条规则
+            if(target.getAttribute('disablerule')){
+                var el = $(target);
+                var itm = parseInt(el.attr("disablerule"));
+                if(el.hasClass('btn-info')){
+                    el.removeClass('btn-info');
+                }else{
+                    el.addClass('btn-info');
+                    serverJson['vhost' + (itm-1)].push(1);
+                }
+                localStorage.setItem('serverRule', JSON.stringify(serverJson));
+            }
         },
         saveGroupName : function(event){
             if(event.keyCode == 13){
@@ -209,10 +224,17 @@ define('conf/main',function(require,exports,module){
             //url匹配
             var reg2 = /^([a-zA-Z]\:)\w/g;
             var reg3 = /^(http|https|ftp)\:/g;
+<<<<<<< HEAD
 
             var text1 = $('#srcUrl').val();
             var text2 = $('#urlTo').val();
 
+=======
+
+            var text1 = $('#srcUrl').val();
+            var text2 = $('#urlTo').val();
+
+>>>>>>> 1fd9daf8f5648122b6ed18fdfcdfe74b56be116e
             if($('#srcUrl').parent().prev().css('display') != 'none'){
                 //服务器配置
                 if(reg1.test(text1) && reg2.test(text2)){
@@ -236,21 +258,44 @@ define('conf/main',function(require,exports,module){
                 errSrc.text("规则不能为空");
                 return;
             }
+<<<<<<< HEAD
             if(!exports.verifyRule()){
                 errSrc.show();
                 errSrc.text("输入规则不正确");
                 return;
             }
             exports.send = {};
+=======
+
+            //输入框规则验证
+            // if(!exports.verifyRule()){
+            //     errSrc.show();
+            //     errSrc.text("输入规则不正确");
+            //     return;
+            // }
+
+            //唯一性验证
+>>>>>>> 1fd9daf8f5648122b6ed18fdfcdfe74b56be116e
             exports.data.srcUrl = $('#srcUrl').val();
             exports.data.urlTo  = $('#urlTo').val();
+            exports.send = {};
             exports.send.type = "sh";
             if($('#srcUrl').parent().prev().css('display') != 'none'){
+                for(var i in serverJson){
+                    if(serverJson[i][0] === exports.data.srcUrl){
+                        errSrc.show();
+                        errSrc.text("域名重复");
+                        return;
+                    }
+                }
                 serverJson['vhost' + (s++)] = [exports.data.srcUrl,exports.data.urlTo];
                 var severTpl = ['<tr>'+
                                     '<td>'+ exports.data.srcUrl +'</td>'+
                                     '<td>'+ exports.data.urlTo +'</td>'+
-                                    '<td><button type="button" class="btn btn-xs btn-info" severRule = "'+ s +'">delete</button></td>'+
+                                    '<td>'+
+                                        '<button type="button" class="btn btn-xs btn-info Wpr" severRule = "'+ s +'">delete</button>'+
+                                        '<button type="button" class="btn" disableRule = "'+ s +'">disabled</button>'+
+                                    '</td>'+
                                 '</tr>'].join('');
                 // exports.data.num = s.toString();               
                 $('#serverWrap').append(severTpl);
@@ -267,6 +312,15 @@ define('conf/main',function(require,exports,module){
                 });
 
             }else{
+                for(var i in json){
+                    for(var j in json[i]){
+                        if(json[i][j][0] === exports.data.srcUrl){
+                            errSrc.show();
+                            errSrc.text("代理规则重复");
+                            return;
+                        }
+                    } 
+                }
                 exports.hideDialog();
                 var item = $('#saveRule').attr("srcEdit");
                 if(parseInt(item)){
@@ -354,7 +408,10 @@ define('conf/main',function(require,exports,module){
                 stpl += '<tr>'+
                             '<td>'+ data[i][0] +'</td>'+
                             '<td>'+ data[i][1] +'</td>'+
-                            '<td><button type="button" class="btn btn-xs btn-info" severRule = "'+ h +'">delete</button></td>'+
+                            '<td>'+
+                                '<button type="button" class="btn btn-xs btn-info Wpr" severRule = "'+ h +'">delete</button>'+
+                                '<button type="button" class="btn btn-xs btn-info" disableRule = "'+ h +'">disabled</button>'+
+                            '</td>'+
                         '</tr>';
             }
             s = h;

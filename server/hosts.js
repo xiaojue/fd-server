@@ -17,7 +17,7 @@ function set(domain, ip) {
             if (err) {
                 console.error(err)
             } else {
-                console.log('set /etc/hosts successfully! ' + domain)
+                console.log('set hosts successfully! ' + domain)
             }
             
             ing = false;
@@ -39,7 +39,7 @@ function remove(domain, ip) {
             if (err) {
                 console.error(err)
             } else {
-                console.log('remove /etc/hosts successfully!')
+                console.log('remove hosts successfully!' + domain)
             }
             
             ing = false;

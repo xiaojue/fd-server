@@ -12,6 +12,9 @@
         },{
             domain: "www.test-m4.com",
             path: "E:/workspace/UnifiedWebDevEnv/staticServer/public2"
+        },{
+            domain: "www.test-m5.com",
+            path: "E:/workspace/UnifiedWebDevEnv/staticServer/public2"
         }
     ]
 }
