@@ -7,7 +7,7 @@ exports.list = function(req, res){
 	var util = require('util');
 	var fs = require("fs");
 
-	var listener = require('../module/listener.js');
+	var listener = require('../models/listener.js');
 	var stream = new listener();
 	stream.on("data", function(data) {
 	    console.log('Received data: "' + data + '"');

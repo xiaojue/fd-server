@@ -30,7 +30,7 @@
               		<h3 class="panel-title">已创建的规则组</h3>
            		</div>
 	            <div class="panel-body" id="groupBtnWrap">
-	              	
+	              
 	            </div>
           	</div>
           	<!-- 每个规则组面板集合-->
@@ -49,6 +49,22 @@
 					<p>默认开启：127.0.0.1 端口：8080</p>    
 				</div>
 				<table class="table table-condensed" id="serverWrap">
+					<% if (data && data.proxy) { %>
+						<% for(var i in data.proxy){ %>
+							<tr>
+								<td>
+									<% i %>
+								</td>
+								<td>
+									<% data.proxy[i] %>
+								</td>
+								<td>
+									<button type="button" class="btn btn-xs btn-info Wpr" severrule="">delete</button>
+									<button type="button" class="btn btn-xs btn-info" disablerule="">disabled</button>
+								</td>
+							</tr>
+						<% } %>
+	              	<% } %>
 				</table>
 	      		<button type="button" class="btn btn-info" id="staticServer">添加</button>	
 	      	</div>

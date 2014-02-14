@@ -23,7 +23,8 @@ define('conf/main',function(require,exports,module){
     var gtpl = '', rtpl = '', stpl = '';
     var allnamelist = [];
 
-    var url = "/saveHosts";
+    var url = '/saveHosts';
+    var localUrl = '/localConfig';
     var exports = {
         data :{},
         init : function(){
@@ -208,17 +209,10 @@ define('conf/main',function(require,exports,module){
             //url匹配
             var reg2 = /^([a-zA-Z]\:)\w/g;
             var reg3 = /^(http|https|ftp)\:/g;
-<<<<<<< HEAD
 
             var text1 = $('#srcUrl').val();
             var text2 = $('#urlTo').val();
 
-=======
-
-            var text1 = $('#srcUrl').val();
-            var text2 = $('#urlTo').val();
-
->>>>>>> 1fd9daf8f5648122b6ed18fdfcdfe74b56be116e
             if($('#srcUrl').parent().prev().css('display') != 'none'){
                 //服务器配置
                 if(reg1.test(text1) && reg2.test(text2)){
@@ -242,15 +236,6 @@ define('conf/main',function(require,exports,module){
                 errSrc.text("规则不能为空");
                 return;
             }
-<<<<<<< HEAD
-            if(!exports.verifyRule()){
-                errSrc.show();
-                errSrc.text("输入规则不正确");
-                return;
-            }
-            exports.send = {};
-=======
-
             //输入框规则验证
             // if(!exports.verifyRule()){
             //     errSrc.show();
@@ -259,7 +244,6 @@ define('conf/main',function(require,exports,module){
             // }
 
             //唯一性验证
->>>>>>> 1fd9daf8f5648122b6ed18fdfcdfe74b56be116e
             exports.data.srcUrl = $('#srcUrl').val();
             exports.data.urlTo  = $('#urlTo').val();
             if($('#srcUrl').parent().prev().css('display') != 'none'){
@@ -394,6 +378,14 @@ define('conf/main',function(require,exports,module){
             $.ajax({
                 type: "POST",
                 url: url,
+                data: data,
+                success:function(){}
+            });
+        },
+        saveLocalConfig : function(data){
+            $.ajax({
+                type: "POST",
+                url: localUrl,
                 data: data,
                 success:function(){}
             });
