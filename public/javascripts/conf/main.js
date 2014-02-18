@@ -19,31 +19,30 @@ define('conf/main',function(require,exports,module){
     //此值在做模板更新的时候 编辑删除按钮所在组和第几条规则
     //判断是否刷新页面 本地存储数据是否在刷新页面的时候变更 flag=1;
     var z = 0;
-    var type, gN, localData, nameLocal, serverLocal, json = {}, flag = 1, serverJson = {}, proxyConfig = {}, s=0, y = 0;
+    var type, gN, flag = 1, s=0, y = 0;
     var gtpl = '', rtpl = '', stpl = '';
     var allnamelist = [];
+
+    //修改配置文件存储 重新定义变量
+    var configServerData, localServerData, localProxyData, configProxyData, nameProxyData;
 
     var url = '/saveHosts';
     var localUrl = '/localConfig';
     var exports = {
         data :{},
         init : function(){
-            localData = JSON.parse(localStorage.getItem("proxyRule"));
-            nameLocal = localStorage.getItem("proxyRuleName");
-            if(!exports.isEmptyObject(localData) && nameLocal){
-                nameLocal = nameLocal.split(',');
-            }else{
-                localStorage.removeItem("proxyRuleName");
-            }
-            serverLocal = JSON.parse(localStorage.getItem("serverRule"));
-            if(window.localStorage && localData && nameLocal){
-                //每次进行更新本地代理数据
-                this.updateGroupListFunc(localData,nameLocal);
-            }
-            if(window.localStorage && serverLocal){
-                //每次更新本地静态服务数据
-                serverJson = serverLocal;
-                this.updateServerListFunc(serverLocal);
+            if(scope && scope.localData && scope.configData){
+                configServerData = scope.configData.vhost;
+                localServerData = scope.localData.vhost;
+                localProxyData = scope.localData.proxy;
+                configProxyData = scope.configData.proxy;
+                nameProxyData = scope.localData.name;
+                if(localProxyData){
+                    this.updateGroupListFunc(localProxyData,nameProxyData);
+                }
+                if(nameProxyData){
+                    allnamelist = nameProxyData;
+                }
             }
             this.bindEvent();
             this.delegateEvent();
@@ -102,92 +101,137 @@ define('conf/main',function(require,exports,module){
             if(target.getAttribute('deleteGroup')){
                 var total = $('#groupBtnWrap').find('button').length;
                 var dgNum = parseInt(target.getAttribute('deleteGroup'));
-                delete json['group' + dgNum];
-                for(var item in json){
+                var delgroup = localProxyData['group' + dgNum];
+                for(var i in delgroup){
+                    if(configProxyData[delgroup[i][0]]){
+                        delete configProxyData[delgroup[i][0]];
+                    }
+                }
+                delete localProxyData['group' + dgNum];
+                for(var item in localProxyData){
                     var grN = parseInt(item.replace(/group/g,''));
                     if( grN > dgNum){
-                        json['group' + (grN - 1)] = json['group' + grN];
+                        localProxyData['group' + (grN - 1)] = localProxyData['group' + grN];
                     }
                 }
                 if(total > dgNum){
-                    delete json['group' + total];
+                    delete localProxyData['group' + total];
                 }
-                localStorage.setItem('proxyRule', JSON.stringify(json));
+
                 allnamelist = exports.without(allnamelist,dgNum-1);
-                localStorage.setItem('proxyRuleName', allnamelist);
-                exports.updateGroupListFunc(json,allnamelist,'d');
+                //本地缓存规则组文件名字的变更配置文件
+                exports.requestAjax({
+                    type : "sn",
+                    sn : allnamelist,
+                    local: "s"
+                });
+
+                exports.updateGroupListFunc(localProxyData,allnamelist,'d');
+
+                //本地缓存的配置文件
+                exports.requestAjax({
+                    type : "sp",
+                    sp : JSON.stringify(localProxyData),
+                    local: "s"
+                });
+
+                //若规则组中服务有启动的，则删除规则组的同时关闭服务  
+                exports.requestAjax({
+                    type : "cancelProxy",
+                    rule :  JSON.stringify(configProxyData)
+                });  
             }
             //删除每条规则按钮
             if(target.getAttribute('deleteRule') && $(target).hasClass("btn-info")){
                 var arr = target.getAttribute('deleteRule').split('_');
-                delete json['group' + arr[0]]['rule' + arr[1]];
+                var opendelr = localProxyData['group' + arr[0]]['rule' + arr[1]];
+                delete localProxyData['group' + arr[0]]['rule' + arr[1]];
                 var rNum = $('#group' + arr[0]).find('tr').length;
-                for(var item in json['group' + arr[0]]){
+                for(var item in localProxyData['group' + arr[0]]){
                     var rn = parseInt(item.replace(/rule/g,''));
                     if( rn > arr[1]){
-                        json['group' + arr[0]]['rule' + (rn-1)] = json['group' + arr[0]]['rule' + rn];
+                        localProxyData['group' + arr[0]]['rule' + (rn-1)] = localProxyData['group' + arr[0]]['rule' + rn];
                     }
                 }
-                delete json['group' + arr[0]]['rule' + (rNum -1)];
-                localStorage.setItem('proxyRule', JSON.stringify(json));
-                exports.updateGroupListFunc(json, allnamelist);
+                delete localProxyData['group' + arr[0]]['rule' + (rNum -1)];
+                exports.updateGroupListFunc(localProxyData, allnamelist);
+                //本地缓存的配置文件
+                exports.requestAjax({
+                    type : "sp",
+                    sp : JSON.stringify(localProxyData),
+                    local: "s"
+                });
+                
+                var delinput = $(target).parent().siblings().children("input")[0];
+                if(delinput.checked){
+                    delete configProxyData[opendelr[0]];
+                    exports.requestAjax({
+                        type : "cancelProxy",
+                        rule :  JSON.stringify(configProxyData)
+                    });
+                }
             }
             //启用代理规则
             if(target.nodeName.toLowerCase() === 'input' && target.checked){
                 var proxyNum = target.value.split('_');
-                var openRule = json["group" + proxyNum[0]]["rule" + proxyNum[1]];
-                proxyConfig[openRule[0]] = openRule[1]; 
+                var openRule = localProxyData["group" + proxyNum[0]]["rule" + proxyNum[1]];
+                configProxyData[openRule[0]] = openRule[1]; 
                 exports.requestAjax({
                     type : "openProxy",
-                    rule :  JSON.stringify(proxyConfig)
+                    rule :  JSON.stringify(configProxyData)
                 });
                 var lastchild =  $(target).parent().parent().children().last()[0];
                 $(lastchild.children[0]).removeClass('btn-info');
-                $(lastchild.children[1]).removeClass('btn-info');
-                // $("#group" + proxyNum[0]).prev().children().last().removeClass("btn-info");
             }
             //取消代理规则
             if(target.nodeName.toLowerCase() === 'input' && !target.checked){
                 var cancelNum = target.value.split('_');
-                var cancelRule = json["group" + cancelNum[0]]["rule" + cancelNum[1]];
-                delete proxyConfig[cancelRule[0]];
+                var cancelRule = localProxyData["group" + cancelNum[0]]["rule" + cancelNum[1]];
+                delete configProxyData[cancelRule[0]];
                 exports.requestAjax({
                     type : "cancelProxy",
-                    rule :  JSON.stringify(proxyConfig)
+                    rule :  JSON.stringify(configProxyData)
                 });
                 var lastchild =  $(target).parent().parent().children().last()[0];
                 $(lastchild.children[0]).addClass('btn-info');
-                $(lastchild.children[1]).addClass('btn-info');
-                // $("#group" + cancelNum[0]).prev().children().last().addClass("btn-info");
             }
-
         },
         deleteServer : function(event){
             var target = event.target;
+            var el = $(target);
             var serverNum = target.getAttribute('severrule'); 
             if(serverNum){
-                delete serverJson[serverNum];
+                delete localServerData[serverNum];
+                delete configServerData[serverNum];
+                //服务器删除
                 exports.requestAjax({
                     type : 'dh',
-                    dh : JSON.stringify(serverJson)
+                    dh : serverNum
                 });
-                localStorage.setItem('serverRule', JSON.stringify(serverJson));
-                exports.updateServerListFunc(serverJson);
+                //本地删除
+                exports.requestAjax({
+                    type : 'dh',
+                    dh : serverNum,
+                    local : 's'
+                });
+                el.parent().parent().remove();
             }
             //禁用某条规则
             if(target.getAttribute('disablerule')){
-                var el = $(target);
                 var itm = el.attr("disablerule");
                 if(el.hasClass('btn-info')){
                     el.removeClass('btn-info');
+                    delete configServerData[itm]
+                    //config 移除此项
                     exports.requestAjax({
                         type : "disable",
                         disrule :  itm
                     });
                 }else{
+                    //不禁用此项
                     exports.requestAjax({
                         type : "sh",
-                        sh :  JSON.stringify(serverJson)
+                        sh :  JSON.stringify(localServerData)
                     });
                     el.addClass('btn-info');
                 }
@@ -200,7 +244,12 @@ define('conf/main',function(require,exports,module){
                 var groupN = $(target).parent().next().attr('editgname');
                 $('#groupBtnWrap').find('button')[parseInt(groupN) -1].innerHTML = target.value;
                 allnamelist[groupN-1] = target.value;
-                localStorage.setItem('proxyRuleName', allnamelist);
+                //本地名字的存储
+                exports.requestAjax({
+                    type : "sn",
+                    sn : allnamelist,
+                    local: "s"
+                });
             }
         },
         verifyRule : function(){
@@ -247,15 +296,16 @@ define('conf/main',function(require,exports,module){
             exports.data.srcUrl = $('#srcUrl').val();
             exports.data.urlTo  = $('#urlTo').val();
             if($('#srcUrl').parent().prev().css('display') != 'none'){
-                //稍后要做修改 由于本地存储数据的变更
-                for(var i in serverJson){
+                for(var i in localServerData){
                     if(i === exports.data.srcUrl){
                         errSrc.show();
                         errSrc.text("域名重复");
                         return;
                     }
                 }
-                serverJson[exports.data.srcUrl] = exports.data.urlTo;
+                
+                localServerData[exports.data.srcUrl] = exports.data.urlTo;
+                configServerData[exports.data.srcUrl] = exports.data.urlTo;
                 var severTpl = ['<tr>'+
                                     '<td>'+ exports.data.srcUrl +'</td>'+
                                     '<td>'+ exports.data.urlTo +'</td>'+
@@ -263,41 +313,49 @@ define('conf/main',function(require,exports,module){
                                         '<button type="button" class="btn btn-xs btn-info Wpr" severRule = "'+ exports.data.srcUrl +'">delete</button>'+
                                         '<button type="button" class="btn btn-xs btn-info" disableRule = "'+ exports.data.srcUrl +'">disabled</button>'+
                                     '</td>'+
-                                '</tr>'].join('');           
+                                '</tr>'].join('');       
                 $('#serverWrap').append(severTpl);
                 exports.hideDialog();
-                localStorage.setItem('serverRule', JSON.stringify(serverJson));
+                //本地缓存的配置文件
                 exports.requestAjax({
                     type : "sh",
-                    sh : JSON.stringify(serverJson)
+                    sh : JSON.stringify(localServerData),
+                    local: "s"
+                });
+                //启用代理的配置文件
+                exports.requestAjax({
+                    type : "sh",
+                    sh : JSON.stringify(configServerData)
                 });
             }else{
-                for(var i in json){
-                    for(var j in json[i]){
-                        if(json[i][j][0] === exports.data.srcUrl){
+                for(var i in localProxyData){
+                    for(var j in localProxyData[i]){
+                        if(localProxyData[i][j][0] === exports.data.srcUrl){
                             errSrc.show();
                             errSrc.text("代理规则重复");
                             return;
                         }
                     } 
                 }
+
                 exports.hideDialog();
                 var item = $('#saveRule').attr("srcEdit");
                 if(parseInt(item)){
                     item = item.split('_');
                     //编辑规则的时候，更新json数据
-                    json['group' + item[0]]['rule' + item[1]] =[exports.data.srcUrl,exports.data.urlTo];
-                    exports.updateGroupListFunc(json, allnamelist);
+                    localProxyData['group' + item[0]]['rule' + item[1]] =[exports.data.srcUrl,exports.data.urlTo];
+                    exports.updateGroupListFunc(localProxyData, allnamelist);
                 }else{
                     if(m != 0){
                         //对已经存在的组添加规则
-                        json['group' + type]['rule' + m] =[exports.data.srcUrl,exports.data.urlTo];
+                        localProxyData['group' + type]['rule' + m] =[exports.data.srcUrl,exports.data.urlTo];
+                        gN = type;
                     }else{
                         //此处禁止连续添加新组 而不添加规则
                         //添加新组，添加新的规则 
                         //此处有个bug 删除了一个规则组的所有规则之后，在新添加规则有bug
                         gN = type ? type : i;
-                        json['group' + gN]['rule' + m] =[exports.data.srcUrl,exports.data.urlTo];
+                        localProxyData['group' + gN]['rule' + m] =[exports.data.srcUrl,exports.data.urlTo];
                     }
                     var ruleTpl = [
                         '<tr>',
@@ -314,10 +372,13 @@ define('conf/main',function(require,exports,module){
                     $('#allGroupPanel table').eq(type - 1).append(ruleTpl);
                     $("#saveRule").attr("srcEdit",0);
                 }
-                localStorage.setItem('proxyRule', JSON.stringify(json));
+                //本地缓存的配置文件
+                exports.requestAjax({
+                    type : "sp",
+                    sp : JSON.stringify(localProxyData),
+                    local: "s"
+                });
             }
-           
-           
         },
         /*更新列表数据*/
         updateGroupListFunc : function(data,name,del){
@@ -333,10 +394,16 @@ define('conf/main',function(require,exports,module){
                                 '<table class="table table-condensed">';
                 rtpl += '<button type="button" class="btn btn-success btn_smr" group="'+ groupNum +'">'+ name[parseInt(groupNum) -1] +'</button>';
                 z = 0;
+
                 for(rule in data[group]){
                     var ruleCon = data[group][rule];
                     var num = z++;
-                    gtpl += '<tr><td class="ipt_pl"><input type="checkbox" value="'+ groupNum + "_" + num +'"></td><td>'+ ruleCon[0] +'</td><td>'+ ruleCon[1] +'</td><td><button type="button" class="btn btn-xs btn-info Wpr" editrule="'+ groupNum + "_" + num +'">edit</button><button type="button" class="btn btn-xs btn-info" deleterule="'+ groupNum + "_" + num +'">delete</button></td></tr>';              
+                    if(configProxyData && configProxyData[ruleCon[0]]){
+                        gtpl += '<tr><td class="ipt_pl"><input type="checkbox" value="'+ groupNum + "_" + num +'" checked="checked"></td><td>'+ ruleCon[0] +'</td><td>'+ ruleCon[1] +'</td><td><button type="button" class="btn btn-xs Wpr" editrule="'+ groupNum + "_" + num +'">edit</button><button type="button" class="btn btn-xs btn-info" deleterule="'+ groupNum + "_" + num +'">delete</button></td></tr>';
+                    }else{
+                        gtpl += '<tr><td class="ipt_pl"><input type="checkbox" value="'+ groupNum + "_" + num +'"></td><td>'+ ruleCon[0] +'</td><td>'+ ruleCon[1] +'</td><td><button type="button" class="btn btn-xs btn-info Wpr" editrule="'+ groupNum + "_" + num +'">edit</button><button type="button" class="btn btn-xs btn-info" deleterule="'+ groupNum + "_" + num +'">delete</button></td></tr>';
+                    }
+                                  
                 }   
                 gtpl += '</table>'+
                         '<button type="button" class="btn btn-xs btn-info" rulebtn="'+ groupNum +'">新增规则</button>'+
@@ -348,44 +415,35 @@ define('conf/main',function(require,exports,module){
             $('#groupBtnWrap').html(rtpl);
 
             //每次刷新页面都要判断是否有本地存储，存储多少项，便于每次新增规则组的时候id的创建
-            if(!exports.isEmptyObject(localData) && flag){
-                for(var s in localData){
+            if(!exports.isEmptyObject(localProxyData) && flag){
+                for(var s in localProxyData){
                     i++;
                 }
-                json = localData;
-                allnamelist = nameLocal;
+                allnamelist = nameProxyData;
                 flag = 0;
             }
             if(del && del === 'd'){
                 i= i-1;
             }
         },
-        updateServerListFunc : function(data){
-            stpl = '';
-            for(var i in data){
-                stpl += '<tr>'+
-                            '<td>'+ i +'</td>'+
-                            '<td>'+ data[i]+'</td>'+
-                            '<td>'+
-                                '<button type="button" class="btn btn-xs btn-info Wpr" severRule = "'+ i +'">delete</button>'+
-                                '<button type="button" class="btn btn-xs btn-info" disableRule = "'+ i +'">disabled</button>'+
-                            '</td>'+
-                        '</tr>';
-            }
-            $('#serverWrap').html(stpl);
-        },
+        // updateServerListFunc : function(data){
+        //     stpl = '';
+        //     for(var i in data){
+        //         stpl += '<tr>'+
+        //                     '<td>'+ i +'</td>'+
+        //                     '<td>'+ data[i]+'</td>'+
+        //                     '<td>'+
+        //                         '<button type="button" class="btn btn-xs btn-info Wpr" severRule = "'+ i +'">delete</button>'+
+        //                         '<button type="button" class="btn btn-xs btn-info" disableRule = "'+ i +'">disabled</button>'+
+        //                     '</td>'+
+        //                 '</tr>';
+        //     }
+        //     $('#serverWrap').html(stpl);
+        // },
         requestAjax : function(data){
             $.ajax({
                 type: "POST",
                 url: url,
-                data: data,
-                success:function(){}
-            });
-        },
-        saveLocalConfig : function(data){
-            $.ajax({
-                type: "POST",
-                url: localUrl,
                 data: data,
                 success:function(){}
             });
@@ -406,7 +464,7 @@ define('conf/main',function(require,exports,module){
         },
         addGroupFunc : function(){
             i++;
-            json['group' + i] = {};
+            localProxyData['group' + i] = {};
             //每次创建规则组新增规则m值设置为0
             m = 0;
             var groupTpl = [
@@ -425,7 +483,12 @@ define('conf/main',function(require,exports,module){
             var groupBtnTpl = '<button type="button" class="btn btn-success btn_smr" group= '+ i +'>group' + i + '</button>';
             $("#groupBtnWrap").append(groupBtnTpl);
             allnamelist.push('group' + i);
-            localStorage.setItem('proxyRuleName', allnamelist);
+            //本地名字的存储
+            exports.requestAjax({
+                type : "sn",
+                sn : allnamelist,
+                local: "s"
+            });
         },
         isEmptyObject : function(obj){
             for(var n in obj){return false} 
@@ -438,8 +501,6 @@ define('conf/main',function(require,exports,module){
         } 
     }
     exports.init();   
-
-
     /* 静态服务器ui配置界面 */
 
     var exportServer = {

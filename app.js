@@ -60,7 +60,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/index', routes.index);
-app.all('/saveHosts', saveHosts.list);
+app.post('/saveHosts', saveHosts.list);
 
 //供外部调用打开端口
 module.exports = app;
