@@ -84,7 +84,6 @@ function startServer(options, flag){
 *@param list {Array} 要启动的服务列表
 */
 function update(list){
-    console.log(list);
     if(list && list instanceof Array){
         //将不需要的已开启服务关闭
         var listStr = JSON.stringify(list);

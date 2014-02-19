@@ -1,5 +1,4 @@
 var fs = require("fs");
-var md5 = require("MD5");
 var child_process = require('child_process');
 var fileListen = false;
 var vhosts = {

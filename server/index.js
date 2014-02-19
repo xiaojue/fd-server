@@ -71,4 +71,9 @@ function parseData(data){
     return false;
 }
 
+process.on('SIGINT', function() {
+  console.log('The service will be closed~!');
+  process.exit(0);
+});
+
 exports.start = init;
