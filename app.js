@@ -4,7 +4,7 @@
  */
 //产品环境下创建访问日志，错误日志，不让程序中断
 var fs = require('fs');
-var accessLogfile = fs.createWriteStream('access.log', {flags : 'a'});
+// var accessLogfile = fs.createWriteStream('access.log', {flags : 'a'});
 var errorLogfile = fs.createWriteStream('error.log', {flags : 'a'});
 
 //express 基础框架
@@ -19,7 +19,7 @@ var app = express();
 
 // all environments
 app.configure(function(){
-	app.use(express.logger({stream : accessLogfile}));
+	// app.use(express.logger({stream : accessLogfile}));
 	app.set('port', process.env.PORT || 3000);
 	app.set('views', path.join(__dirname, 'views'));
 	app.set('view engine', 'ejs');
