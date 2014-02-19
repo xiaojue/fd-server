@@ -228,10 +228,11 @@ define('conf/main',function(require,exports,module){
                         disrule :  itm
                     });
                 }else{
+                    configServerData[itm] = localServerData[itm]; 
                     //不禁用此项
                     exports.requestAjax({
                         type : "sh",
-                        sh :  JSON.stringify(localServerData)
+                        sh :  JSON.stringify(configServerData)
                     });
                     el.addClass('btn-info');
                 }
