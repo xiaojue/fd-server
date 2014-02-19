@@ -7,11 +7,11 @@ var vhosts = {
     list: []
 };
 
-//³õÊ¼»¯Êı¾İ
+//åˆå§‹åŒ–æ•°æ®
 function init(path){
     fs.exists(path, function (t){
         if(t){
-            //¼àÌıÎÄ¼ş¸üĞÂ
+            //ç›‘å¬æ–‡ä»¶æ›´æ–°
             fs.watchFile(path,function (curr, prev){
                 if(curr.mtime > prev.mtime){
                     console.log("config file update~! " + path);
@@ -26,7 +26,7 @@ function init(path){
     });
 }
 
-//»ñÈ¡ÅäÖÃĞÅÏ¢²¢Æô¶¯server/¸üĞÂserver
+//è·å–é…ç½®ä¿¡æ¯å¹¶å¯åŠ¨server/æ›´æ–°server
 function startup(path){
     fs.exists(path, function (t){
         if(t){
