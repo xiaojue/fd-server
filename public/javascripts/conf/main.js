@@ -461,6 +461,7 @@ define('conf/main',function(require,exports,module){
             $('.dialogT')[2].style.display = '';
             $('.dialogT')[1].style.display = 'none';
             $('.dialogT')[3].style.display = 'none';
+            $("#errorTip").hide();
         },
         addGroupFunc : function(){
             i++;
@@ -518,6 +519,7 @@ define('conf/main',function(require,exports,module){
             $('.dialogT')[3].style.display = '';
             $('#srcUrl').val('');
             $('#urlTo').val('');
+            $("#errorTip").hide();
         }
     } 
     exportServer.init();

@@ -22,7 +22,7 @@ exports.index = function(req, res){
 							res.render('index', { title: 'RIA统一开发平台', data: localJson, datac: json});
 						}else{
 							json = {};
-							res.render('index', { title: 'RIA统一开发平台', data: '', datac: ''});
+							res.render('index', { title: 'RIA统一开发平台', data: localJson, datac: ''});
 						}
 					}
 				});
@@ -32,9 +32,5 @@ exports.index = function(req, res){
 
 			}
 		}
-
-		
 	});
-	
-  	
 };
