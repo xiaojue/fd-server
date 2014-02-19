@@ -15,6 +15,7 @@ function start(list){
     if(!isChange(list)){
         return;
     }
+    
     //更新绑定hosts
     var listStr = JSON.stringify(list);
     //先移除不再需要绑定的hosts
@@ -33,8 +34,9 @@ function start(list){
     //是否已开启过服务，有则关闭重启
     if(server){
         console.log("重启路由中...");
-        close();
-        route(list);
+        close(function (){
+            route(list);
+        });
     }else{
         route(list);
     }
@@ -73,8 +75,8 @@ function route(list){
 *@return true/false
 */
 function isChange(list){
-    var n1 = (JSON.stringify(list).match(/:/g) || []).length;//list个数
-    var n2 = (JSON.stringify(routeList).match(/:/g) || []).length;//routeList个数
+    var n1 = (JSON.stringify(list).match(/,/g) || []).length;//list个数
+    var n2 = (JSON.stringify(routeList).match(/,/g) || []).length;//routeList个数
     
     if(n1 !== n2){
         return true;

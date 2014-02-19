@@ -1,0 +1,1 @@
+module.exports = [{"pattern":"http://www.anotherwebsite.com/assets/js/homepage2.js","responder":"E:/workspace/express_fdserver/test/nproxy_list.js"}]

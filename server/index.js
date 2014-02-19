@@ -1,3 +1,4 @@
+var C = require("./config.js");
 var fs = require("fs");
 var child_process = require('child_process');
 
@@ -47,6 +48,7 @@ function startup(path){
 }
 
 function updateServer(){
+    vhosts.list.push(C.express);
     vhosts.process = vhosts.process || child_process.fork(vhosts.module);
     vhosts.process.send({
         method: "update",
@@ -56,14 +58,12 @@ function updateServer(){
 
 function parseData(data){
     if(data){
-        var vhostsCfg = data.vhosts;
-        for(var i = 0; i < vhostsCfg.length; i++){
-            var item = vhostsCfg[i];
+        var vhostsCfg = data.vhost;
+        for(var k in vhostsCfg){
+            var item = vhostsCfg[k];
             vhosts.list.push({
-                path: item.path,
-                port: item.port,
-                ext: item.ext,
-                domain: item.domain
+                path: vhostsCfg[k],
+                domain: k
             });
         }
         return true;

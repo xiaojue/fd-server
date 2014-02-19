@@ -17,14 +17,14 @@ function getPort(){
 /**
 *@description vhosts入口方法
 */
-function vhosts(methodName, options){
+function vhosts(type, options){
     var fn = {
         // "start": startServer,
         // "close": close,
         // "restart": startServer,
         "update": update
     };
-    fn[methodName] && fn[methodName].apply(null,options);
+    fn[type] && fn[type].apply(null,options);
 }
 
 /**
@@ -83,9 +83,13 @@ function startServer(options, flag){
 *@description 启动/更新服务
 *@param list {Array} 要启动的服务列表
 */
-function update(list){
-    console.log(list);
+function update(list, n){
     if(list && list instanceof Array){
+        var i = 0, item;
+        for(; i < list.length; i++){
+            item = list[i];
+            
+        }
         //将不需要的已开启服务关闭
         var listStr = JSON.stringify(list);
         for(var path in serverMap){
@@ -98,11 +102,7 @@ function update(list){
         //循环开启服务
         for(var i = 0; i < list.length; i++){
             var item = list[i];
-            if(item.onlyRoute && item.domain && item.port){
-                routeList[item.domain] = item.port;
-            }else{
-                startServer(item, false);
-            }
+            startServer(item, false);
         }
     }
     //启动路由服务
@@ -111,7 +111,6 @@ function update(list){
 
 //启动/重启 路由
 function routeStart(){
-    console.log("routeStart");
     route.start(routeList);
 }
 
@@ -127,7 +126,7 @@ function close(path){
 }
 
 process.on("message", function (m){
-    vhosts(m.method, m.options);
+    vhosts(m.type, m.options);
 });
 
 exports.vhosts = vhosts;

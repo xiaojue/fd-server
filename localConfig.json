@@ -1,1 +1,1 @@
-{"vhost":{},"proxy":{},"name":""}
+{"vhost":{"www.test-m1.com":"E:/workspace/UnifiedWebDevEnv/staticServer/public","www.test-m2.com":"E:/workspace/UnifiedWebDevEnv/staticServer/public2","www.test-m3.com":"E:/workspace/UnifiedWebDevEnv/staticServer/public2","www.sina-test.com":"E:/workspace/UnifiedWebDevEnv/staticServer/public","www.sina-test2.com":"E:/workspace/UnifiedWebDevEnv/staticServer/public2"},"proxy":{},"name":""}
