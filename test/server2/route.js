@@ -1,8 +1,3 @@
-/**
-*@description 路由服务
-*@updateTime 2014-02-20/10
-*/
-
 var bouncy = require('bouncy');
 var fs = require("fs");
 var hosts = require("./hosts");
@@ -16,21 +11,10 @@ var routeList = {};//路由域名端口列表
 *  问题： 目前关闭路由服务时（server.close），并不能立即关闭，等所有连接断开时才会真正触发close关闭服务。
 */
 function start(list){
-    //指定路由列表不存在或为空对象，直接关闭退出。
-    if(typeof list !== "object" || JSON.stringify(list) === "{}"){
-        close();
-        return;
-    }
     //判断路由列表是否发生变化
     if(!isChange(list)){
         return;
     }
-    //是否已开启过服务，有则关闭重启
-    if(server){
-        console.log("重启路由中...");
-        server.close(); 
-    }
-    
     //更新绑定hosts
     var listStr = JSON.stringify(list);
     //先移除不再需要绑定的hosts
@@ -46,12 +30,20 @@ function start(list){
         }
     }
     
-    route(list);
+    //是否已开启过服务，有则关闭重启
+    if(server){
+        console.log("重启路由中...");
+        close();
+        route(list);
+    }else{
+        route(list);
+    }
+    
     routeList = list;
 }
 
-//开启路由
 function route(list){
+    //开启路由
     server = bouncy(function (req, res, bounce){
         var port = list[req.headers.host];
         // console.log("route: "+req.headers.host);
@@ -65,6 +57,9 @@ function route(list){
     });
     server.on("error", function (err){
         console.log(err);
+    });
+    server.on("close", function (){
+        console.log("路由已关闭！");
     });
     server.on("listening", function (){
         console.log("路由已启用！");
@@ -81,7 +76,6 @@ function isChange(list){
     var n1 = (JSON.stringify(list).match(/:/g) || []).length;//list个数
     var n2 = (JSON.stringify(routeList).match(/:/g) || []).length;//routeList个数
     
-    //属性个数不相同，返回true
     if(n1 !== n2){
         return true;
     }
@@ -121,22 +115,12 @@ function remove(domain){
 
 //关闭路由服务
 function close(callback){
-    callback = callback || function(){};
     if(server){
         server.close(callback);
     }
-    clearHosts();
     routeList = {};
-}
-
-//清除所有路由服务绑定的hosts
-function clearHosts(){
-    for(var k in routeList){
-        hosts.remove(k);
-    }
 }
 
 exports.start = start;
 exports.add = add;
 exports.remove = remove;
-exports.exit = close;

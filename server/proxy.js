@@ -5,7 +5,7 @@
 
 var nproxy = require("nproxy");
 var fs = require("fs");
-var listFilePath = process.cwd() + "/test/server/proxy_list.js";
+var listFilePath = process.cwd() + "/server/proxy_list.js";
 var proxyPort = 8989;
 var proxyServer = null;
 

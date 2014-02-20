@@ -1,46 +1,53 @@
+/**
+*@description æœåŠ¡ä¸»çº¿ç¨‹å…¥å£
+*@updateTime 2014-02-20/10
+*/
+
 var fs = require("fs");
 var child_process = require('child_process');
 var fileListen = false;
+
 var vhosts = {
     module: "./test/server/vhosts",
     process: null,
-    list: {}
+    list: []
 };
 var proxy = {
     module: "./test/server/proxy",
     process: null,
     list: []
 };
-//¼ÆÊıÆ÷£¬ÓÃÓÚÅĞ¶ÏÄÄĞ©·şÎñÅäÖÃ¹æÔò·¢ÉúÁË±ä»¯
-var getNum = (function (){
-        var n = 0;
-        return function (){
-            return ++n;
-        };
-    })();
 
-//»ñÈ¡ÅäÖÃĞÅÏ¢²¢Æô¶¯server/¸üĞÂserver
-function startup(path){
+/**
+*@description è·å–é…ç½®ä¿¡æ¯å¹¶å¯åŠ¨server/æ›´æ–°server
+*@param options {
+        configFile: "",//æœåŠ¡é…ç½®æ–‡ä»¶è·¯å¾„
+        appHost: "" //expressæœåŠ¡éœ€è¦çš„åŸŸåå’Œç«¯å£
+    }
+*/
+function startup(options){
+    var path = options.configFile;
+    var appHost = options.appHost;
     fs.exists(path, function (t){
         if(t){
-            //Ìí¼Ó¼àÌıÎÄ¼ş¸üĞÂÊÂ¼ş
+            //æ·»åŠ ç›‘å¬æ–‡ä»¶æ›´æ–°äº‹ä»¶
             if(!fileListen){
                 fs.watchFile(path,function (curr, prev){
                     if(curr.mtime > prev.mtime){
                         console.log("config file update~! " + path);
-                        startup(path);
+                        startup(options);
                     }
                 });
                 fileListen = true;
             }
-            //¶ÁÈ¡ÎÄ¼şÄÚÈİ
+            //è¯»å–æ–‡ä»¶å†…å®¹
             fs.readFile(path, {encoding: "utf8"}, function (err, data){
                 if(err){
                     throw err;
                 }
-                eval('var obj = ' + data);
+                var obj = JSON.parse(data);
                 
-                //´¦ÀíÊı¾İ£¬È»ºó¸üĞÂ·şÎñ
+                //å¤„ç†æ•°æ®ï¼Œç„¶åæ›´æ–°æœåŠ¡
                 if(dealData(obj)){
                     updateVhostsServer();
                     updateProxyServer();
@@ -53,26 +60,24 @@ function startup(path){
     
     function dealData(data){
         if(data){
-            var _n = getNum();//±êÊ¶±¾´Î´¦ÀíµÄÊı×Ö
-            var vhostsCfg = data.vhosts;
-            var proxyCfg = data.proxys;
-            var i, item, domain, path;
+            var vhostsCfg = data.vhost;
+            var proxyCfg = data.proxy;
+            var i, k, item, domain, path;
             
-            //´¦ÀívhostÅäÖÃÊı¾İ
-            for(i = 0; i < vhostsCfg.length; i++){
-                item = vhostsCfg[i];
-                domain = item.domain;
-                path = item.path;
-                vhosts.list[domain] = {
-                    path: item.path,
-                    port: item.port,
-                    ext: item.ext,
-                    _n: _n
-                };
+            //åˆå§‹åŒ–vhosté…ç½®æ•°æ®
+            vhosts.list = [];
+            if(appHost){
+                appHost.onlyRoute = true;
+                vhosts.list.push(appHost);
             }
-            vhosts._latest = _n;
+            for(domain in vhostsCfg){
+                vhosts.list.push({
+                    path: vhostsCfg[domain],
+                    domain: domain
+                });
+            }
             
-            //´¦Àí´úÀí·şÎñÅäÖÃÊı¾İ
+            //å¤„ç†ä»£ç†æœåŠ¡é…ç½®æ•°æ®
             proxy.list = [];
             for(i = 0; i < proxyCfg.length; i++){
                 item = proxyCfg[i];
@@ -88,34 +93,51 @@ function startup(path){
     } 
 }
 
-//¸üĞÂ±¾µØ¾²Ì¬·şÎñ
+/**
+*æ›´æ–°æœ¬åœ°é™æ€æœåŠ¡ã€‚åŒä»£ç†
+*/
 function updateVhostsServer(){
-    //vhostsÏß³Ì´¦Àí
-    vhosts.process = vhosts.process || child_process.fork(vhosts.module);
-    vhosts.process.send({
-        type: "update",
-        options: [vhosts.list, vhosts._lastest]
-    });
-    vhosts.process.on("close", function(){
-        console.log("vhosts.process closed~£¡");
-    });
+    //vhostsçº¿ç¨‹å¤„ç†
+    if(vhosts.list && vhosts.list.length > 0){
+        vhosts.process = vhosts.process || child_process.fork(vhosts.module);
+        vhosts.process.send({
+            type: "update",
+            options: [vhosts.list]
+        });
+    }else if(vhosts.process){
+        //ä¸å­˜åœ¨ä»£ç†æœåŠ¡æ—¶ï¼Œä¸­æ–­å·²å¼€å¯çš„ä»£ç†æœåŠ¡
+        process.kill(vhosts.process.pid, 'SIGHUP');
+    }
 }
 
-//¸üĞÂ´úÀí·şÎñ
+/**
+*æ›´æ–°ä»£ç†æœåŠ¡ã€‚å­˜åœ¨ä»£ç†è§„åˆ™ï¼Œä¾¿å¼€å¯ä¸€ä¸ªä»£ç†æœåŠ¡çº¿ç¨‹ï¼Œå¹¶å°†ä»£ç†è§„åˆ™åˆ—è¡¨ä¼ é€’ç»™è¯¥çº¿ç¨‹ï¼›ä¸å­˜åœ¨ä½†å·²å¼€å¯è¿‡ä»£ç†æœåŠ¡ï¼Œåˆ™ä¸­æ–­å·²å¼€å¯çš„ä»£ç†æœåŠ¡ï¼Œå¦åˆ™ä¸å¤„ç†ã€‚
+*/
 function updateProxyServer(){
-    //proxyÏß³Ì´¦Àí
-    proxy.process = proxy.process || child_process.fork(proxy.module);
-    proxy.process.send({
-        type: "update",
-        options: [proxy.list]
-    });
-    proxy.process.on("close", function(){
-        console.log("proxy.process closed~£¡");
-    });
+    //proxyçº¿ç¨‹å¤„ç†
+    if(proxy.list && proxy.list.length > 0){
+        proxy.process = proxy.process || child_process.fork(proxy.module);
+        proxy.process.send({
+            type: "update",
+            options: [proxy.list]
+        });
+    }else if(proxy.process){
+        //ä¸å­˜åœ¨ä»£ç†æœåŠ¡æ—¶ï¼Œä¸­æ–­å·²å¼€å¯çš„ä»£ç†æœåŠ¡
+        process.kill(proxy.process.pid, 'SIGHUP');
+    }
 }
 
-process.on('uncaughtException', function(err){
-  console.error('uncaughtException: ' + err.message);
+// process.on('uncaughtException', function(err){
+  // console.error('uncaughtException: ' + err.message);
+// });
+//ç›‘å¬è¿›ç¨‹ä¸­æ–­ä¿¡å·ï¼Œç„¶åå»¶è¿Ÿä¸€ç§’é€€å‡ºï¼Œä¾¿äºå…³é—­ç›¸å…³æœåŠ¡
+process.on('SIGINT', function() {
+  console.log('The service will be closed~!');
+  // setTimeout(process.exit, 1000);
+  setTimeout(function (){
+    console.log("The service process has exited~!");
+    process.exit();
+  }, 800);
 });
 
-exports.start = init;
+exports.start = startup;
