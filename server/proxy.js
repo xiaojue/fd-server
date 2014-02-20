@@ -1,6 +1,6 @@
 /**
 *@description 代理服务
-*@updateTime 2014-02-20/10
+*@updateTime 2014-02-20/17
 */
 
 var nproxy = require("nproxy");
@@ -19,9 +19,12 @@ function proxy(type, options){
 
 function updateProxy(list){
     close();
-    var listContent = "module.exports = " = JSON.stringify(list);
+    console.log(list);
+    var listContent = "module.exports = " + JSON.stringify(list);
+    console.log(listContent);
     fs.writeFile(listFilePath, listContent,function (err){
         if(err){
+            console.log("err");
             throw err;
         }
         console.log("proxy rule list saved~!");
@@ -31,7 +34,7 @@ function updateProxy(list){
     function start(){
         proxyServer = nproxy(proxyPort, {
             "responderListFilePath": listFilePath,
-            "debug": true
+            "debug": false
         });
         console.log("The proxy service has been updated~! ");
     }
@@ -62,4 +65,4 @@ process.on('SIGINT', function() {
   }, 500);
 });
 
-exports.start = start;
+// exports.start = start;

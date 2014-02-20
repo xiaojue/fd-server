@@ -1,6 +1,6 @@
 /**
 *@description 服务主线程入口
-*@updateTime 2014-02-20/10
+*@updateTime 2014-02-20/17
 */
 
 var fs = require("fs");
@@ -26,7 +26,8 @@ var proxy = {
     }
 */
 function startup(options){
-    var path = options.configFile;
+    var options = options || {};
+    var path = options.configFile || process.cwd() + "/config.json";
     var appHost = options.appHost;
     fs.exists(path, function (t){
         if(t){
@@ -62,7 +63,7 @@ function startup(options){
         if(data){
             var vhostsCfg = data.vhost;
             var proxyCfg = data.proxy;
-            var i, k, item, domain, path;
+            var i, k, item, path;
             
             //初始化vhost配置数据
             vhosts.list = [];
@@ -70,23 +71,21 @@ function startup(options){
                 appHost.onlyRoute = true;
                 vhosts.list.push(appHost);
             }
-            for(domain in vhostsCfg){
+            for(k in vhostsCfg){
                 vhosts.list.push({
-                    path: vhostsCfg[domain],
-                    domain: domain
+                    path: vhostsCfg[k],
+                    domain: k
                 });
             }
             
             //处理代理服务配置数据
             proxy.list = [];
-            for(i = 0; i < proxyCfg.length; i++){
-                item = proxyCfg[i];
+            for(k in proxyCfg){
                 proxy.list.push({
-                    pattern: item.pattern,
-                    responder: item.responder
+                    pattern: k,
+                    responder: proxyCfg[k]
                 });
-            }
-            
+            }            
             return true;
         }
         return false;
@@ -133,7 +132,6 @@ function updateProxyServer(){
 //监听进程中断信号，然后延迟一秒退出，便于关闭相关服务
 process.on('SIGINT', function() {
   console.log('The service will be closed~!');
-  // setTimeout(process.exit, 1000);
   setTimeout(function (){
     console.log("The service process has exited~!");
     process.exit();

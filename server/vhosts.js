@@ -1,148 +1,173 @@
 /**
-*@description ±¾µØ¾²Ì¬·şÎñ
-*@updateTime 2014-02-20/10
+*@description æœ¬åœ°é™æ€æœåŠ¡
+*@updateTime 2014-02-20/17
 */
-
+var fs = require("fs");
 var SS = require('node-static');
 var http = require('http');
 var route = require("./route");
 
-var routeList = {};//Â·ÓÉÁĞ±í keyÎªdomain valueÎªport
-var staticPaths = {};//´æ·Å¿ªÆôµÄserver¶ÔÏó,keyÎªpath
-//¼ÆÊıÆ÷£¬ÓÃÓÚÅĞ¶ÏÄÄĞ©·şÎñÅäÖÃ¹æÔò·¢ÉúÁË±ä»¯
-var getNum = (function (){
-        var n = 0;
-        return function (){
-            return ++n;
-        };
-    })();
+var routeList = {};//è·¯ç”±åˆ—è¡¨ keyä¸ºdomain valueä¸ºport
+var staticPaths = {};//å­˜æ”¾å¼€å¯çš„serverå¯¹è±¡,keyä¸ºpath
 /**
-*@description Ëæ»úÉú³ÉÒ»¸öÎ´±»Õ¼ÓÃµÄ¶Ë¿ÚºÅ
-*@return Ò»¸öÎ´±»Õ¼ÓÃµÄ¶Ë¿ÚºÅ
-*   ¶Ë¿ÚÊÇ·ñ±»Õ¼ÓÃÄ¿Ç°²»ÖªµÀÈçºÎÊµÏÖ£¬Òò´Ë²¢Î´ÑéÖ¤¡£Ä¿Ç°Éú³ÉµÄ¶Ë¿Ú·¶Î§ÊÇ8000~9000
+*@description éšæœºç”Ÿæˆä¸€ä¸ªæœªè¢«å ç”¨çš„ç«¯å£å·
+*@param cb {Function} å›è°ƒå‡½æ•°ï¼Œä¸€ä¸ªå‚æ•°ä¾¿æ˜¯ç”Ÿæˆçš„ç«¯å£å·
+*  é€šè¿‡åˆ›å»ºå¼€å¯ä¸€ä¸ªæµ‹è¯•æœåŠ¡ï¼Œä½¿ç”¨éšæœºå¾—åˆ°çš„ç«¯å£å·ç›‘å¬ã€‚
+*  è‹¥å‡ºç°é”™è¯¯ä¾¿è®¤ä¸ºè¿™ä¸ªç«¯å£ä¸å¯ç”¨ï¼Œé‡æ–°ç”Ÿæˆä¸€ä¸ªå†æµ‹è¯•ï¼›
+*  è‹¥å¯ä»¥ç›‘å¬ä½¿ç”¨å°±å…³é—­æµ‹è¯•æœåŠ¡ï¼Œå¹¶é€šè¿‡å›è°ƒè¿”å›è¿™ä¸ªç«¯å£å·ã€‚
 */
-function getPort(){
-    return parseInt(Math.random()*1000+8000);
-}
-
-/**
-*@description vhostsÈë¿Ú·½·¨
-*/
-function vhosts(type, options){
-    var fn = {
-        // "start": startServer,
-        // "exit": exit,
-        // "restart": startServer,
-        "update": update
-    };
-    fn[type] && fn[type].apply(null,options);
-}
-
-/**
-*@description ¿ªÆôÒ»¸öserver ·µ»Ø¼àÌıµÄ¶Ë¿ÚºÅ
-*@param path {String}: ĞèÒª¿ªÆô·şÎñµÄÎÄ¼şÂ·¾¶£¬±ØÑ¡
-*       port {Number}: ¶Ë¿ÚºÅ£¬¿ÉÑ¡
-*       options {Object}: À©Õ¹¶ÔÏó
-*@return {Object}: {
-*           port: ,
-*           path: ,
-*           server: 
-*        }
-*/
-function startServer(path, port, options){
-    var port = port || getPort();//¶Ë¿Ú
+function getPort(cb){
+    var times = 10;
+    _getPort();
     
-    //Æô¶¯server
-    var fileServer = new SS.Server(path, options);
-    var server = http.createServer(function (request, response) {
-        request.addListener('end', function () {
-            fileServer.serve(request, response, function (err, result) {
-                if(err){
-                    response.writeHead(err.status, err.headers);
-                    response.end();
-                }
+    function _getPort(){
+        var port = parseInt(Math.random()*8000+1000);
+        if(times-- < 0){
+            cb(null, "OMG~ï¼æ‰¾ä¸åˆ°å¯ç”¨ç«¯å£ã€‚ã€‚");
+        }else{
+            var server = http.createServer();
+            server.on("error", function(){
+                //é”™è¯¯è¯´æ˜ä¸å¯ç”¨ï¼Œåˆ™é‡æ–°è·å–ä¸€ä¸ª
+                _getPort();
             });
-        }).resume();
-    });
-    
-    server.listen(port);
-    console.log("Server runing at port: " + port + ". path: " + path);
-    server.on("close", function (){
-        console.log("static server closed~! " + path);
-    });
-    return {
-        path: path,
-        port: port,
-        server: server
-    };
+            server.on("listening", function(){
+                //å¯ç”¨ï¼Œåˆ™å…³é—­å¼€å¯çš„æµ‹è¯•æœåŠ¡ï¼Œè¿”å›ç«¯å£å·
+                server.close();
+                cb(port);
+            });
+            server.listen(port);
+        }
+    }
 }
 
 /**
-*@description Æô¶¯/¸üĞÂ·şÎñ
-*@param list {Array} ÒªÆô¶¯µÄ·şÎñÁĞ±í
+*@description å¼€å¯ä¸€ä¸ªserver è¿”å›ç›‘å¬çš„ç«¯å£å·
+*@param path {String}: éœ€è¦å¼€å¯æœåŠ¡çš„æ–‡ä»¶è·¯å¾„ï¼Œå¿…é€‰
+*       cb {Function}: å›è°ƒå‡½æ•°ï¼Œä¼ é€’ä¸€ä¸ªå¼€å¯çš„serverä¿¡æ¯å¯¹è±¡ã€‚
+*       options {Object}: æ‰©å±•å¯¹è±¡
+*/
+function startServer(path, cb, options){
+    var cb = cb || function (){};
+    var options = options || {};
+    fs.exists(path, function (t){
+        if(t){
+            if(!options.port){
+                getPort(function (p, err){
+                    p ? cb(_start(path, p, options)) : cb({err:err});
+                });
+            }else{
+                cb(_start(path, options.port, options));
+            }
+        }else{
+            cb({err: "static-server: æŒ‡å®šè·¯å¾„ä¸åˆæ³•~ï¼" + path});
+        }
+    });
+    
+    function _start(path, port, options){
+        //å¯åŠ¨server
+        var fileServer = new SS.Server(path, options);
+        var server = http.createServer(function (request, response) {
+            request.addListener('end', function () {
+                fileServer.serve(request, response, function (err, result) {
+                    if(err){
+                        response.writeHead(err.status, err.headers);
+                        response.end();
+                    }
+                });
+            }).resume();
+        });
+        server.on("close", function (){
+            console.log("static server closed~! " + path);
+        });
+        
+        server.listen(port);
+        console.log("Server runing at port: " + port + ". path: " + path);
+        return {
+            path: path,
+            port: port,
+            server: server
+        };
+    }
+}
+
+/**
+*@description å¯åŠ¨/æ›´æ–°æœåŠ¡
+*@param list {Array} è¦å¯åŠ¨çš„æœåŠ¡åˆ—è¡¨
 */
 function update(list){
     if(list && list instanceof Array && list.length > 0){
-        var cur_n = getNum(), i = 0, item, path, domain, result;
-        routeList = {};//³õÊ¼Â·ÓÉÁĞ±í
+        var i = 0, item, path, domain, result;
+        var newQueue = [];//å­˜æ”¾éœ€è¦æ–°å¼€å¯çš„æœåŠ¡è·¯å¾„åˆ—è¡¨
         
+        routeList = {};//åˆå§‹è·¯ç”±åˆ—è¡¨
         for(; i < list.length; i++){
             item = list[i];
             path = item.path;
             domain = item.domain;
             
-            //Í¨¹ıÂ·¾¶ÅĞ¶Ï£¬¸ÃÂ·¾¶ÊÇ·ñ´æÔÚÒÑ¿ªÆôÁË¾²Ì¬·şÎñ¡£
-            //Èô´æÔÚ£¬Ôò±êÊ¶²¢½«ÓòÃûÖ¸ÏòÌí¼Óµ½Â·ÓÉÁĞ±íÖĞ£»
-            //Èô²»´æÔÚ£¬Ôò¿ªÆôÒ»¸ö£¬È»ºó±£´æ¡¢±êÊ¶²¢½«ÓòÃûÖ¸ÏòÌí¼Óµ½Â·ÓÉÁĞ±íÖĞ
+            //é€šè¿‡è·¯å¾„åˆ¤æ–­ï¼Œè¯¥è·¯å¾„æ˜¯å¦å­˜åœ¨å·²å¼€å¯äº†é™æ€æœåŠ¡ã€‚
+            //è‹¥å­˜åœ¨ï¼Œåˆ™æ ‡è¯†å¹¶å°†åŸŸåæŒ‡å‘æ·»åŠ åˆ°è·¯ç”±åˆ—è¡¨ä¸­ï¼›
+            //è‹¥ä¸å­˜åœ¨ï¼Œåˆ™å°†è·¯å¾„æ”¾å…¥åˆ°newQueueä¸­
             if(path && domain){
                 if(staticPaths[path]){
-                    staticPaths[path]._n = cur_n;
+                    staticPaths[path].enabled = true;
                     routeList[domain] = staticPaths[path].port;
                 }else{
-                    result = startServer(path);
-                    if(!result || result.err){
-                        console.warn("static-server start fail~! path: " + path + ", port: " + port + ", err: " + err);
-                    }else{
-                        result._n = cur_n;
-                        staticPaths[path] = result;
-                        routeList[domain] = result.port;
-                    }
+                    newQueue.push(path);
                 }
             }
-            
-            //½öÌí¼ÓÂ·ÓÉ·şÎñ£¬ĞèÒªÖ¸¶¨ÓòÃûºÍ¶Ë¿Ú¡£
+            //ä»…æ·»åŠ è·¯ç”±æœåŠ¡ï¼Œéœ€è¦æŒ‡å®šåŸŸåå’Œç«¯å£ã€‚
             if(item.onlyRoute){
                 routeList[domain] = item.port;
             }
             
         }
-        //Æô¶¯¸üĞÂÂ·ÓÉ·şÎñ
-        routeStart();
         
-        //¹Ø±ÕÇå³ı²»ĞèÒªµÄ·şÎñ
+        //å…³é—­æ¸…é™¤ä¸éœ€è¦çš„æœåŠ¡
         var _paths = {};
         for(var k in staticPaths){
             item = staticPaths[k];
-            if(item._n === cur_n){
+            if(item.enabled){
+                delete item.enabled;
                 _paths[k] = item;
             }else{
                 close(item.server);
             }
         }
         staticPaths = _paths;
+        
+        //å¼€å¯æ–°å¢çš„æœåŠ¡
+        if(newQueue.length > 0){
+            var count = newQueue.length;
+            for(i = 0; i < newQueue.length; i++){
+                startServer(newQueue[i], function(result){
+                    if(!result || result.err){
+                        console.warn("static-server start fail~! path: " + path + ", port: " + port + ", err: " + (result&&result.err));
+                    }else{
+                        staticPaths[path] = result;
+                        routeList[domain] = result.port;
+                    }
+                    if(--count === 0){
+                        routeStart();
+                    }
+                });
+            }
+        }else{
+            routeStart();
+        }
     }else{
         close();
     }
 }
 
-//Æô¶¯/ÖØÆô Â·ÓÉ
+//å¯åŠ¨/é‡å¯ è·¯ç”±
 function routeStart(){
     route.start(routeList);
 }
 
 /**
-*@description ¹Ø±Õ·şÎñ
-*@param server {Server} ĞèÒª¹Ø±ÕµÄ·şÎñ ¿ÉÑ¡
+*@description å…³é—­æœåŠ¡
+*@param server {Server} éœ€è¦å…³é—­çš„æœåŠ¡ å¯é€‰
 */
 function close(server){
     if(server){
@@ -168,6 +193,16 @@ function close(server){
 
 function exit(){
     route.exit();
+}
+
+/**
+*@description vhostså…¥å£æ–¹æ³•
+*/
+function vhosts(type, options){
+    var fn = {
+        "update": update
+    };
+    fn[type] && fn[type].apply(null,options);
 }
 
 process.on("message", function (m){

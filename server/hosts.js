@@ -1,14 +1,13 @@
 /**
-*@description hosts¹ÜÀí °ó¶¨ºÍÒÆ³ıhosts
+*@description hostsç®¡ç† ç»‘å®šå’Œç§»é™¤hosts
 *
-* ÎÊÌâ£ºhostile°ühostsÎÄ¼şÂ·¾¶winÏµÍ³ĞèÒªĞŞ¸ÄÏÂ£¬Ìí¼Óc:¼´¿É£¬linuxÃ»ÊÔ¹ı¡£ÁíÍâÕâ¸ö°üÒ²Ö»ÄÜµ¥ÌõµÄÉèÖÃĞŞ¸Ä£¬²¢ÇÒÓÉÓÚÊÇÒì²½µÄ»á³öÏÖÏà»¥¸²¸ÇÏÖÏó¡£ÎÒ¿´hostile´úÂëÊµÏÖ²»¸´ÔÓ£¬¿É²Î¿¼ÖØĞÂÊµÏÖÒ»¸ö¡£Ä¿Ç°ÎªÁË¾¡¿ì×ö³öµã½ø¶È£¬¼ÓÁË¶ÓÁĞÈ¥ÉèÖÃÒÀ´Îhosts£¬ÈÔÈ»Ê¹ÓÃhostile¡£
-*@updateTime 2014-02-20/10
+* é—®é¢˜ï¼šhostileåŒ…hostsæ–‡ä»¶è·¯å¾„winç³»ç»Ÿéœ€è¦ä¿®æ”¹ä¸‹ï¼Œæ·»åŠ c:å³å¯ï¼Œlinuxæ²¡è¯•è¿‡ã€‚å¦å¤–è¿™ä¸ªåŒ…ä¹Ÿåªèƒ½å•æ¡çš„è®¾ç½®ä¿®æ”¹ï¼Œå¹¶ä¸”ç”±äºæ˜¯å¼‚æ­¥çš„ä¼šå‡ºç°ç›¸äº’è¦†ç›–ç°è±¡ã€‚æˆ‘çœ‹hostileä»£ç å®ç°ä¸å¤æ‚ï¼Œå¯å‚è€ƒé‡æ–°å®ç°ä¸€ä¸ªã€‚ç›®å‰ä¸ºäº†å°½å¿«åšå‡ºç‚¹è¿›åº¦ï¼ŒåŠ äº†é˜Ÿåˆ—å»è®¾ç½®ä¾æ¬¡hostsï¼Œä»ç„¶ä½¿ç”¨hostileã€‚
+*@updateTime 2014-02-20/17
 */
 var hostile = require('hostile')
 var queue = [];
-var ing = false;
 
-//set ÉèÖÃhost°ó¶¨
+//set è®¾ç½®hostç»‘å®š
 function set(domain, ip) {
     queue.push(function (cb){
         hostile.set(ip || '127.0.0.1', domain, function (err) {
@@ -22,7 +21,7 @@ function set(domain, ip) {
     });
     deal();
 }
-//remove ÒÆ³ı°ó¶¨µÄhostÉèÖÃ
+//remove ç§»é™¤ç»‘å®šçš„hostè®¾ç½®
 function remove(domain, ip) {
     queue.push(function (cb){
         hostile.remove(ip || '127.0.0.1', domain, function (err) {
