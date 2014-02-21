@@ -11,17 +11,16 @@ var proxyServer = null;
 
 function proxy(type, options){
     var fn = {
-        "update": updateProxy
-        // "exit": close
+        "update": updateProxy,
+        "exit": exitProcess
     };
     fn[type] && fn[type].apply(null,options);
 }
 
 function updateProxy(list){
     close();
-    console.log(list);
-    var listContent = "module.exports = " + JSON.stringify(list);
-    console.log(listContent);
+    var listContent = "module.exports = " + JSON.stringify(list) + ";";
+    // console.log(listContent);
     fs.writeFile(listFilePath, listContent,function (err){
         if(err){
             console.log("err");
@@ -40,29 +39,31 @@ function updateProxy(list){
     }
 }
 
-function close(){
+function close(cb){
     if(proxyServer){
         for(var k in proxyServer){
-            proxyServer[k] && proxyServer[k].close(function (){
-                console.log("proxy " + k + " closed~!");
-            });
+            proxyServer[k] && proxyServer[k].close(function (){});
         }
     }
-    fs.writeFile(listFilePath, "module.exports = []",function (err){});
+    fs.unlink(listFilePath,cb||function(){});
+    // fs.writeFile(listFilePath, "module.exports = [];",function (err){});
+}
+//退出进程
+function exitProcess(){
+    console.log("The proxy process will be exit~!");
+    close(function(){
+        console.log("The proxy process has exited~!");
+        process.exit();
+    });
 }
 
 process.on("message", function (m){
     console.log("proxy " + m.type);
     proxy(m.type, m.options);
 });
-
+//监听进程中断信号
 process.on('SIGINT', function() {
-  console.log("The proxy process will be exit~!");
-  close();
-  setTimeout(function (){
-    console.log("The proxy process has exited~!");
-    process.exit();
-  }, 500);
+    exitProcess();
 });
 
 // exports.start = start;
