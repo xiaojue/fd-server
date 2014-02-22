@@ -6,13 +6,6 @@
 exports.list = function(req, res){
 	var util = require('util');
 	var fs = require("fs");
-
-	var listener = require('../models/listener.js');
-	var stream = new listener();
-	stream.on("data", function(data) {
-	    console.log('Received data: "' + data + '"');
-	})
-	
 	if(req.body.local === "s"){
 		var localJson;
 		fs.readFile('localConfig.json','utf-8', function (err, data) {
@@ -53,7 +46,6 @@ exports.list = function(req, res){
 				fs.writeFile('localConfig.json', JSON.stringify(localJson), function (err) {
 				  	if (err) throw err;
 				  	console.log('It\'s saved!');
-				  	stream.notice("It works!"); // Received data: "It works!"
 				});
 				res.send('(\'{"message": "successful"}\')');
 			}
@@ -104,7 +96,6 @@ exports.list = function(req, res){
 				fs.writeFile('config.json', JSON.stringify(json), function (err) {
 				  	if (err) throw err;
 				  	console.log('It\'s saved!');
-				  	stream.notice("It works!"); // Received data: "It works!"
 				});
 				res.send('(\'{"message": "successful"}\')');
 			}
