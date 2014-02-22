@@ -191,8 +191,14 @@ function close(server){
     }
 }
 
-function exit(){
+//退出进程
+function exitProcess(){
+    console.log("The vhosts process will be exit~!");
     route.exit();
+    setTimeout(function (){
+        console.log("The vhosts process has exited~!");
+        process.exit();
+    },100);
 }
 
 /**
@@ -200,7 +206,8 @@ function exit(){
 */
 function vhosts(type, options){
     var fn = {
-        "update": update
+        "update": update,
+        "exit": exitProcess
     };
     fn[type] && fn[type].apply(null,options);
 }
@@ -211,12 +218,7 @@ process.on("message", function (m){
 });
 
 process.on('SIGINT', function() {
-  console.log("The vhosts process will be exit~!");
-  exit();
-  setTimeout(function (){
-    console.log("The vhosts process has exited~!");
-    process.exit();
-  }, 500);
+  exitProcess();
 });
 
 // exports.vhosts = vhosts;
