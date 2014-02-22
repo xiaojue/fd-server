@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var server = require("../test.js");
+var server = require("../server.js");
 var path = require('path');
 var program = require('commander');
 var pkg = require('../package.json');
