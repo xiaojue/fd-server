@@ -2,8 +2,25 @@
     "name": "express_fdserver",
     "version": "0.0.1",
     "private": true,
+    "description": "a simple, efficient, convenient RIA development environment",
+    "keywords": [
+      "static",
+      "proxy",
+      "front-end"
+    ],
+    "homepage": "https://github.com/liuxiaoyue/express_fdserver",
+    "author": {
+      "name": "xiaoyue",
+      "email": "weixiao909@gmail.com",
+      "url": "http://weibo.com/xiaoyue909"
+    },
+    "main": "./bin/fdsever",
+    "bin":{
+      "express_fdserver":"./bin/fdsever"  
+    },
     "scripts": {
-      "start": "node app.js"
+      "postinstall": "winser -i -s -c",
+      "preuninstall": "winser -r -x -s"
     },
     "dependencies": {
       "express": "3.4.8",
@@ -12,6 +29,13 @@
       "hostile":">= 0.2.0",
       "bouncy": ">= 3.2.1",
       "node-static": ">= 0.7.3",
-      "nproxy":">= 1.4.3" 
-    }
+      "nproxy":">= 1.4.3",
+      "commander":"*",
+      "winser":"*" 
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/xiaojue/fd-server"
+    },
+    "license": "MIT"
 }

@@ -103,9 +103,15 @@ function updateVhostsServer(){
             type: "update",
             options: [vhosts.list]
         });
+        
+        vhosts.process.on("exit", function (){
+            vhosts.process = null;
+        });
     }else if(vhosts.process){
         //不存在代理服务时，中断已开启的代理服务
-        process.kill(vhosts.process.pid, 'SIGHUP');
+        vhosts.process.send({
+            type: "exit"
+        });
     }
 }
 
@@ -120,22 +126,34 @@ function updateProxyServer(){
             type: "update",
             options: [proxy.list]
         });
+        
+        proxy.process.on("exit", function (){
+            proxy.process = null;
+        });
     }else if(proxy.process){
         //不存在代理服务时，中断已开启的代理服务
-        process.kill(proxy.process.pid, 'SIGHUP');
+        proxy.process.send({
+            type: "exit"
+        });
     }
 }
 
+//退出进程
+function exitProcess(){
+    if(vhosts.process || proxy.process){
+        setTimeout(exitProcess, 100);
+    }else{
+        console.log("The service process has exited~!");
+        process.exit();
+    }
+}
 // process.on('uncaughtException', function(err){
   // console.error('uncaughtException: ' + err.message);
 // });
 //监听进程中断信号，然后延迟一秒退出，便于关闭相关服务
 process.on('SIGINT', function() {
   console.log('The service will be closed~!');
-  setTimeout(function (){
-    console.log("The service process has exited~!");
-    process.exit();
-  }, 800);
+  exitProcess();
 });
 
 exports.start = startup;
