@@ -26,6 +26,7 @@ var proxy = {
     }
 */
 function startup(options){
+    console.log("index: " + __dirname);
     var options = options || {};
     var path = options.configFile || process.cwd() + "/config.json";
     var appHost = options.appHost;
@@ -154,6 +155,15 @@ function exitProcess(){
 process.on('SIGINT', function() {
   console.log('The service will be closed~!');
   exitProcess();
+});
+
+//test
+process.on('message', function(m) {
+  console.log(m);
+  if(m.type === "exit"){
+    console.log('The service will be closed~! wwwwwwww');
+    exitProcess();
+  }
 });
 
 exports.start = startup;

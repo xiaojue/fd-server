@@ -18,10 +18,6 @@
     "bin":{
       "express_fdserver":"./bin/fdsever"  
     },
-    "scripts": {
-      "postinstall": "winser -i -s -c",
-      "preuninstall": "winser -r -x -s"
-    },
     "dependencies": {
       "express": "3.4.8",
       "ejs": "*",
@@ -30,8 +26,7 @@
       "bouncy": ">= 3.2.1",
       "node-static": ">= 0.7.3",
       "nproxy":">= 1.4.3",
-      "commander":"*",
-      "winser":"*" 
+      "commander":"*"
     },
     "repository": {
       "type": "git",

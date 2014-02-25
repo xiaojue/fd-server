@@ -142,7 +142,7 @@ function update(list){
             for(i = 0; i < newQueue.length; i++){
                 startServer(newQueue[i], function(result){
                     if(!result || result.err){
-                        console.warn("static-server start fail~! path: " + path + ", port: " + port + ", err: " + (result&&result.err));
+                        console.warn("static-server start fail~! path: " + newQueue[i] + ", err: " + (result&&result.err));
                     }else{
                         staticPaths[path] = result;
                         routeList[domain] = result.port;
