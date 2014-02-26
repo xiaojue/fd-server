@@ -1,20 +1,19 @@
 #!/usr/bin/env node
-var server = require("../server/server.js");
-var commserver = require("../server/start.js");
-var path = require('path');
-var program = require('commander');
+var fds = require("../lib/fdServer.js");
 var pkg = require('../package.json');
-process.chdir(process.cwd().replace(/\\bin/g, ''));
-program.version(pkg.version);
+var program = require('commander');
 
-program.command("open").description("local server open");
+program.version(pkg.version);
+program.command("open").description("local server open").action(function (){
+    fds({type: "open"});
+});
 program.command("start").description("open local development environment and register local system server").action(function(){
-	commserver.start();
+	fds({type: "start"});
 });
 program.command("stop").description("exit local development environment").action(function(){
-	commserver.stop();
+	fds({type: "stop"});
 });
 program.command("remove").description("remove register local system server").action(function(){
-	commserver.remove();
+	fds({type: "removeService"});
 });
 program.parse(process.argv);
