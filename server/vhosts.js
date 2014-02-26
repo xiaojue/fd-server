@@ -96,8 +96,8 @@ function startServer(path, cb, options){
 */
 function update(list){
     if(list && list instanceof Array && list.length > 0){
+        var newQueue = {}, newQueue_num = 0;//存放需要新开启的服务路径列表
         var i = 0, item, path, domain, result;
-        var newQueue = [];//存放需要新开启的服务路径列表
         
         routeList = {};//初始路由列表
         for(; i < list.length; i++){
@@ -107,13 +107,18 @@ function update(list){
             
             //通过路径判断，该路径是否存在已开启了静态服务。
             //若存在，则标识并将域名指向添加到路由列表中；
-            //若不存在，则将路径放入到newQueue中
+            //若不存在，则将路径及域名信息放入到newQueue中
             if(path && domain){
                 if(staticPaths[path]){
                     staticPaths[path].enabled = true;
                     routeList[domain] = staticPaths[path].port;
                 }else{
-                    newQueue.push(path);
+                    if(newQueue[path]){
+                        newQueue[path].push(domain);
+                    }else{
+                        newQueue[path] = [domain];
+                        newQueue_num++;
+                    }
                 }
             }
             //仅添加路由服务，需要指定域名和端口。
@@ -123,31 +128,22 @@ function update(list){
             
         }
         
-        //关闭清除不需要的服务
-        var _paths = {};
-        for(var k in staticPaths){
-            item = staticPaths[k];
-            if(item.enabled){
-                delete item.enabled;
-                _paths[k] = item;
-            }else{
-                close(item.server);
-            }
-        }
-        staticPaths = _paths;
+        clearNoneedServer();
         
         //开启新增的服务
-        if(newQueue.length > 0){
-            var count = newQueue.length;
-            for(i = 0; i < newQueue.length; i++){
-                startServer(newQueue[i], function(result){
+        if(newQueue_num > 0){
+            for(path in newQueue){
+                startServer(path, function(result){
                     if(!result || result.err){
                         console.warn("static-server start fail~! path: " + newQueue[i] + ", err: " + (result&&result.err));
                     }else{
                         staticPaths[path] = result;
-                        routeList[domain] = result.port;
+                        
+                        for(i = 0; i < newQueue[path].length; i++){
+                            routeList[newQueue[path][i]] = result.port;
+                        }
                     }
-                    if(--count === 0){
+                    if(--newQueue_num === 0){
                         routeStart();
                     }
                 });
@@ -157,6 +153,21 @@ function update(list){
         }
     }else{
         close();
+    }
+    
+    //关闭清除不需要的服务
+    function clearNoneedServer(){
+        var _paths = {}, k, item;
+        for(k in staticPaths){
+            item = staticPaths[k];
+            if(item.enabled){
+                delete item.enabled;
+                _paths[k] = item;
+            }else{
+                close(item.server);
+            }
+        }
+        staticPaths = _paths;
     }
 }
 
