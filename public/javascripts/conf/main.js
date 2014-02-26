@@ -329,24 +329,36 @@ define('conf/main',function(require,exports,module){
                     sh : JSON.stringify(configServerData)
                 });
             }else{
-                for(var i in localProxyData){
-                    for(var j in localProxyData[i]){
-                        if(localProxyData[i][j][0] === exports.data.srcUrl){
-                            errSrc.show();
-                            errSrc.text("代理规则重复");
-                            return;
-                        }
-                    } 
-                }
-
-                exports.hideDialog();
                 var item = $('#saveRule').attr("srcEdit");
                 if(parseInt(item)){
                     item = item.split('_');
-                    //编辑规则的时候，更新json数据
+                    //编辑规则的时候，更新json数据 此处排重处理 编辑的 时候禁止和其他项编辑重复
+                    var copy = jQuery.extend(true, {}, localProxyData);
+                    delete copy['group' + item[0]]['rule' + item[1]];
+                    console.log(copy);
+                    for(var i in copy){
+                        for(var j in copy[i]){
+                            if(copy[i][j][0] === exports.data.srcUrl){
+                                errSrc.show();
+                                errSrc.text("代理规则重复");
+                                return;
+                            }
+                        } 
+                    }
+                    exports.hideDialog();
                     localProxyData['group' + item[0]]['rule' + item[1]] =[exports.data.srcUrl,exports.data.urlTo];
                     exports.updateGroupListFunc(localProxyData, allnamelist);
                 }else{
+                    for(var i in localProxyData){
+                        for(var j in localProxyData[i]){
+                            if(localProxyData[i][j][0] === exports.data.srcUrl){
+                                errSrc.show();
+                                errSrc.text("代理规则重复");
+                                return;
+                            }
+                        } 
+                    }
+                    exports.hideDialog();
                     if(m != 0){
                         //对已经存在的组添加规则
                         localProxyData['group' + type]['rule' + m] =[exports.data.srcUrl,exports.data.urlTo];
