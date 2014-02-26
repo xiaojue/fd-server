@@ -6,14 +6,15 @@ var program = require('commander');
 var pkg = require('../package.json');
 process.chdir(process.cwd().replace(/\\bin/g, ''));
 program.version(pkg.version);
-// program.option('-c, --config <path>', 'set the config file');
-
 
 program.command("open").description("local server open");
-program.command("start").description("open local development environment").action(function(){
+program.command("start").description("open local development environment and register local system server").action(function(){
 	commserver.start();
 });
 program.command("stop").description("exit local development environment").action(function(){
 	commserver.stop();
+});
+program.command("remove").description("remove register local system server").action(function(){
+	commserver.remove();
 });
 program.parse(process.argv);

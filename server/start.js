@@ -5,7 +5,7 @@ var http = require("http");
 // console.log("__dirname: " + __dirname);
 // console.log("cwd: " + process.cwd());
 var options = {
-    name: "Fdserver11111",
+    name: "fdserver",
     description: "The nodejs web server. express_fdserver. ",
     script: __dirname + "\\sys.js"
 };
