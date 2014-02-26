@@ -6,9 +6,14 @@
 exports.list = function(req, res){
 	var util = require('util');
 	var fs = require("fs");
+
+	var vhosts = {
+	    localConfig: __dirname.replace(/routes/,"") + "/localConfig.json",
+	    config:__dirname.replace(/routes/,"") + "/config.json"
+	};
 	if(req.body.local === "s"){
 		var localJson;
-		fs.readFile('localConfig.json','utf-8', function (err, data) {
+		fs.readFile(vhosts.localConfig,'utf-8', function (err, data) {
 			if(err){
 				console.log(err);
 			}else{
@@ -43,7 +48,7 @@ exports.list = function(req, res){
 			}
 
 			function modifyLocalConfig(){
-				fs.writeFile('localConfig.json', JSON.stringify(localJson), function (err) {
+				fs.writeFile(vhosts.localConfig, JSON.stringify(localJson), function (err) {
 				  	if (err) throw err;
 				  	console.log('It\'s saved!');
 				});
@@ -54,7 +59,7 @@ exports.list = function(req, res){
 	}else{
 		var configData;
 		var json;
-		fs.readFile('config.json','utf-8', function (err, data) {
+		fs.readFile(vhosts.config,'utf-8', function (err, data) {
 			if(err){
 				console.log(err);
 			}else{
@@ -93,7 +98,7 @@ exports.list = function(req, res){
 			}	
 
 			function modifyConfig(){
-				fs.writeFile('config.json', JSON.stringify(json), function (err) {
+				fs.writeFile(vhosts.config, JSON.stringify(json), function (err) {
 				  	if (err) throw err;
 				  	console.log('It\'s saved!');
 				});

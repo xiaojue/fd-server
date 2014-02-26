@@ -8,12 +8,12 @@ var child_process = require('child_process');
 var fileListen = false;
 
 var vhosts = {
-    module: "./server/vhosts",
+    module: __dirname + "/vhosts",
     process: null,
     list: []
 };
 var proxy = {
-    module: "./server/proxy",
+    module: __dirname + "/proxy",
     process: null,
     list: []
 };
