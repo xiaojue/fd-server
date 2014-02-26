@@ -2,64 +2,82 @@
 *@description 服务主线程入口
 *@updateTime 2014-02-20/17
 */
-
 var fs = require("fs");
 var child_process = require('child_process');
-var fileListen = false;
+var path = require("path");
+var expr = require("../app.js");
+var ing = false;
 
 var vhosts = {
-    module: "./server/vhosts",
+    module: path.join(__dirname, "vhosts.js"),
     process: null,
     list: []
 };
 var proxy = {
-    module: "./server/proxy",
+    module: path.join(__dirname, "proxy.js"),
     process: null,
     list: []
 };
 
+var defaultOpitons = {
+    appPort: 3003,
+    appHost: "www.sina-fds.com",
+    configFilePath: path.join(__dirname, "../config.json")
+};
+
 /**
-*@description 获取配置信息并启动server/更新server
+*@description 获取配置信息并启动server
 *@param options {
-        configFile: "",//服务配置文件路径
-        appHost: "" //express服务需要的域名和端口
+        configFilePath: "",//服务配置文件路径
+        appPort: "" //express服务需要的端口
+        appHost: "" //express服务需要的域名
     }
 */
 function startup(options){
-    console.log("index: " + __dirname);
+    if(ing){
+        console.log("服务已启用~！");
+        return;
+    }
+    ing = true;
+    
     var options = options || {};
-    var path = options.configFile || process.cwd() + "/config.json";
-    var appHost = options.appHost;
+    var path = options.configFilePath || defaultOpitons.configFilePath;
+    var appPort = options.appPort || defaultOpitons.appPort;
+    var appHost = options.appHost || defaultOpitons.appHost;
+    
+    //启动express Web服务
+    expr.listen(appPort);
     fs.exists(path, function (t){
         if(t){
             //添加监听文件更新事件
-            if(!fileListen){
-                fs.watchFile(path,function (curr, prev){
-                    if(curr.mtime > prev.mtime){
-                        console.log("config file update~! " + path);
-                        startup(options);
-                    }
-                });
-                fileListen = true;
-            }
-            //读取文件内容
-            fs.readFile(path, {encoding: "utf8"}, function (err, data){
-                if(err){
-                    throw err;
-                }
-                var obj = JSON.parse(data);
-                
-                //处理数据，然后更新服务
-                if(dealData(obj)){
-                    updateVhostsServer();
-                    updateProxyServer();
+            fs.watchFile(path,function (curr, prev){
+                if(curr.mtime > prev.mtime){
+                    console.log("config file update~! " + path);
+                    _start();
                 }
             });
+            
+            _start();
         }else{
             console.warn("file not found. " + path);
         }
     });
     
+    function _start(){
+        //读取文件内容
+        fs.readFile(path, {encoding: "utf8"}, function (err, data){
+            if(err){
+                throw err;
+            }
+            var obj = JSON.parse(data);
+            
+            //处理数据，然后更新服务
+            if(dealData(obj)){
+                updateVhostsServer();
+                updateProxyServer();
+            }
+        });
+    }
     function dealData(data){
         if(data){
             var vhostsCfg = data.vhost;
@@ -68,10 +86,11 @@ function startup(options){
             
             //初始化vhost配置数据
             vhosts.list = [];
-            if(appHost){
-                appHost.onlyRoute = true;
-                vhosts.list.push(appHost);
-            }
+            vhosts.list.push({
+                port: appPort,
+                domain: appHost,
+                onlyRoute: true
+            });
             for(k in vhostsCfg){
                 vhosts.list.push({
                     path: vhostsCfg[k],
@@ -140,30 +159,39 @@ function updateProxyServer(){
 }
 
 //退出进程
-function exitProcess(){
-    if(vhosts.process || proxy.process){
-        setTimeout(exitProcess, 100);
-    }else{
-        console.log("The service process has exited~!");
-        process.exit();
+function exitProcess(msg){
+    if(exitProcess.ing){
+        return;
     }
+    exitProcess.ing = true;
+    console.log('The service will be closed~! by ' + (msg||"stop"));
+    vhosts.process ? vhosts.process.send({type:"exit"}) : '';
+    proxy.process ? proxy.process.send({type:"exit"}) : '';
+    
+    setInterval(function (){
+        if(!vhosts.process && !proxy.process){
+            console.log("The service process has exited~!");
+            process.exit();
+        }
+    }, 100);
 }
 // process.on('uncaughtException', function(err){
   // console.error('uncaughtException: ' + err.message);
 // });
 //监听进程中断信号，然后延迟一秒退出，便于关闭相关服务
 process.on('SIGINT', function() {
-  console.log('The service will be closed~!');
-  exitProcess();
+  exitProcess("SIGINT");
 });
 
-//test
-process.on('message', function(m) {
-  console.log(m);
-  if(m.type === "exit"){
-    console.log('The service will be closed~! wwwwwwww');
-    exitProcess();
-  }
+process.on("message", function (m){
+    if(m.type === "exit"){
+        exitProcess("message[exit]");
+    }
+});
+
+process.on('exit', function() {
+    console.log("The service has exited~!~~~~~~~~~~~~~~~~~~`````");
 });
 
 exports.start = startup;
+exports.stop = exitProcess;

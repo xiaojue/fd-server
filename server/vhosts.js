@@ -192,8 +192,13 @@ function close(server){
 }
 
 //退出进程
-function exitProcess(){
-    console.log("The vhosts process will be exit~!");
+function exitProcess(msg){
+    if(exitProcess.ing){
+        return;
+    }
+    exitProcess.ing = true;
+    console.log('The vhosts process will be closed~! by ' + (msg||"exit"));
+    
     route.exit();
     setTimeout(function (){
         console.log("The vhosts process has exited~!");
@@ -218,7 +223,11 @@ process.on("message", function (m){
 });
 
 process.on('SIGINT', function() {
-  exitProcess();
+  exitProcess("SIGINT");
+});
+
+process.on('exit', function() {
+    console.log("The vhosts process has exited~!~~~~~~~~~~~~~~~~~~`````");
 });
 
 // exports.vhosts = vhosts;

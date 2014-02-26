@@ -5,7 +5,7 @@
 
 var nproxy = require("nproxy");
 var fs = require("fs");
-var listFilePath = process.cwd() + "/server/proxy_list.js";
+var listFilePath = require("path").join(__dirname, "proxy_list.js");
 var proxyPort = 8989;
 var proxyServer = null;
 
@@ -49,8 +49,14 @@ function close(cb){
     // fs.writeFile(listFilePath, "module.exports = [];",function (err){});
 }
 //退出进程
-function exitProcess(){
-    console.log("The proxy process will be exit~!");
+function exitProcess(msg){
+    if(exitProcess.ing){
+        return;
+    }
+    exitProcess.ing = true;
+    var msg = msg||"exit";
+    console.log('The proxy process will be exit~! by ' + msg);
+
     close(function(){
         console.log("The proxy process has exited~!");
         process.exit();
@@ -63,7 +69,11 @@ process.on("message", function (m){
 });
 //监听进程中断信号
 process.on('SIGINT', function() {
-    exitProcess();
+    exitProcess("SIGINT");
+});
+
+process.on('exit', function() {
+    console.log("The proxy process has exited~!~~~~~~~~~~~~~~~~~~`````");
 });
 
 // exports.start = start;

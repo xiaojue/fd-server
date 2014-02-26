@@ -1,0 +1,10 @@
+2014-02-26 13:59:39 - Starting D:\Program Files\nodejs\node.exe --harmony "E:\workspace\express_fdserver\node_modules\node-windows\lib\wrapper.js" -f "E:\workspace\express_fdserver\lib\sysMaster.js" -l "fd-Server" -g 0.25 -w 1 -r 3 -a n
+2014-02-26 13:59:39 - Started 3012
+2014-02-26 14:06:23 - Stopping fdserver.exe
+2014-02-26 14:06:23 - ProcessKill 3012
+2014-02-26 14:06:23 - Finished fdserver.exe
+2014-02-26 14:06:44 - Starting D:\Program Files\nodejs\node.exe --harmony "E:\workspace\express_fdserver\node_modules\node-windows\lib\wrapper.js" -f "E:\workspace\express_fdserver\lib\sysMaster.js" -l "fd-Server" -g 0.25 -w 1 -r 3 -a n
+2014-02-26 14:06:45 - Started 504
+2014-02-26 14:20:02 - Stopping fdserver.exe
+2014-02-26 14:20:02 - ProcessKill 504
+2014-02-26 14:20:02 - Finished fdserver.exe

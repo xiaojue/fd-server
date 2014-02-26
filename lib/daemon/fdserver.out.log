@@ -1,0 +1,89 @@
+[worker5156]Server running at http://127.0.0.1:8123/
+/?type=startss
+type参数无效~
+/favicon.ico
+/?type=start
+/favicon.ico
+vhosts update
+路由已启用！
+set hosts successfully! www.sina-fds.com
+{"vhost":{},"proxy":{},"name":""}
+[90mGET /index [36m304 [90m85ms[0m
+[90mGET /stylesheets/bootstrap.min.css [36m304 [90m7ms[0m
+[90mGET /stylesheets/style.css [36m304 [90m4ms[0m
+[90mGET /javascripts/lithe.js [36m304 [90m3ms[0m
+[90mGET /javascripts/config.js [36m304 [90m1ms[0m
+[90mGET /javascripts/conf/main.js [36m304 [90m1ms[0m
+[90mGET /javascripts/lib/core/chaos/jquery.js [36m304 [90m2ms[0m
+[90mGET /javascripts/lib/kit/func/delay.js [36m304 [90m1ms[0m
+[90mGET /javascripts/lib/core/jquery/jquery.js [36m304 [90m3ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/jquery.js [36m304 [90m1ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/prefixfree.js [36m304 [90m2ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/transform.js [36m304 [90m1ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/hammer.js [36m304 [90m1ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/transit.js [36m304 [90m1ms[0m
+[90mGET /javascripts/vendor/hammer/hammer.js [36m304 [90m1ms[0m
+/?type=stop
+The service will be closed~! by message[exit]
+vhosts exit
+The vhosts process will be closed~! by exit
+remove hosts successfully! www.sina-fds.com
+The vhosts process has exited~!
+The service process has exited~!
+/?type=start
+/favicon.ico
+vhosts update
+路由已启用！
+set hosts successfully! www.sina-fds.com
+{"vhost":{},"proxy":{},"name":""}
+[90mGET /index [36m304 [90m36ms[0m
+[90mGET /stylesheets/bootstrap.min.css [36m304 [90m12ms[0m
+[90mGET /javascripts/lithe.js [36m304 [90m7ms[0m
+[90mGET /stylesheets/style.css [36m304 [90m9ms[0m
+[90mGET /javascripts/config.js [36m304 [90m1ms[0m
+[90mGET /javascripts/conf/main.js [36m304 [90m17ms[0m
+[90mGET /javascripts/lib/core/chaos/jquery.js [36m304 [90m3ms[0m
+[90mGET /javascripts/lib/kit/func/delay.js [36m304 [90m5ms[0m
+[90mGET /javascripts/lib/core/jquery/jquery.js [36m304 [90m20ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/jquery.js [36m304 [90m8ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/hammer.js [36m304 [90m6ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/prefixfree.js [36m304 [90m6ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/transit.js [36m304 [90m6ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/transform.js [36m304 [90m5ms[0m
+[90mGET /javascripts/vendor/hammer/hammer.js [36m304 [90m2ms[0m
+The service will be closed~! by message[exit]
+vhosts exit
+The vhosts process will be closed~! by exit
+/?type=stop
+remove hosts successfully! www.sina-fds.com
+The vhosts process has exited~!
+The service process has exited~!
+/?type=start
+vhosts update
+路由已启用！
+set hosts successfully! www.sina-fds.com
+{"vhost":{},"proxy":{},"name":""}
+[90mGET /index [36m304 [90m29ms[0m
+[90mGET /stylesheets/bootstrap.min.css [36m304 [90m9ms[0m
+[90mGET /stylesheets/style.css [36m304 [90m5ms[0m
+[90mGET /javascripts/lithe.js [36m304 [90m5ms[0m
+[90mGET /javascripts/config.js [36m304 [90m4ms[0m
+[90mGET /javascripts/conf/main.js [36m304 [90m1ms[0m
+[90mGET /javascripts/lib/core/chaos/jquery.js [36m304 [90m2ms[0m
+[90mGET /javascripts/lib/kit/func/delay.js [36m304 [90m1ms[0m
+[90mGET /javascripts/lib/core/jquery/jquery.js [36m304 [90m4ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/jquery.js [36m304 [90m3ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/prefixfree.js [36m304 [90m3ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/transform.js [36m304 [90m2ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/hammer.js [36m304 [90m4ms[0m
+[90mGET /javascripts/lib/core/extra/jquery/transit.js [36m304 [90m3ms[0m
+[90mGET /javascripts/vendor/hammer/hammer.js [36m304 [90m2ms[0m
+/?type=start
+/favicon.ico
+/?type=stop
+The service will be closed~! by message[exit]
+vhosts exit
+The vhosts process will be closed~! by exit
+remove hosts successfully! www.sina-fds.com
+The vhosts process has exited~!
+The service process has exited~!
