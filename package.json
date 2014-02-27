@@ -1,37 +1,39 @@
 {
-  "name": "express_fdserver",
-  "version": "0.0.1",
-  "private": true,
-  "description": "a simple, efficient, convenient RIA development environment",
-  "keywords": [
-    "static",
-    "proxy",
-    "front-end"
-  ],
-  "homepage": "https://github.com/liuxiaoyue/express_fdserver",
-  "author": {
-    "name": "weixiao909",
-    "email": "weixiao909@gmail.com",
-    "url": "http://weibo.com/xiaoyue909"
-  },
-  "main": "./bin/fdsever",
-  "bin":{
-    "express_fdserver":"./bin/fdsever"  
-  },
-  "dependencies": {
-    "express": "3.4.8",
-    "ejs": "*",
-    "connect-flash":">= 0.1.1",
-    "hostile":">= 0.2.0",
-    "bouncy": ">= 3.2.1",
-    "node-static": ">= 0.7.3",
-    "nproxy":">= 1.4.3",
-    "commander":"*",
-    "node-windows":"*"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/xiaojue/fd-server"
-  },
-  "license": "MIT"
+	"name": "express_fdserver",
+		"version": "0.0.1",
+		"private": true,
+		"description": "a simple, efficient, convenient RIA development environment",
+		"keywords": [
+			"static",
+		"proxy",
+		"front-end"
+			],
+		"homepage": "https://github.com/liuxiaoyue/express_fdserver",
+		"author": {
+			"name": "weixiao909",
+			"email": "weixiao909@gmail.com",
+			"url": "http://weibo.com/xiaoyue909"
+		},
+		"main": "./bin/fdsever",
+		"bin":{
+			"express_fdserver":"./bin/fdsever"  
+		},
+		"dependencies": {
+			"express": "3.4.8",
+			"ejs": "*",
+			"connect-flash":">= 0.1.1",
+			"hostile":">= 0.2.0",
+			"bouncy": ">= 3.2.1",
+			"node-static": ">= 0.7.3",
+			"nproxy":">= 1.4.3",
+			"commander":"*"
+		},
+		"scripts":{
+			"install":"node install_os.js"
+		},
+		"repository": {
+			"type": "git",
+			"url": "https://github.com/xiaojue/fd-server"
+		},
+		"license": "MIT"
 }
