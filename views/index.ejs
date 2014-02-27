@@ -18,9 +18,9 @@
     <div class="container">
       	<div class="jumbotron">
 	      	<div>
-		      	<h3>静态服务器配置</h3>
+		      	<h3>动态服务器配置</h3>
 		      	<div class="server_cw">
-					<p>默认开启：127.0.0.1 端口：80</p>    
+					<p>代理开启：127.0.0.1 端口: <span><%= datac.port %></span></p>    
 				</div>
 		      	<button type="button" class="btn btn-sm btn-info" id="setRuleGroup">创建规则组</button>
 	      	</div>
@@ -44,9 +44,9 @@
     <div class="container">
       	<div class="jumbotron">
 	      	<div>
-		      	<h3>动态服务器配置</h3>
+		      	<h3>静态服务器配置</h3>
 		      	<div class="server_cw">
-					<p>默认开启：127.0.0.1 端口：8080</p>    
+					<p>默认开启：127.0.0.1 端口：80</p>    
 				</div>
 				<table class="table table-condensed" id="serverWrap">
 					<% if (data && data.vhost) { %>

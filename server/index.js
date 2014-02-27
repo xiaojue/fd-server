@@ -5,7 +5,7 @@
 var fs = require("fs");
 var child_process = require('child_process');
 var path = require("path");
-var expr = require("../app.js");
+var expr = require("./app.js");
 var ing = false;
 
 var vhosts = {
