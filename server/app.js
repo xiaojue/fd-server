@@ -21,7 +21,7 @@ var app = express();
 app.configure(function(){
 	// app.use(express.logger({stream : accessLogfile}));
 	app.set('port', process.env.PORT || 3001);
-	app.set('views', path.join(__dirname.replace(/\\server/,""), 'views'));
+	app.set('views', path.resolve(__dirname,'../','views'));
 	app.set('view engine', 'ejs');
 	app.use(express.favicon());
 	app.use(express.logger('dev'));
@@ -37,7 +37,7 @@ app.configure(function(){
 	app.use(app.router);
 	// app.use(express.router(routes));
 	//提供静态文件支持
-	app.use(express.static(path.join(__dirname.replace(/\\server/,""), 'public')));
+	app.use(express.static(path.resolve(__dirname,'../','public')));
 })
 //开发环境
 app.configure('development', function(){

@@ -4,13 +4,14 @@
  */
 
 exports.list = function(req, res){
-	var util = require('util');
+	var path = require('path');
 	var fs = require("fs");
 
 	var vhosts = {
-	    localConfig: __dirname.replace(/routes/,"") + "/localConfig.json",
-	    config:__dirname.replace(/routes/,"") + "/config.json"
+	    localConfig: path.resolve(__dirname, '../', 'localConfig.json'),
+	    config:path.resolve(__dirname, '../', 'config.json')
 	};
+
 	if(req.body.local === "s"){
 		var localJson;
 		fs.readFile(vhosts.localConfig,'utf-8', function (err, data) {
