@@ -4,16 +4,20 @@ var pkg = require('../package.json');
 var program = require('commander');
 
 program.version(pkg.version);
-program.command("open").description("local server open").action(function (){
-    fds({type: "open"});
+program.command("start").description("open local development environment and register local system server").action(function() {
+	fds({
+		type: "start"
+	});
 });
-program.command("start").description("open local development environment and register local system server").action(function(){
-	fds({type: "start"});
+program.command("stop").description("exit local development environment").action(function() {
+	fds({
+		type: "stop"
+	});
 });
-program.command("stop").description("exit local development environment").action(function(){
-	fds({type: "stop"});
-});
-program.command("remove").description("remove register local system server").action(function(){
-	fds({type: "removeService"});
+program.command("remove").description("remove register local system server").action(function() {
+	fds({
+		type: "removeService"
+	});
 });
 program.parse(process.argv);
+
