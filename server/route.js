@@ -1,6 +1,6 @@
 /**
 *@description 路由服务
-*@updateTime 2014-02-20/10
+*@updateTime 2014-02-20/28 修改路由服务启用成功后再做hosts绑定
 */
 var logger = require('../lib/log/logger.js').getLogger("vhosts");
 var bouncy = require('bouncy');
@@ -13,7 +13,6 @@ var routeList = {};//路由域名端口列表
 /**
 *@description 开启/重启路由服务
 *@param list 路由域名端口列表
-*  问题： 目前关闭路由服务时（server.close），并不能立即关闭，等所有连接断开时才会真正触发close关闭服务。
 */
 function start(list){
     //指定路由列表不存在或为空对象，直接关闭退出。
@@ -39,19 +38,27 @@ function start(list){
             hosts.remove(dm);
         }
     }
-    //添加新增的绑定hosts
-    for(var dm in list){
-        if(!routeList[dm]){
-            hosts.set(dm);
-        }
-    }
     
-    route(list);
-    routeList = list;
+    //启动路由服务，成功时再去添加新增绑定hosts
+    route(list, function (err){
+        if(err){
+            logger.error(err);
+        }else{
+            //添加新增的绑定hosts
+            for(var dm in list){
+                if(!routeList[dm]){
+                    hosts.set(dm);
+                }
+            }
+            
+            routeList = list;
+        }
+    });
+    
 }
 
 //开启路由
-function route(list){
+function route(list, cb){
     server = bouncy(function (req, res, bounce){
         var port = list[req.headers.host];
         // logger.debug("route: "+req.headers.host);
@@ -64,10 +71,11 @@ function route(list){
         }
     });
     server.on("error", function (err){
-        logger.error(err);
+        cb(err);
     });
     server.on("listening", function (){
         logger.info("路由已启用！");
+        cb();
     });
     server.listen(80);
 }
