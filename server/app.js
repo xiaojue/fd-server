@@ -2,11 +2,7 @@
 /**
  * Module dependencies.
  */
-//产品环境下创建访问日志，错误日志，不让程序中断
 var fs = require('fs');
-// var accessLogfile = fs.createWriteStream('access.log', {flags : 'a'});
-var errorLogfile = fs.createWriteStream('error.log', {flags : 'a'});
-
 //express 基础框架
 var express = require('express');
 var routes = require('../routes');
@@ -19,12 +15,10 @@ var app = express();
 
 // all environments
 app.configure(function(){
-	// app.use(express.logger({stream : accessLogfile}));
 	app.set('port', process.env.PORT || 3001);
 	app.set('views', path.resolve(__dirname,'../','views'));
 	app.set('view engine', 'ejs');
 	app.use(express.favicon());
-	app.use(express.logger('dev'));
 	app.use(express.json());
 	app.use(express.urlencoded());
 	//解析客户端请求，通常是通过post发过来的请求
@@ -45,17 +39,8 @@ app.configure('development', function(){
 })
 //生产环境
 app.configure('production', function(){
-	app.error(function(err, req, res, next){
-		var meta = '[' + new Date() + ']' + req.url + '\n';
-		errorLogfile.write(meta + err.stack + '\n');
-		next();
-	});
-})
 
-// development only
-if ('development' == app.get('env')) {
-  	app.use(express.errorHandler());
-}
+})
 
 app.get('/index', routes.index);
 app.post('/saveHosts', saveHosts.list);

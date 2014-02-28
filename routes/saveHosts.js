@@ -4,6 +4,7 @@
  */
 
 exports.list = function(req, res){
+	var logger = require('../lib/log/logger.js').getLogger("uipage");
 	var path = require('path');
 	var fs = require("fs");
 
@@ -16,9 +17,10 @@ exports.list = function(req, res){
 		var localJson;
 		fs.readFile(vhosts.localConfig,'utf-8', function (err, data) {
 			if(err){
-				console.log(err);
+				logger.error(err);
 			}else{
 				if(data){
+					logger.info(data);
 					var localJson = JSON.parse(data);
 				}else{
 					localJson = {};
@@ -51,7 +53,7 @@ exports.list = function(req, res){
 			function modifyLocalConfig(){
 				fs.writeFile(vhosts.localConfig, JSON.stringify(localJson), function (err) {
 				  	if (err) throw err;
-				  	console.log('It\'s saved!');
+				  	logger.info('It\'s saved!');
 				});
 				res.send('(\'{"message": "successful"}\')');
 			}
@@ -62,9 +64,10 @@ exports.list = function(req, res){
 		var json;
 		fs.readFile(vhosts.config,'utf-8', function (err, data) {
 			if(err){
-				console.log(err);
+				logger.error(err);
 			}else{
 				if(data){
+					logger.info(data);
 					var json = JSON.parse(data);
 				}else{
 					json = {};
@@ -101,13 +104,10 @@ exports.list = function(req, res){
 			function modifyConfig(){
 				fs.writeFile(vhosts.config, JSON.stringify(json), function (err) {
 				  	if (err) throw err;
-				  	console.log('It\'s saved!');
+				  	logger.info('It\'s saved!');
 				});
 				res.send('(\'{"message": "successful"}\')');
 			}
 		});
-	}
-
-	
-				
+	}				
 };
