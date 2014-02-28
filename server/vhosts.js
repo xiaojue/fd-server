@@ -6,6 +6,7 @@ var fs = require("fs");
 var SS = require('node-static');
 var http = require('http');
 var route = require("./route");
+var logger = require('../lib/log/logger.js').getLogger("vhosts");
 
 var routeList = {};//路由列表 key为domain value为port
 var staticPaths = {};//存放开启的server对象,key为path
@@ -77,11 +78,11 @@ function startServer(path, cb, options){
             }).resume();
         });
         server.on("close", function (){
-            console.log("static server closed~! " + path);
+            logger.debug("static server closed~! " + path);
         });
         
         server.listen(port);
-        console.log("Server runing at port: " + port + ". path: " + path);
+        logger.debug("Server runing at port: " + port + ". path: " + path);
         return {
             path: path,
             port: port,
@@ -135,7 +136,7 @@ function update(list){
             for(path in newQueue){
                 startServer(path, function(result){
                     if(!result || result.err){
-                        console.warn("static-server start fail~! path: " + newQueue[i] + ", err: " + (result&&result.err));
+                        logger.warn("static-server start fail~! path: " + newQueue[i] + ", err: " + (result&&result.err));
                     }else{
                         staticPaths[path] = result;
                         
@@ -208,11 +209,11 @@ function exitProcess(msg){
         return;
     }
     exitProcess.ing = true;
-    console.log('The vhosts process will be closed~! by ' + (msg||"exit"));
+    logger.info('The vhosts process will be closed~! by ' + (msg||"exit"));
     
     route.exit();
     setTimeout(function (){
-        console.log("The vhosts process has exited~!");
+        logger.info("The vhosts process has exited~!");
         process.exit();
     },100);
 }
@@ -229,7 +230,7 @@ function vhosts(type, options){
 }
 
 process.on("message", function (m){
-    console.log("vhosts " + m.type);
+    logger.debug("vhosts " + m.type);
     vhosts(m.type, m.options);
 });
 
@@ -238,7 +239,7 @@ process.on('SIGINT', function() {
 });
 
 process.on('exit', function() {
-    console.log("The vhosts process has exited~!~~~~~~~~~~~~~~~~~~`````");
+    logger.debug("The vhosts process has exited~!~~~~~~~~~~~~~~~~~~`````");
 });
 
 // exports.vhosts = vhosts;

@@ -2,7 +2,7 @@
 *@description 路由服务
 *@updateTime 2014-02-20/10
 */
-
+var logger = require('../lib/log/logger.js').getLogger("vhosts");
 var bouncy = require('bouncy');
 var fs = require("fs");
 var hosts = require("./hosts");
@@ -27,7 +27,7 @@ function start(list){
     }
     //是否已开启过服务，有则关闭重启
     if(server){
-        console.log("重启路由中...");
+        logger.info("重启路由中...");
         server.close(); 
     }
     
@@ -54,9 +54,9 @@ function start(list){
 function route(list){
     server = bouncy(function (req, res, bounce){
         var port = list[req.headers.host];
-        // console.log("route: "+req.headers.host);
+        // logger.debug("route: "+req.headers.host);
         if(port){
-            // console.log("route: "+port);
+            // logger.debug("route: "+port);
             bounce(port);
         }else{
             res.statusCode = 404;
@@ -64,10 +64,10 @@ function route(list){
         }
     });
     server.on("error", function (err){
-        console.log(err);
+        logger.error(err);
     });
     server.on("listening", function (){
-        console.log("路由已启用！");
+        logger.info("路由已启用！");
     });
     server.listen(80);
 }

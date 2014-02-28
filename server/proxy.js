@@ -1,8 +1,8 @@
 /**
 *@description 代理服务
-*@updateTime 2014-02-20/17
+*@updateTime 2014-02-20/28 添加日志管理
 */
-
+var logger = require('../lib/log/logger.js').getLogger("proxy");
 var nproxy = require("nproxy");
 var fs = require("fs");
 var listFilePath = require("path").join(__dirname, "proxy_list.js");
@@ -20,13 +20,13 @@ function proxy(type, options){
 function updateProxy(list){
     close();
     var listContent = "module.exports = " + JSON.stringify(list) + ";";
-    // console.log(listContent);
+    // logger.info(listContent);
     fs.writeFile(listFilePath, listContent,function (err){
         if(err){
-            console.log("err");
+            logger.error("err");
             throw err;
         }
-        console.log("proxy rule list saved~!");
+        logger.info("proxy rule list saved~!");
         start();
     });
     
@@ -35,7 +35,7 @@ function updateProxy(list){
             "responderListFilePath": listFilePath,
             "debug": false
         });
-        console.log("The proxy service has been updated~! ");
+        logger.info("The proxy service has been updated~! ");
     }
 }
 
@@ -55,16 +55,16 @@ function exitProcess(msg){
     }
     exitProcess.ing = true;
     var msg = msg||"exit";
-    console.log('The proxy process will be exit~! by ' + msg);
+    logger.info('The proxy process will be exit~! by ' + msg);
 
     close(function(){
-        console.log("The proxy process has exited~!");
+        logger.info("The proxy process has exited~!");
         process.exit();
     });
 }
 
 process.on("message", function (m){
-    console.log("proxy " + m.type);
+    logger.debug("proxy " + m.type);
     proxy(m.type, m.options);
 });
 //监听进程中断信号
@@ -73,7 +73,7 @@ process.on('SIGINT', function() {
 });
 
 process.on('exit', function() {
-    console.log("The proxy process has exited~!~~~~~~~~~~~~~~~~~~`````");
+    logger.debug("The proxy process has exited~!~~~~~~~~~~~~~~~~~~`````");
 });
 
 // exports.start = start;

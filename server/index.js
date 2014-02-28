@@ -1,11 +1,12 @@
 /**
 *@description 服务主线程入口
-*@updateTime 2014-02-20/17
+*@updateTime 2014-02-20/28 添加日志管理
 */
 var fs = require("fs");
 var child_process = require('child_process');
 var path = require("path");
 var expr = require("./app.js");
+var logger = require('../lib/log/logger.js').getLogger("operate");
 var ing = false;
 
 var vhosts = {
@@ -35,7 +36,7 @@ var defaultOpitons = {
 */
 function startup(options){
     if(ing){
-        console.log("服务已启用~！");
+        logger.info("服务已启用~！");
         return;
     }
     ing = true;
@@ -52,14 +53,14 @@ function startup(options){
             //添加监听文件更新事件
             fs.watchFile(path,function (curr, prev){
                 if(curr.mtime > prev.mtime){
-                    console.log("config file update~! " + path);
+                    logger.debug("config file update~! " + path);
                     _start();
                 }
             });
             
             _start();
         }else{
-            console.warn("file not found. " + path);
+            logger.warn("file not found. " + path);
         }
     });
     
@@ -164,13 +165,13 @@ function exitProcess(msg){
         return;
     }
     exitProcess.ing = true;
-    console.log('The service will be closed~! by ' + (msg||"stop"));
+    logger.info('The service will be closed~! by ' + (msg||"stop"));
     vhosts.process ? vhosts.process.send({type:"exit"}) : '';
     proxy.process ? proxy.process.send({type:"exit"}) : '';
     
     setInterval(function (){
         if(!vhosts.process && !proxy.process){
-            console.log("The service process has exited~!");
+            logger.info("The service process has exited~!");
             process.exit();
         }
     }, 100);
@@ -190,7 +191,7 @@ process.on("message", function (m){
 });
 
 process.on('exit', function() {
-    console.log("The service has exited~!~~~~~~~~~~~~~~~~~~`````");
+    logger.debug("The service has exited~!~~~~~~~~~~~~~~~~~~`````");
 });
 
 exports.start = startup;
