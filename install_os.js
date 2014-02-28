@@ -1,18 +1,20 @@
 var os = require('os');
 var platform = os.platform();
-var exec = require('child_process').exec;
+var cp = require('child_process');
+var cmd;
 
-
-function endInstall(err,stdout,stderr){
-	if(error){
-		console.log(err);	
-	}
+if (platform == 'linux') {
+	cmd = cp.exec('npm install node-linux');
+} else if (platform == 'win32') {
+	cmd = cp.exec('npm install node-windows');
+} else if (platform == 'darwin') {
+	cmd = cp.exec('npm install node-mac');
 }
 
-if(platform == 'linux'){
-	exec('npm install node-linux');	
-}else if(platform == 'win32'){
-	exec('npm install node-windows');	
-}else if(platform == 'darwin'){
-	exec('npm install node-mac');	
-}
+cmd.stdout.on('data', function(data) {
+	console.log(data);
+});
+
+cmd.stderr.on('data', function(data) {
+	console.log(data);
+});
