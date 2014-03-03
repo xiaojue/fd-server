@@ -19,7 +19,7 @@
     <div class="container">
       	<div class="jumbotron">
 	      	<div>
-		      	<h3>vhost配置</h3>
+		      	<h4>vhost配置</h4>
 				<table class="table table-condensed" id="serverWrap">
 					<% if (data && data.vhost) { %>
 						<% for(var i in data.vhost){ %>
@@ -31,8 +31,7 @@
 									<%= data.vhost[i] %>
 								</td>
 								<td>
-									<button type="button" class="btn btn-xs btn-info Wpr" severrule='<%= i %>'>delete</button>
-
+									<button type="button" class="btn btn-xs btn-danger Wpr" severrule='<%= i %>'>delete</button>
 									<% if (datac && datac.vhost) { %>
 										<% if (datac.vhost[i] === data.vhost[i]) { %>
 											<button type="button" class="btn btn-xs btn-info" disablerule='<%= i %>'>disabled</button>
@@ -40,13 +39,12 @@
 											<button type="button" class="btn btn-xs" disablerule='<%= i %>'>disabled</button>
 										<% } %>
 									<% } %>
-
 								</td>
 							</tr>
 						<% } %>
 	              	<% } %>
 				</table>
-	      		<button type="button" class="btn btn-info" id="staticServer">添加</button>	
+	      		<button type="button" class="btn btn-primary" id="staticServer">添加</button>	
 	      	</div>
 
 	      	<div></div>
@@ -57,7 +55,7 @@
     <div class="container">
       	<div class="jumbotron">
 	      	<div>
-		      	<h3>proxy配置</h3>
+		      	<h4>proxy配置</h4>
 		      	<div class="server_cw">
 					<p>代理：localhost 端口: <span><%= datac.port %></span></p>    
 				</div>
