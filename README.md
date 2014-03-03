@@ -8,9 +8,43 @@ fd-server 是一个多功能的前端开发环境，它支持以下几大功能�
 
 ---
 
-#安装步骤
+### 下载安装
 
 ```bash
 $ npm install fd-server -g
-$ sudo fd-server -h
+$ sudo fd-server install
 ```
+
+---
+
+### 命令行工具
+
+```bash
+$ fd-server -h
+
+  Usage: fd-server [command]
+
+  Commands:
+
+    install                install the fd-server service
+    start                  start the fd-server server
+    stop                   stop the fd-server server
+    uninstall              uninstall the fd-server service
+
+  Options:
+
+    -h, --help     output usage information
+    -V, --version  output the version number
+    
+```
+---
+
+### 注意事项
+
+`install` `uninstall` `stop` `start` 命令都需要管理员权限，linux or mac下使用 `sudo fd-server start` win下会有权限的窗口提醒，需要确认。 
+
+---
+
+### License
+
+MIT license
