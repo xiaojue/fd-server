@@ -37,7 +37,14 @@ $ fd-server -h
     -V, --version  output the version number
     
 ```
+---
 
 ### 注意事项
 
 `install` `uninstall` `stop` `start` 命令都需要管理员权限，linux or mac下使用 `sudo fd-server start` win下会有权限的窗口提醒，需要确认。 
+
+---
+
+### License
+
+MIT license
