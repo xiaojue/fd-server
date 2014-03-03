@@ -139,3 +139,4 @@ Error: listen EADDRINUSE
 [2014-02-28 19:58:58.239] [WARN] vhosts - static-server start fail~! path: undefined, err: static-server: 指定路径不合法~！11
 [2014-02-28 19:58:58.261] [INFO] vhosts - 路由已启用！
 [2014-02-28 19:58:58.293] [INFO] vhosts - set hosts successfully! www.sina-fds.com
+[2014-03-03 11:35:45.108] [INFO] operate - 服务已经启动

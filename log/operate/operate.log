@@ -3,3 +3,4 @@
 [2014-02-28 19:26:09.143] [INFO] operate - The service will be closed~! by SIGINT
 [2014-02-28 19:26:10.247] [INFO] operate - The service process has exited~!
 [2014-02-28 19:58:03.055] [DEBUG] operate - config file update~! D:\node\express_fdserver\config.json
+[2014-03-03 11:35:45.108] [INFO] operate - 服务已经启动
