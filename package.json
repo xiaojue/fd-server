@@ -1,22 +1,29 @@
 {
-	"name": "express_fdserver",
+	"name": "fd-server",
 		"version": "0.0.1",
 		"private": true,
 		"description": "a simple, efficient, convenient RIA development environment",
 		"keywords": [
 			"static",
-		"proxy",
-		"front-end"
-			],
-		"homepage": "https://github.com/liuxiaoyue/express_fdserver",
-		"author": {
+			"proxy",
+			"front-end"
+		],
+		"homepage": "https://github.com/liuxiaoyue/fd-server",
+		"author": [{
 			"name": "weixiao909",
 			"email": "weixiao909@gmail.com",
 			"url": "http://weibo.com/xiaoyue909"
-		},
+		},{
+			"name":"xiaojue",
+			"email":"designsor@gmail.com",
+			"url":"http://www.tuer.me"
+		},{
+			"name":"RK-WJW",
+			"email":"jiangwei5@staff.sina.com.cn"
+		}],
 		"main": "./bin/fdsever",
 		"bin":{
-			"express_fdserver":"./bin/fdsever"  
+			"fd-server":"./bin/fdsever"  
 		},
 		"dependencies": {
 			"express": "3.4.8",
@@ -34,7 +41,7 @@
 		},
 		"repository": {
 			"type": "git",
-			"url": "https://github.com/xiaojue/fd-server"
+			"url": "https://github.com/liuxiaoyue/fd-server"
 		},
 		"license": "MIT"
 }
