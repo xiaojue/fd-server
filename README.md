@@ -13,4 +13,19 @@ fd-server 是一个多功能的前端开发环境，它支持以下几大功能�
 ```bash
 $ npm install fd-server -g
 $ sudo fd-server -h
+
+  Usage: fd-server [command]
+
+  Commands:
+
+    install                install the fd-server service
+    start                  start the fd-server server
+    stop                   stop the fd-server server
+    uninstall              uninstall the fd-server service
+
+  Options:
+
+    -h, --help     output usage information
+    -V, --version  output the version number
+    
 ```
