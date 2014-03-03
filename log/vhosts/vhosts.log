@@ -79,3 +79,13 @@ Error: listen EADDRINUSE
 [2014-02-28 19:58:58.239] [WARN] vhosts - static-server start fail~! path: undefined, err: static-server: 指定路径不合法~！11
 [2014-02-28 19:58:58.261] [INFO] vhosts - 路由已启用！
 [2014-02-28 19:58:58.293] [INFO] vhosts - set hosts successfully! www.sina-fds.com
+[2014-03-03 16:32:30.148] [DEBUG] vhosts - vhosts update
+[2014-03-03 16:32:30.156] [INFO] vhosts - 路由已启用！
+[2014-03-03 16:32:30.182] [INFO] vhosts - set hosts successfully! www.sina-fds.com
+[2014-03-03 16:55:07.248] [DEBUG] vhosts - vhosts exit
+[2014-03-03 16:55:07.249] [INFO] vhosts - The vhosts process will be closed~! by exit
+[2014-03-03 16:55:07.263] [INFO] vhosts - remove hosts successfully! www.sina-fds.com
+[2014-03-03 16:55:07.351] [INFO] vhosts - The vhosts process has exited~!
+[2014-03-03 17:05:47.722] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:05:47.730] [INFO] vhosts - 路由已启用！
+[2014-03-03 17:05:47.744] [INFO] vhosts - set hosts successfully! www.sina-fds.com
