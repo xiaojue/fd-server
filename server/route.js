@@ -62,13 +62,21 @@ function route(list, cb){
     server = bouncy(function (req, res, bounce){
         var port = list[req.headers.host];
         // logger.debug("route: "+req.headers.host);
+        //res.statusCode = 200;
+	//res.end('port is '+port);
+	bounce(port);
+	/*
         if(port){
             // logger.debug("route: "+port);
-            bounce(port);
-        }else{
+            //bounce(3003);
+            //bounce(port);
+            res.statusCode = 200;
+	    res.end('port');
+        else{
             res.statusCode = 404;
             res.end("no such host");
         }
+	*/
     });
     server.on("error", function (err){
         cb(err);
