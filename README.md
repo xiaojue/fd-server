@@ -12,7 +12,7 @@ fd-server 是一个多功能的前端开发环境，它支持以下几大功能�
 
 ```bash
 $ npm install fd-server -g
-$ sudo fd-server -h
+$ fd-server -h
 
   Usage: fd-server [command]
 
