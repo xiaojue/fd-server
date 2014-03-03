@@ -1,5 +1,3 @@
-
-
 /*
  * GET home page.
  */
@@ -27,17 +25,17 @@ exports.index = function(req, res){
 						logger.info(data1);
 						if(data1){
 							json = JSON.parse(data1);
-							res.render('index', { title: 'RIA统一开发平台', data: localJson, datac: json});
+							res.render('index', { title: 'fd-server admin', data: localJson, datac: json});
 						}else{
 							json = {};
-							res.render('index', { title: 'RIA统一开发平台', data: localJson, datac: ''});
+							res.render('index', { title: 'fd-server admin', data: localJson, datac: ''});
 						}
 					}
 				});
 			}else{
 				logger.info(data);
 				localJson = {};
-				res.render('index', { title: 'RIA统一开发平台', data: '', datac: ''});
+				res.render('index', { title: 'fd-server admin', data: '', datac: ''});
 			}
 		}
 	});
