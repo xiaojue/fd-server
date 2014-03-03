@@ -5,25 +5,29 @@ var program = require('commander');
 
 program.version(pkg.version);
 
+program.usage('[command]');
+
 program.command("install").description("install the fd-server service").action(function() {
 	fds({
 		type: "install"
 	});
 });
-program.command("start").description("open local development environment and register local system server").action(function() {
+program.command("start").description("start the fd-server server").action(function() {
 	fds({
 		type: "start"
 	});
 });
-program.command("stop").description("exit local development environment").action(function() {
+program.command("stop").description("stop the fd-server server").action(function() {
 	fds({
 		type: "stop"
 	});
 });
-program.command("remove").description("remove register local system server").action(function() {
+program.command("uninstall").description("uninstall the fd-server service").action(function() {
 	fds({
 		type: "removeService"
 	});
 });
+
 program.parse(process.argv);
 
+if (!program.args.length) program.help();
