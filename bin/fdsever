@@ -22,6 +22,16 @@ program.command("stop").description("stop the fd-server server").action(function
 		type: "stop"
 	});
 });
+program.command("restart").description("restart the fd-server server").action(function() {
+	fds({
+		type: "restart"
+	});
+});
+program.command("stop").description("stop the fd-server server").action(function() {
+	fds({
+		type: "stop"
+	});
+});
 program.command("uninstall").description("uninstall the fd-server service").action(function() {
 	fds({
 		type: "removeService"
