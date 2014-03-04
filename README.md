@@ -62,6 +62,8 @@ $ sudo fd-server start
 ```
 启动完成之后可访问 `http://www.sina-fds.com/index` 访问服务配置页面。
 
+[浏览器代理配置帮助](https://github.com/liuxiaoyue/fd-server/wiki/%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AE%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A3%E7%90%86)
+
 ---
 ### 日志管理
 使用[log4js](https://github.com/nomiddlename/log4js-node)统一管理，日志文件存放于项目跟目录的log文件夹下。
