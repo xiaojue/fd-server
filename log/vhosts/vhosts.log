@@ -89,3 +89,62 @@ Error: listen EADDRINUSE
 [2014-03-03 17:05:47.722] [DEBUG] vhosts - vhosts update
 [2014-03-03 17:05:47.730] [INFO] vhosts - 路由已启用！
 [2014-03-03 17:05:47.744] [INFO] vhosts - set hosts successfully! www.sina-fds.com
+[2014-03-03 17:13:08.361] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:13:53.440] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:14:03.458] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:14:08.466] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:32:45.401] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:32:50.410] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:40:06.159] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:40:06.161] [WARN] vhosts - static-server start fail~! path: undefined, err: static-server: 指定路径不合法~！3
+[2014-03-03 17:40:21.186] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:45:51.765] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:45:51.767] [WARN] vhosts - static-server start fail~! path: undefined, err: static-server: 指定路径不合法~！3
+[2014-03-03 17:48:22.026] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:48:27.035] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:48:27.035] [WARN] vhosts - static-server start fail~! path: undefined, err: static-server: 指定路径不合法~！3
+[2014-03-03 17:49:02.097] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:49:07.104] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:49:07.105] [WARN] vhosts - static-server start fail~! path: undefined, err: static-server: 指定路径不合法~！3
+[2014-03-03 17:49:12.113] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:49:32.149] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:49:32.149] [WARN] vhosts - static-server start fail~! path: undefined, err: static-server: 指定路径不合法~！3
+[2014-03-03 17:51:47.381] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:51:47.382] [WARN] vhosts - static-server start fail~! path: 2,1111, err: static-server: 指定路径不合法~！3
+[2014-03-03 17:51:52.391] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:51:52.391] [WARN] vhosts - static-server start fail~! path: 2,1111, err: static-server: 指定路径不合法~！3
+[2014-03-03 17:51:57.399] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:51:57.399] [WARN] vhosts - static-server start fail~! path: 2,1111, err: static-server: 指定路径不合法~！3
+[2014-03-03 17:52:22.443] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:52:22.444] [WARN] vhosts - static-server start fail~! path: 2,1111, err: static-server: 指定路径不合法~！3
+[2014-03-03 17:52:37.468] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:52:37.468] [WARN] vhosts - static-server start fail~! path: undefined, err: static-server: 指定路径不合法~！3
+[2014-03-03 17:56:07.831] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:56:07.832] [WARN] vhosts - static-server start fail~! path: undefined, err: static-server: 指定路径不合法~！3
+[2014-03-03 17:57:17.954] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:57:17.955] [WARN] vhosts - static-server start fail~! path: 2,1111, err: static-server: 指定路径不合法~！3
+[2014-03-03 17:57:22.967] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:57:27.972] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:57:27.974] [WARN] vhosts - static-server start fail~! path: 1, err: static-server: 指定路径不合法~！2
+[2014-03-03 17:57:58.025] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:58:13.053] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:58:13.054] [WARN] vhosts - static-server start fail~! path: 1, err: static-server: 指定路径不合法~！2
+[2014-03-03 17:58:33.085] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:58:38.094] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:58:43.103] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:58:48.112] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:58:48.112] [WARN] vhosts - static-server start fail~! path: 1, err: static-server: 指定路径不合法~！2
+[2014-03-03 17:59:13.155] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:59:23.173] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:59:28.181] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:59:28.181] [WARN] vhosts - static-server start fail~! path: 1, err: static-server: 指定路径不合法~！2
+[2014-03-03 17:59:38.199] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:59:43.208] [DEBUG] vhosts - vhosts update
+[2014-03-03 17:59:43.208] [WARN] vhosts - static-server start fail~! path: 1, err: static-server: 指定路径不合法~！2
+[2014-03-03 17:59:48.217] [DEBUG] vhosts - vhosts update
+[2014-03-03 18:00:08.250] [DEBUG] vhosts - vhosts update
+[2014-03-03 18:00:13.258] [DEBUG] vhosts - vhosts update
+[2014-03-03 18:00:13.259] [WARN] vhosts - static-server start fail~! path: undefined, err: static-server: 指定路径不合法~！d
+[2014-03-03 18:01:03.346] [DEBUG] vhosts - vhosts update
+[2014-03-03 18:01:03.347] [WARN] vhosts - static-server start fail~! path: undefined, err: static-server: 指定路径不合法~！d
+[2014-03-03 18:01:13.363] [DEBUG] vhosts - vhosts update
