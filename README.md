@@ -52,7 +52,18 @@ $ fd-server -h
 ```
 
 ---
-###日志管理
+
+### 快速上手
+
+安装成功后，使用start命令开启服务。
+
+```bash
+$ sudo fd-server start
+```
+启动完成之后可访问 `http://www.sina-fds.com/index` 访问服务配置页面。
+
+---
+### 日志管理
 使用[log4js](https://github.com/nomiddlename/log4js-node)统一管理，日志文件存放于项目跟目录的log文件夹下。
 
 - log：日志文件根目录
