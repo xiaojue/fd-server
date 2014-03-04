@@ -4,7 +4,7 @@ var cp = require('child_process');
 var cmd;
 
 if (platform == 'linux') {
-	cmd = cp.exec('npm install node-linux');
+	cmd = cp.exec('npm install git://github.com/xiaojue/node-linux.git#5bd49b078e3342752ed14642e78922ac2cab27ba');
 } else if (platform == 'win32') {
 	cmd = cp.exec('npm install node-windows');
 } else if (platform == 'darwin') {

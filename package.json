@@ -28,7 +28,7 @@
 			"express": "3.4.8",
 			"ejs": "*",
 			"connect-flash":">= 0.1.1",
-			"hostile":">= 0.2.0",
+			"hostile":"git://github.com/xiaojue/hostile.git#4cedbe1cf7b3eca7bdb3b6cab1090e7034b26c4c",
 			"bouncy": "git://github.com/xiaojue/bouncy.git#ec314733a5ebbade5a30232f45fcf4c95c4fb198",
 			"node-static": ">= 0.7.3",
 			"nproxy":">= 1.4.3",
