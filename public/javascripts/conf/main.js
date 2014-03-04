@@ -37,9 +37,10 @@ define('conf/main',function(require,exports,module){
                 localProxyData = scope.localData.proxy;
                 configProxyData = scope.configData.proxy;
                 nameProxyData = scope.localData.name;
-                if(localProxyData){
+                if(JSON.stringify(localProxyData) != "{}"){
                     this.updateGroupListFunc(localProxyData,nameProxyData);
                 }
+
                 if(nameProxyData){
                     allnamelist = nameProxyData;
                 }
@@ -140,9 +141,13 @@ define('conf/main',function(require,exports,module){
                     type : "cancelProxy",
                     rule :  JSON.stringify(configProxyData)
                 });  
+                var groupBtnWrap = $("#groupBtnWrap");
+                if(groupBtnWrap.text() === ""){
+                    $("#allgroupwrap").hide();
+                }
             }
             //删除每条规则按钮
-            if(target.getAttribute('deleteRule') && $(target).hasClass("btn-info")){
+            if(target.getAttribute('deleterule') && confirm("确认删除吗？")){
                 var arr = target.getAttribute('deleteRule').split('_');
                 var opendelr = localProxyData['group' + arr[0]]['rule' + arr[1]];
                 delete localProxyData['group' + arr[0]]['rule' + arr[1]];
@@ -200,7 +205,7 @@ define('conf/main',function(require,exports,module){
             var target = event.target;
             var el = $(target);
             var serverNum = target.getAttribute('severrule'); 
-            if(serverNum){
+            if(serverNum && confirm("确认删除吗？")){
                 delete localServerData[serverNum];
                 delete configServerData[serverNum];
                 //服务器删除
@@ -215,6 +220,10 @@ define('conf/main',function(require,exports,module){
                     local : 's'
                 });
                 el.parent().parent().remove();
+                
+                if($("#serverWrap").text().replace(/\s/g,"") === ""){
+                    $("#serverWrap").hide();
+                }
             }
             //禁用某条规则
             if(target.getAttribute('disablerule')){
@@ -227,6 +236,7 @@ define('conf/main',function(require,exports,module){
                         type : "disable",
                         disrule :  itm
                     });
+                    el.text("已禁用");
                 }else{
                     configServerData[itm] = localServerData[itm]; 
                     //不禁用此项
@@ -235,6 +245,7 @@ define('conf/main',function(require,exports,module){
                         sh :  JSON.stringify(configServerData)
                     });
                     el.addClass('btn-info');
+                    el.text("已开启");
                 }
             }
         },
@@ -311,10 +322,11 @@ define('conf/main',function(require,exports,module){
                                     '<td>'+ exports.data.srcUrl +'</td>'+
                                     '<td>'+ exports.data.urlTo +'</td>'+
                                     '<td>'+
-                                        '<button type="button" class="btn btn-xs btn-info Wpr" severRule = "'+ exports.data.srcUrl +'">delete</button>'+
-                                        '<button type="button" class="btn btn-xs btn-info" disableRule = "'+ exports.data.srcUrl +'">disabled</button>'+
+                                        '<button type="button" class="btn btn-xs btn-danger Wpr" severRule = "'+ exports.data.srcUrl +'">删除</button>'+
+                                        '<button type="button" class="btn btn-xs btn-info" disableRule = "'+ exports.data.srcUrl +'">已开启</button>'+
                                     '</td>'+
-                                '</tr>'].join('');       
+                                '</tr>'].join(''); 
+                $('#serverWrap').show();      
                 $('#serverWrap').append(severTpl);
                 exports.hideDialog();
                 //本地缓存的配置文件
@@ -376,8 +388,8 @@ define('conf/main',function(require,exports,module){
                             '<td>' + exports.data.srcUrl + '</td>',
                             '<td>' + exports.data.urlTo + '</td>',
                             '<td>',
-                                '<button type="button" class="btn btn-xs btn-info Wpr" editRule='+ gN + '_' + m +'>edit</button>',
-                                '<button type="button" class="btn btn-xs btn-info" deleteRule='+ gN + '_' + m +'>delete</button>',
+                                '<button type="button" class="btn btn-xs btn-info Wpr" editRule='+ gN + '_' + m +'>编辑</button>',
+                                '<button type="button" class="btn btn-xs btn-danger" deleteRule='+ gN + '_' + m +'>删除</button>',
                             '</td>',
                         '</tr>'
                     ].join('');
@@ -395,6 +407,7 @@ define('conf/main',function(require,exports,module){
         },
         /*更新列表数据*/
         updateGroupListFunc : function(data,name,del){
+            $("#allgroupwrap").show();
             gtpl = '';
             rtpl = '';
             for(group in data){
@@ -404,7 +417,7 @@ define('conf/main',function(require,exports,module){
                                 '<span class="groupname"><input type="text" value="'+ name[parseInt(groupNum) -1] +'" class="form-control iptgroup" disabled="disabled"/></span><button type="button" class="btn btn-xs btn-info" editgname = '+ groupNum +'>编辑组名</button> <button type="button" class="btn btn-xs btn-info" deleteGroup = '+ groupNum +'>删除此规则组</button>'+
                             '</div>'+
                             '<div class="panel-body panel-content" id="'+ group +'">'+
-                                '<table class="table table-condensed">';
+                                '<table class="table table-condensed setmb">';
                 rtpl += '<button type="button" class="btn btn-success btn_smr" group="'+ groupNum +'">'+ name[parseInt(groupNum) -1] +'</button>';
                 z = 0;
 
@@ -414,7 +427,7 @@ define('conf/main',function(require,exports,module){
                     if(configProxyData && configProxyData[ruleCon[0]]){
                         gtpl += '<tr><td class="ipt_pl"><input type="checkbox" value="'+ groupNum + "_" + num +'" checked="checked"></td><td>'+ ruleCon[0] +'</td><td>'+ ruleCon[1] +'</td><td><button type="button" class="btn btn-xs Wpr" editrule="'+ groupNum + "_" + num +'">edit</button><button type="button" class="btn btn-xs btn-info" deleterule="'+ groupNum + "_" + num +'">delete</button></td></tr>';
                     }else{
-                        gtpl += '<tr><td class="ipt_pl"><input type="checkbox" value="'+ groupNum + "_" + num +'"></td><td>'+ ruleCon[0] +'</td><td>'+ ruleCon[1] +'</td><td><button type="button" class="btn btn-xs btn-info Wpr" editrule="'+ groupNum + "_" + num +'">edit</button><button type="button" class="btn btn-xs btn-info" deleterule="'+ groupNum + "_" + num +'">delete</button></td></tr>';
+                        gtpl += '<tr><td class="ipt_pl"><input type="checkbox" value="'+ groupNum + "_" + num +'"></td><td>'+ ruleCon[0] +'</td><td>'+ ruleCon[1] +'</td><td><button type="button" class="btn btn-xs btn-info Wpr" editrule="'+ groupNum + "_" + num +'">编辑</button><button type="button" class="btn btn-xs btn-danger" deleterule="'+ groupNum + "_" + num +'">删除</button></td></tr>';
                     }
                                   
                 }   
@@ -477,6 +490,7 @@ define('conf/main',function(require,exports,module){
             $("#errorTip").hide();
         },
         addGroupFunc : function(){
+            $("#allgroupwrap").show();
             i++;
             localProxyData['group' + i] = {};
             //每次创建规则组新增规则m值设置为0
@@ -487,7 +501,7 @@ define('conf/main',function(require,exports,module){
                         '<span class="groupname"><input type="text" value="group' + i + '" class="form-control iptgroup" disabled="disabled" /></span><button type="button" class="btn btn-xs btn-info" editgname = '+ i +'>编辑组名</button> <button type="button" class="btn btn-xs btn-info" deleteGroup = '+ i +'>删除此规则组</button>',
                     '</div>',
                     '<div class="panel-body panel-content" id="group' + i + '">',
-                        '<table class="table table-condensed">',    
+                        '<table class="table table-condensed setmb">',    
                         '</table>',
                         '<button type="button" class="btn btn-sm btn-info" ruleBtn='+ i +'>新增规则</button>',
                     '</div>',

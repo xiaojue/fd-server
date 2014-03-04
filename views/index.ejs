@@ -20,30 +20,35 @@
       	<div class="jumbotron">
 	      	<div>
 		      	<h4>vhost配置</h4>
-				<table class="table table-condensed" id="serverWrap">
-					<% if (data && data.vhost) { %>
-						<% for(var i in data.vhost){ %>
-							<tr>
-								<td>
-									<%= i %>
-								</td>
-								<td>
-									<%= data.vhost[i] %>
-								</td>
-								<td>
-									<button type="button" class="btn btn-xs btn-danger Wpr" severrule='<%= i %>'>delete</button>
-									<% if (datac && datac.vhost) { %>
-										<% if (datac.vhost[i] === data.vhost[i]) { %>
-											<button type="button" class="btn btn-xs btn-info" disablerule='<%= i %>'>disabled</button>
-										<% }else{ %>
-											<button type="button" class="btn btn-xs" disablerule='<%= i %>'>disabled</button>
+		      	<% if (data && JSON.stringify(data.vhost) != "{}") { %>
+					<table class="table table-condensed setmb" id="serverWrap">
+						<% if (data && data.vhost) { %>
+							<% for(var i in data.vhost){ %>
+								<tr>
+									<td>
+										<%= i %>
+									</td>
+									<td>
+										<%= data.vhost[i] %>
+									</td>
+									<td>
+										<button type="button" class="btn btn-xs btn-danger Wpr" severrule='<%= i %>'>删除</button>
+										<% if (datac && datac.vhost) { %>
+											<% if (datac.vhost[i] === data.vhost[i]) { %>
+												<button type="button" class="btn btn-xs btn-info" disablerule='<%= i %>'>已开启</button>
+											<% }else{ %>
+												<button type="button" class="btn btn-xs" disablerule='<%= i %>'>已禁用</button>
+											<% } %>
 										<% } %>
-									<% } %>
-								</td>
-							</tr>
-						<% } %>
-	              	<% } %>
-				</table>
+									</td>
+								</tr>
+							<% } %>
+		              	<% } %>
+					</table>
+				<% }else{ %>
+					<table class="table table-condensed setmb" id="serverWrap" style="display:none;">
+					</table>	
+				<% } %>
 	      		<button type="button" class="btn btn-primary" id="staticServer">添加</button>	
 	      	</div>
 
@@ -57,12 +62,12 @@
 	      	<div>
 		      	<h4>proxy配置</h4>
 		      	<div class="server_cw">
-					<p>代理：localhost 端口: <span><%= datac.port %></span></p>    
+					<p>代理：localhost 端口: <span><%= datac.port %></span> <a href="https://github.com/liuxiaoyue/fd-server/wiki/proxy-help" class="proxyhelp">如何设置浏览器代理？</a></p>    
 				</div>
-		      	<button type="button" class="btn btn-sm btn-info" id="setRuleGroup">创建规则组</button>
+		      	<button type="button" class="btn btn-primary" id="setRuleGroup">创建规则组</button>
 	      	</div>
 	      	<!-- 已经创建的规则组 -->
-	      	<div class="panel panel-success">
+	      	<div class="panel panel-success" id="allgroupwrap" style="display:none;">
             	<div class="panel-heading">
               		<h3 class="panel-title">已创建的规则组</h3>
            		</div>
