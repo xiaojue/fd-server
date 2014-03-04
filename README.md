@@ -17,7 +17,7 @@ $ sudo fd-server install
 
 如果使用debian系统，安装后报`start-stop-daemon command not found`错误，则需要手动安装`start-stop-daemon`命令。
 
-```
+```bash
 $ wget http://developer.axis.com/download/distribution/apps-sys-utils-start-stop-daemon-IR1_9_18-2.tar.gz
 $ tar zxf apps-sys-utils-start-stop-daemon-IR1_9_18-2.tar.gz
 $ mv apps/sys-utils/start-stop-daemon-IR1_9_18-2/ ./
