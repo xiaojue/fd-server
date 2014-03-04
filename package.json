@@ -29,7 +29,7 @@
 			"ejs": "*",
 			"connect-flash":">= 0.1.1",
 			"hostile":">= 0.2.0",
-			"bouncy": ">= 3.2.1",
+			"bouncy": "git://github.com/xiaojue/bouncy.git#ec314733a5ebbade5a30232f45fcf4c95c4fb198",
 			"node-static": ">= 0.7.3",
 			"nproxy":">= 1.4.3",
 			"commander":"*",
