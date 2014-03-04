@@ -37,8 +37,21 @@ $ fd-server -h
     -V, --version  output the version number
     
 ```
----
 
+---
+###日志管理
+使用[log4js](https://github.com/nomiddlename/log4js-node)统一管理，日志文件存放于项目跟目录的log文件夹下。
+
+- log：日志文件根目录
+ - vhosts：存放静态服务运行日志目录 
+ - proxy：存放代理服务运行日志目录
+ - operate：存放服务操作控制相关的日志目录
+ - uipage：express模块日志
+ - all.log
+
+log目录下的all.log文件将存放所有类别的日志信息，包括console.log输出的日志。
+
+---
 ### 注意事项
 
 `install` `uninstall` `stop` `start` 命令都需要管理员权限，linux or mac下使用 `sudo fd-server start` win下会有权限的窗口提醒，需要确认。 
