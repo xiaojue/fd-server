@@ -49,7 +49,8 @@ $ fd-server -h
  - uipage：express模块日志
  - all.log
 
-log目录下的all.log文件将存放所有类别的日志信息，包括console.log输出的日志。
+log目录下的all.log文件将存放所有类别的日志信息。   
+*日志文件夹会在运行时自己创建*
 
 ---
 ### 注意事项
