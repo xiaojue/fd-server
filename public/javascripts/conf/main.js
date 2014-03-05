@@ -37,8 +37,13 @@ define('conf/main',function(require,exports,module){
                 localProxyData = scope.localData.proxy;
                 configProxyData = scope.configData.proxy;
                 nameProxyData = scope.localData.name;
-                if(JSON.stringify(localProxyData) != "{}"){
-                    this.updateGroupListFunc(localProxyData,nameProxyData);
+                if(!!nameProxyData){
+                    allnamelist = nameProxyData;
+                }
+
+                //此处存储名字有个问题.若用户平频繁的创建规则而不添加组，在渲染组的时候名字会发生错落或者丢失
+                if(JSON.stringify(localProxyData) != "{}" && allnamelist.length>0){
+                    this.updateGroupListFunc(localProxyData,allnamelist);
                 }else{
                     //此处防止不断的创建组，而不添加规则，组名不断的写入配置文件的bug
                     exports.requestAjax({
@@ -46,9 +51,6 @@ define('conf/main',function(require,exports,module){
                         sn : "",
                         local: "s"
                     });
-                }
-                if(!!nameProxyData){
-                    allnamelist = nameProxyData;
                 }
             }
             this.bindEvent();
@@ -433,8 +435,7 @@ define('conf/main',function(require,exports,module){
                         gtpl += '<tr><td class="ipt_pl"><input type="checkbox" value="'+ groupNum + "_" + num +'" checked="checked"></td><td>'+ ruleCon[0] +'</td><td>'+ ruleCon[1] +'</td><td><button type="button" class="btn btn-xs Wpr" editrule="'+ groupNum + "_" + num +'">edit</button><button type="button" class="btn btn-xs btn-info" deleterule="'+ groupNum + "_" + num +'">delete</button></td></tr>';
                     }else{
                         gtpl += '<tr><td class="ipt_pl"><input type="checkbox" value="'+ groupNum + "_" + num +'"></td><td>'+ ruleCon[0] +'</td><td>'+ ruleCon[1] +'</td><td><button type="button" class="btn btn-xs btn-info Wpr" editrule="'+ groupNum + "_" + num +'">编辑</button><button type="button" class="btn btn-xs btn-danger" deleterule="'+ groupNum + "_" + num +'">删除</button></td></tr>';
-                    }
-                                  
+                    }                 
                 }   
                 gtpl += '</table>'+
                         '<button type="button" class="btn btn-xs btn-info" rulebtn="'+ groupNum +'">新增规则</button>'+
@@ -450,7 +451,7 @@ define('conf/main',function(require,exports,module){
                 for(var s in localProxyData){
                     i++;
                 }
-                allnamelist = nameProxyData || [];
+                // allnamelist = nameProxyData || [];
                 flag = 0;
             }
             if(del && del === 'd'){
