@@ -80,11 +80,17 @@ function startServer(path, cb, options) {
 				var file = Path.join(path, request.url);
 				if(fs.existsSync(file)){
 					var code = fs.readFileSync(file,'utf-8');
+					try{
 					vm.runInNewContext(code,{
+						'__dirname':Path.dirname(file),
+						require:require,
 						route:function(run){
 							run(request,response)
 						}
 					});
+					}catch(e){
+						logger.debug(e);	
+					}
 					return;
 				}
 			}
