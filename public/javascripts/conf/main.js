@@ -47,8 +47,7 @@ define('conf/main',function(require,exports,module){
                         local: "s"
                     });
                 }
-
-                if(nameProxyData){
+                if(!!nameProxyData){
                     allnamelist = nameProxyData;
                 }
             }
@@ -354,7 +353,6 @@ define('conf/main',function(require,exports,module){
                     //编辑规则的时候，更新json数据 此处排重处理 编辑的 时候禁止和其他项编辑重复
                     var copy = jQuery.extend(true, {}, localProxyData);
                     delete copy['group' + item[0]]['rule' + item[1]];
-                    console.log(copy);
                     for(var i in copy){
                         for(var j in copy[i]){
                             if(copy[i][j][0] === exports.data.srcUrl){
@@ -452,7 +450,7 @@ define('conf/main',function(require,exports,module){
                 for(var s in localProxyData){
                     i++;
                 }
-                allnamelist = nameProxyData;
+                allnamelist = nameProxyData || [];
                 flag = 0;
             }
             if(del && del === 'd'){
