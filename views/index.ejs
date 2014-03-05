@@ -20,7 +20,7 @@
       	<div class="jumbotron">
 	      	<div>
 		      	<h4>vhost配置</h4>
-		      	<div class="server_cw">
+		      	<div class="server_cw setpt">
 					<p>只需设置域名和本地路径</p>    
 				</div>
 		      	<% if (data && JSON.stringify(data.vhost) != "{}") { %>
@@ -64,7 +64,7 @@
       	<div class="jumbotron">
 	      	<div>
 		      	<h4>proxy配置</h4>
-		      	<div class="server_cw">
+		      	<div class="server_cw setpt">
 					<p>代理：localhost 端口: <span><%= datac.port %></span> <a href="https://github.com/liuxiaoyue/fd-server/wiki/proxy-help" class="proxyhelp">如何设置浏览器代理？</a></p>    
 				</div>
 		      	<button type="button" class="btn btn-primary" id="setRuleGroup">创建规则组</button>
