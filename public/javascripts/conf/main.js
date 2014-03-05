@@ -39,6 +39,13 @@ define('conf/main',function(require,exports,module){
                 nameProxyData = scope.localData.name;
                 if(JSON.stringify(localProxyData) != "{}"){
                     this.updateGroupListFunc(localProxyData,nameProxyData);
+                }else{
+                    //此处防止不断的创建组，而不添加规则，组名不断的写入配置文件的bug
+                    exports.requestAjax({
+                        type : "sn",
+                        sn : "",
+                        local: "s"
+                    });
                 }
 
                 if(nameProxyData){
