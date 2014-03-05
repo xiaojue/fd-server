@@ -108,6 +108,9 @@ function startServer(path, cb, options) {
 		server.on("close", function() {
 			logger.debug("static server closed~! " + path);
 		});
+		server.on("error",function(err){
+			logger.debug(err);	
+		});
 
 		server.listen(port);
 		logger.debug("Server runing at port: " + port + ". path: " + path);
