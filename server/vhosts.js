@@ -7,6 +7,7 @@ var SS = require('node-static');
 var http = require('http');
 var url = require('url');
 var Path = require('path');
+var vm = require('vm');
 var route = require("./route");
 var logger = require('../lib/log/logger.js').getLogger("vhosts");
 
@@ -78,11 +79,12 @@ function startServer(path, cb, options) {
 			if (Path.extname(request.url) == '.node') {
 				var file = Path.join(path, request.url);
 				if(fs.existsSync(file)){
-					function route(run){
-						run(request,response);	
-					}
 					var code = fs.readFileSync(file,'utf-8');
-					eval(code);
+					vm.runInNewContext(code,{
+						route:function(run){
+							run(request,response)
+						}
+					});
 					return;
 				}
 			}
