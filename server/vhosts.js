@@ -1,6 +1,6 @@
 /**
 *@description 本地静态服务
-*@updateTime 2014-02-20/17
+*@updateTime 2014-03-06/10 修复一个bug
 */
 var fs = require("fs");
 var SS = require('node-static');
@@ -126,89 +126,89 @@ function startServer(path, cb, options) {
 *@description 启动/更新服务
 *@param list {Array} 要启动的服务列表
 */
-function update(list) {
-	if (list && list instanceof Array && list.length > 0) {
-		var newQueue = {},
-		newQueue_num = 0; //存放需要新开启的服务路径列表
-		var i = 0,
-		item, path, domain, result;
-
-		routeList = {}; //初始路由列表
-		for (; i < list.length; i++) {
-			item = list[i];
-			path = item.path;
-			domain = item.domain;
-
-			//通过路径判断，该路径是否存在已开启了静态服务。
-			//若存在，则标识并将域名指向添加到路由列表中；
-			//若不存在，则将路径及域名信息放入到newQueue中
-			if (path && domain) {
-				if (staticPaths[path]) {
-					staticPaths[path].enabled = true;
-					routeList[domain] = staticPaths[path].port;
-				} else {
-					if (newQueue[path]) {
-						newQueue[path].push(domain);
-					} else {
-						newQueue[path] = [domain];
-						newQueue_num++;
-					}
-				}
-			}
-			//仅添加路由服务，需要指定域名和端口。
-			if (item.onlyRoute) {
-				routeList[domain] = item.port;
-			}
-
-		}
-
-		clearNoneedServer();
-
-		//开启新增的服务
-		if (newQueue_num > 0) {
-			for (path in newQueue) {
-				startServer(path, function(result) {
-					if (!result || result.err) {
-						logger.warn("static-server start fail~! path: " + newQueue[i] + ", err: " + (result && result.err));
-					} else {
-						staticPaths[path] = result;
-
-						for (i = 0; i < newQueue[path].length; i++) {
-							routeList[newQueue[path][i]] = result.port;
-						}
-					}
-					if (--newQueue_num === 0) {
-						routeStart();
-					}
-				});
-			}
-		} else {
-			routeStart();
-		}
-	} else {
-		close();
-	}
-
-	//关闭清除不需要的服务
-	function clearNoneedServer() {
-		var _paths = {},
-		k, item;
-		for (k in staticPaths) {
-			item = staticPaths[k];
-			if (item.enabled) {
-				delete item.enabled;
-				_paths[k] = item;
-			} else {
-				close(item.server);
-			}
-		}
-		staticPaths = _paths;
-	}
+function update(list){
+    logger.debug("vhosts update: " + JSON.stringify(list));
+    if(list && list instanceof Array && list.length > 0){
+        var newQueue = {}, newQueue_num = 0;//存放需要新开启的服务路径列表
+        var i = 0, item, path, domain, result;
+        
+        routeList = {};//初始路由列表
+        for(; i < list.length; i++){
+            item = list[i];
+            path = item.path;
+            domain = item.domain;
+            
+            //通过路径判断，该路径是否存在已开启了静态服务。
+            //若存在，则标识并将域名指向添加到路由列表中；
+            //若不存在，则将路径及域名信息放入到newQueue中
+            if(path && domain){
+                if(staticPaths[path]){
+                    staticPaths[path].enabled = true;
+                    routeList[domain] = staticPaths[path].port;
+                }else{
+                    if(newQueue[path]){
+                        newQueue[path].push(domain);
+                    }else{
+                        newQueue[path] = [domain];
+                        newQueue_num++;
+                    }
+                }
+            }
+            //仅添加路由服务，需要指定域名和端口。
+            if(item.onlyRoute){
+                routeList[domain] = item.port;
+            }
+            
+        }
+        
+        clearNoneedServer();
+        logger.debug("newQueue" + JSON.stringify(newQueue));
+        //开启新增的服务
+        if(newQueue_num > 0){
+            for(path in newQueue){
+                startServer(path, (function(path){
+                    return function (result){
+                        if(!result || result.err){
+                            logger.warn("static-server start fail~! path: " + path + ". " + (result&&result.err));
+                        }else{
+                            staticPaths[path] = result;
+                            for(var i = 0; i < newQueue[path].length; i++){
+                                routeList[newQueue[path][i]] = result.port;
+                            }
+                        }
+                        if(--newQueue_num === 0){
+                            routeStart();
+                        }
+                    };
+                })(path));
+            }
+        }else{
+            routeStart();
+        }
+    }else{
+        close();
+    }
+    
+    //关闭清除不需要的服务
+    function clearNoneedServer(){
+        var _paths = {}, k, item;
+        for(k in staticPaths){
+            item = staticPaths[k];
+            if(item.enabled){
+                delete item.enabled;
+                _paths[k] = item;
+            }else{
+                close(item.server);
+            }
+        }
+        staticPaths = _paths;
+    }
 }
 
 //启动/重启 路由
-function routeStart() {
-	route.start(routeList);
+function routeStart(){
+    logger.debug("routeStart: " + JSON.stringify(routeList));
+    route.start(routeList);
 }
 
 /**

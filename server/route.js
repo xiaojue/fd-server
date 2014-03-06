@@ -45,6 +45,7 @@ function start(list){
             logger.error(err);
         }else{
             //添加新增的绑定hosts
+            logger.debug("route: " + JSON.stringify(list));
             for(var dm in list){
                 if(!routeList[dm]){
                     hosts.set(dm);

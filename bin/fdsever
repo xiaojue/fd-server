@@ -33,6 +33,14 @@ program.command("uninstall").description("uninstall the fd-server service").acti
 	});
 });
 
+program.option('-l, --log [path]', 'Set Log Path');
 program.parse(process.argv);
 
-if (!program.args.length) program.help();
+if (program.log){
+    fds({
+		type: "setLogPath",
+        options: program.log
+	});
+}else if (!program.args.length) {
+    program.help();
+}
