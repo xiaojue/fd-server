@@ -31,9 +31,9 @@ function getPort(cb) {
 	_getPort();
 
 	function _getPort() {
-		var port = parseInt(Math.random() * 8000 + 1000,10);
+		var port = parseInt(Math.random() * 8000 + 1000, 10);
 		times--;
-		if (times< 0) {
+		if (times < 0) {
 			cb(null, "OMG~！找不到可用端口。。");
 		} else {
 			var server = http.createServer();
@@ -79,13 +79,15 @@ function startServer(path, cb, options) {
 	});
 
 	function matchProxy(req) {
-		var proxylist;
-		delete require.cache[require.resolve(listFilePath)];
-		proxylist = require(listFilePath);
-		for (var i = 0; i < proxylist.length; i++) {
-			var proxy = proxylist[i];
-			if(proxy.pattern == 'http://'+req.headers.host + req.url ||  new RegExp(proxy.pattern).test('http://'+req.headers.host + req.url)){
-				return true;
+		if (fs.existsSync(listFilePath)) {
+			var proxylist;
+			delete require.cache[require.resolve(listFilePath)];
+			proxylist = require(listFilePath);
+			for (var i = 0; i < proxylist.length; i++) {
+				var proxy = proxylist[i];
+				if (proxy.pattern == 'http://' + req.headers.host + req.url || new RegExp(proxy.pattern).test('http://' + req.headers.host + req.url)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -96,10 +98,10 @@ function startServer(path, cb, options) {
 			r.get('http://' + req.headers.host + req.url).pipe(res);
 		} else if (req.method == 'POST') {
 			var body = '';
-			req.on('data',function(data){
-				body += data;	
+			req.on('data', function(data) {
+				body += data;
 			});
-			req.on('end',function(){
+			req.on('end', function() {
 				var post = qs.parse(body);
 				r.post('http://' + req.headers.host + req.url).form(post).pipe(res);
 			});
@@ -110,9 +112,9 @@ function startServer(path, cb, options) {
 		//启动server
 		var fileServer = new SS.Server(path, options);
 		var server = http.createServer(function(request, response) {
-			if(matchProxy(request)){
-				catchProxy(request,response);
-				return;	
+			if (matchProxy(request)) {
+				catchProxy(request, response);
+				return;
 			}
 			if (Path.extname(request.url) == '.node') {
 				var file = Path.join(path, request.url);
@@ -215,8 +217,7 @@ function update(list) {
 							for (var i = 0; i < newQueue[path].length; i++) {
 								routeList[newQueue[path][i]] = result.port;
 							}
-						}
-						--newQueue_num;
+						}--newQueue_num;
 						if (newQueue_num === 0) {
 							routeStart();
 						}
@@ -308,11 +309,14 @@ function vhosts(type, options) {
 }
 
 //出现异常时，打印错误信息，退出并告知父进程。
-process.on('uncaughtException', function(err){
-  logger.error('vhosts uncaughtException  ' + err.message);
-  logger.error(err);
-  process.send({type: "exit", message: "uncaughtException"});
-  exitProcess("uncaughtException");
+process.on('uncaughtException', function(err) {
+	logger.error('vhosts uncaughtException  ' + err.message);
+	logger.error(err);
+	process.send({
+		type: "exit",
+		message: "uncaughtException"
+	});
+	exitProcess("uncaughtException");
 });
 
 process.on("message", function(m) {
