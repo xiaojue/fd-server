@@ -299,8 +299,16 @@ function vhosts(type, options) {
 	fn[type] && fn[type].apply(null, options);
 }
 
+//出现异常时，打印错误信息，退出并告知父进程。
+process.on('uncaughtException', function(err){
+  logger.error('vhosts uncaughtException  ' + err.message);
+  logger.error(err);
+  process.send({type: "exit", message: "uncaughtException"});
+  exitProcess("uncaughtException");
+});
+
 process.on("message", function(m) {
-	logger.debug("vhosts " + m.type);
+	logger.debug("vhosts get message：" + JSON.stringify(m));
 	vhosts(m.type, m.options);
 });
 

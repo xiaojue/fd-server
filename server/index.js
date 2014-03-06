@@ -40,7 +40,7 @@ function startup(options){
         return;
     }
     ing = true;
-    
+
     var options = options || {};
     var path = options.configFilePath || defaultOpitons.configFilePath;
     var appPort = options.appPort || defaultOpitons.appPort;
@@ -125,8 +125,16 @@ function updateVhostsServer(){
             options: [vhosts.list]
         });
         
+        //监听静态服务线程状态
         vhosts.process.on("exit", function (){
             vhosts.process = null;
+            exitProcess("exit");
+        });
+        vhosts.process.on("message", function (m){
+            if(m && m.type === "exit"){
+                vhosts.process = null;
+                exitProcess(m.message);
+            }
         });
     }else if(vhosts.process){
         //不存在代理服务时，中断已开启的代理服务
@@ -150,6 +158,12 @@ function updateProxyServer(){
         
         proxy.process.on("exit", function (){
             proxy.process = null;
+        });
+        proxy.process.on("message", function (m){
+            if(m && m.type === "exit"){
+                logger.warn("代理服务线程已退出。" + m.message);
+                proxy.process = null;
+            }
         });
     }else if(proxy.process){
         //不存在代理服务时，中断已开启的代理服务
@@ -176,9 +190,12 @@ function exitProcess(msg){
         }
     }, 100);
 }
-// process.on('uncaughtException', function(err){
-  // console.error('uncaughtException: ' + err.message);
-// });
+
+process.on('uncaughtException', function(err){
+  logger.error('uncaughtException: ' + err.message);
+  logger.error(err);
+  exitProcess("uncaughtException");
+});
 //监听进程中断信号，然后延迟一秒退出，便于关闭相关服务
 process.on('SIGINT', function() {
   exitProcess("SIGINT");

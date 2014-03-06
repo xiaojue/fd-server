@@ -62,9 +62,16 @@ function exitProcess(msg){
         process.exit();
     });
 }
+//出现异常时，退出并告知父进程。
+process.on('uncaughtException', function(err){
+  logger.error('uncaughtException: ' + err.message);
+  logger.error(err);
+  process.send({type: "exit", message: "uncaughtException"});
+  exitProcess("uncaughtException");
+});
 
 process.on("message", function (m){
-    logger.debug("proxy " + m.type);
+    logger.debug("proxy get message: " + JSON.stringify(m));
     proxy(m.type, m.options);
 });
 //监听进程中断信号
