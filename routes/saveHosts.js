@@ -92,12 +92,17 @@ exports.list = function(req, res){
 			}	
 
 			if(req.body.type === "openProxy"){
-				json.proxy = JSON.parse(req.body.rule);
+				json.proxy = req.body.rule;
 				modifyConfig();
 			}
 
 			if(req.body.type === "cancelProxy"){
-				json.proxy = JSON.parse(req.body.rule);
+				if(req.body.rule === "1"){
+					json.proxy = [];
+				}else{
+					json.proxy = req.body.rule;
+				}
+				
 				modifyConfig();
 			}	
 

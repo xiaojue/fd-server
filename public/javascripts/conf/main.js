@@ -24,7 +24,7 @@ define('conf/main',function(require,exports,module){
     var allnamelist = [];
 
     //修改配置文件存储 重新定义变量
-    var configServerData, localServerData, localProxyData, configProxyData, nameProxyData;
+    var configServerData, localServerData, localProxyData, configProxyData, nameProxyData, cancelPos;
 
     var url = '/saveHosts';
     var localUrl = '/localConfig';
@@ -41,6 +41,9 @@ define('conf/main',function(require,exports,module){
                     allnamelist = nameProxyData;
                 }
 
+                if(configProxyData === "[]"){
+                    configProxyData = [];
+                }
                 //此处存储名字有个问题.若用户平频繁的创建规则而不添加组，在渲染组的时候名字会发生错落或者丢失
                 if(JSON.stringify(localProxyData) != "{}" && allnamelist.length>0){
                     this.updateGroupListFunc(localProxyData,allnamelist);
@@ -108,51 +111,53 @@ define('conf/main',function(require,exports,module){
             }
             //删除规则组
             if(target.getAttribute('deleteGroup')){
-                var total = $('#groupBtnWrap').find('button').length;
-                var dgNum = parseInt(target.getAttribute('deleteGroup'));
-                var delgroup = localProxyData['group' + dgNum];
-                for(var i in delgroup){
-                    if(configProxyData[delgroup[i][0]]){
-                        delete configProxyData[delgroup[i][0]];
+                if(confirm("确定删除吗？")){
+                    var total = $('#groupBtnWrap').find('button').length;
+                    var dgNum = parseInt(target.getAttribute('deleteGroup'));
+                    var delgroup = localProxyData['group' + dgNum];
+                    for(var i in delgroup){
+                        if(configProxyData[delgroup[i][0]]){
+                            delete configProxyData[delgroup[i][0]];
+                        }
                     }
-                }
-                delete localProxyData['group' + dgNum];
-                for(var item in localProxyData){
-                    var grN = parseInt(item.replace(/group/g,''));
-                    if( grN > dgNum){
-                        localProxyData['group' + (grN - 1)] = localProxyData['group' + grN];
+                    delete localProxyData['group' + dgNum];
+                    for(var item in localProxyData){
+                        var grN = parseInt(item.replace(/group/g,''));
+                        if( grN > dgNum){
+                            localProxyData['group' + (grN - 1)] = localProxyData['group' + grN];
+                        }
                     }
-                }
-                if(total > dgNum){
-                    delete localProxyData['group' + total];
-                }
+                    if(total > dgNum){
+                        delete localProxyData['group' + total];
+                    }
 
-                allnamelist = exports.without(allnamelist,dgNum-1);
-                //本地缓存规则组文件名字的变更配置文件
-                exports.requestAjax({
-                    type : "sn",
-                    sn : allnamelist,
-                    local: "s"
-                });
+                    allnamelist = exports.without(allnamelist,dgNum-1);
+                    //本地缓存规则组文件名字的变更配置文件
+                    exports.requestAjax({
+                        type : "sn",
+                        sn : allnamelist,
+                        local: "s"
+                    });
 
-                exports.updateGroupListFunc(localProxyData,allnamelist,'d');
+                    exports.updateGroupListFunc(localProxyData,allnamelist,'d');
 
-                //本地缓存的配置文件
-                exports.requestAjax({
-                    type : "sp",
-                    sp : JSON.stringify(localProxyData),
-                    local: "s"
-                });
+                    //本地缓存的配置文件
+                    exports.requestAjax({
+                        type : "sp",
+                        sp : JSON.stringify(localProxyData),
+                        local: "s"
+                    });
 
-                //若规则组中服务有启动的，则删除规则组的同时关闭服务  
-                exports.requestAjax({
-                    type : "cancelProxy",
-                    rule :  JSON.stringify(configProxyData)
-                });  
-                var groupBtnWrap = $("#groupBtnWrap");
-                if(groupBtnWrap.text() === ""){
-                    $("#allgroupwrap").hide();
-                }
+                    //若规则组中服务有启动的，则删除规则组的同时关闭服务  
+                    exports.requestAjax({
+                        type : "cancelProxy",
+                        rule :  JSON.stringify(configProxyData)
+                    });  
+                    var groupBtnWrap = $("#groupBtnWrap");
+                    if(groupBtnWrap.text() === ""){
+                        $("#allgroupwrap").hide();
+                    }
+                }    
             }
             //删除每条规则按钮
             if(target.getAttribute('deleterule') && confirm("确认删除吗？")){
@@ -188,11 +193,19 @@ define('conf/main',function(require,exports,module){
             if(target.nodeName.toLowerCase() === 'input' && target.checked){
                 var proxyNum = target.value.split('_');
                 var openRule = localProxyData["group" + proxyNum[0]]["rule" + proxyNum[1]];
-                configProxyData[openRule[0]] = openRule[1]; 
+                if(configProxyData === "[]" || configProxyData === "1"){
+                    configProxyData = [];
+                }
+                configProxyData.push({
+                    "pattern": openRule[0],
+                    "responder" : openRule[1]
+                });
+                // configProxyData[openRule[0]] = openRule[1]; 
                 exports.requestAjax({
                     type : "openProxy",
-                    rule :  JSON.stringify(configProxyData)
+                    rule : configProxyData
                 });
+
                 var lastchild =  $(target).parent().parent().children().last()[0];
                 $(lastchild.children[0]).removeClass('btn-info');
             }
@@ -200,10 +213,19 @@ define('conf/main',function(require,exports,module){
             if(target.nodeName.toLowerCase() === 'input' && !target.checked){
                 var cancelNum = target.value.split('_');
                 var cancelRule = localProxyData["group" + cancelNum[0]]["rule" + cancelNum[1]];
-                delete configProxyData[cancelRule[0]];
+                for(var l=0; l<configProxyData.length; l++){
+                    if(cancelRule[0] === configProxyData[l]["pattern"]){
+                        cancelPos = l;
+                        break;
+                    }   
+                }
+                configProxyData.splice(cancelPos,1);
+                if(configProxyData.length === 0 ){
+                    configProxyData = "1";
+                }
                 exports.requestAjax({
                     type : "cancelProxy",
-                    rule :  JSON.stringify(configProxyData)
+                    rule : configProxyData
                 });
                 var lastchild =  $(target).parent().parent().children().last()[0];
                 $(lastchild.children[0]).addClass('btn-info');
@@ -417,6 +439,7 @@ define('conf/main',function(require,exports,module){
             $("#allgroupwrap").show();
             gtpl = '';
             rtpl = '';
+            var configflag;
             for(group in data){
                 var groupNum = group.replace(/group/g,'');
                 gtpl += '<div class="panel">'+
@@ -427,16 +450,21 @@ define('conf/main',function(require,exports,module){
                                 '<table class="table table-condensed setmb">';
                 rtpl += '<button type="button" class="btn btn-success btn_smr" group="'+ groupNum +'">'+ name[parseInt(groupNum) -1] +'</button>';
                 z = 0;
-
                 for(rule in data[group]){
                     var ruleCon = data[group][rule];
                     var num = z++;
-                    if(configProxyData && configProxyData[ruleCon[0]]){
-                        gtpl += '<tr><td class="ipt_pl"><input type="checkbox" value="'+ groupNum + "_" + num +'" checked="checked"></td><td>'+ ruleCon[0] +'</td><td>'+ ruleCon[1] +'</td><td><button type="button" class="btn btn-xs Wpr" editrule="'+ groupNum + "_" + num +'">edit</button><button type="button" class="btn btn-xs btn-info" deleterule="'+ groupNum + "_" + num +'">delete</button></td></tr>';
+                    for(var l=0; l<configProxyData.length; l++){
+                        if(ruleCon[0] === configProxyData[l]["pattern"]){
+                            configflag = true;
+                        }   
+                    }
+                    if(configProxyData.length > 0 && configflag){ 
+                        gtpl += '<tr><td class="ipt_pl"><input type="checkbox" value="'+ groupNum + "_" + num +'" checked="checked"></td><td>'+ ruleCon[0] +'</td><td>'+ ruleCon[1] +'</td><td><button type="button" class="btn btn-xs Wpr" editrule="'+ groupNum + "_" + num +'">编辑</button><button type="button" class="btn btn-xs btn-danger" deleterule="'+ groupNum + "_" + num +'">删除</button></td></tr>';
+                        configflag = false;
                     }else{
                         gtpl += '<tr><td class="ipt_pl"><input type="checkbox" value="'+ groupNum + "_" + num +'"></td><td>'+ ruleCon[0] +'</td><td>'+ ruleCon[1] +'</td><td><button type="button" class="btn btn-xs btn-info Wpr" editrule="'+ groupNum + "_" + num +'">编辑</button><button type="button" class="btn btn-xs btn-danger" deleterule="'+ groupNum + "_" + num +'">删除</button></td></tr>';
-                    }                 
-                }   
+                    }    
+                }
                 gtpl += '</table>'+
                         '<button type="button" class="btn btn-xs btn-info" rulebtn="'+ groupNum +'">新增规则</button>'+
                     '</div>'+
@@ -532,7 +560,7 @@ define('conf/main',function(require,exports,module){
             var arr1 = array.slice(0, at);
             var arr2 = array.slice(at + 1);
             return arr1.concat(arr2)
-        } 
+        }
     }
     exports.init();   
     /* 静态服务器ui配置界面 */

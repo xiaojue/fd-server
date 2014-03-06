@@ -100,13 +100,13 @@ function startup(options){
             }
             
             //处理代理服务配置数据
-            proxy.list = [];
-            for(k in proxyCfg){
-                proxy.list.push({
-                    pattern: k,
-                    responder: proxyCfg[k]
-                });
-            }            
+            proxy.list = proxyCfg;
+            // for(k in proxyCfg){
+            //     proxy.list.push({
+            //         pattern: k,
+            //         responder: proxyCfg[k]
+            //     });
+            // }            
             return true;
         }
         return false;

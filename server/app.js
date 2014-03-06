@@ -16,7 +16,7 @@ var app = express();
 
 // all environments
 app.configure(function(){
-	app.set('port', process.env.PORT || 3003);
+	app.set('port', process.env.PORT || 3000);
 	app.set('views', path.resolve(__dirname,'../','views'));
 	app.set('view engine', 'ejs');
 	app.use(express.favicon());
