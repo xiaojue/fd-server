@@ -8,7 +8,13 @@ var http = require('http');
 var url = require('url');
 var Path = require('path');
 var vm = require('vm');
+var qs = require('querystring');
 var route = require("./route");
+var listFilePath = Path.join(__dirname, "proxy_list.js");
+var requestUrl = require('request');
+var r = requestUrl.defaults({
+	'proxy': 'http://127.0.0.1:8989'
+});
 var logger = require('../lib/log/logger.js').getLogger("vhosts");
 
 var routeList = {}; //路由列表 key为domain value为port
@@ -25,8 +31,9 @@ function getPort(cb) {
 	_getPort();
 
 	function _getPort() {
-		var port = parseInt(Math.random() * 8000 + 1000);
-		if (times-- < 0) {
+		var port = parseInt(Math.random() * 8000 + 1000, 10);
+		times--;
+		if (times < 0) {
 			cb(null, "OMG~！找不到可用端口。。");
 		} else {
 			var server = http.createServer();
@@ -51,8 +58,8 @@ function getPort(cb) {
 *       options {Object}: 扩展对象
 */
 function startServer(path, cb, options) {
-	var cb = cb || function() {};
-	var options = options || {};
+	cb = cb || function() {};
+	options = options || {};
 	fs.exists(path, function(t) {
 		if (t) {
 			if (!options.port) {
@@ -71,26 +78,59 @@ function startServer(path, cb, options) {
 		}
 	});
 
+	function matchProxy(req) {
+		if (fs.existsSync(listFilePath)) {
+			var proxylist;
+			delete require.cache[require.resolve(listFilePath)];
+			proxylist = require(listFilePath);
+			for (var i = 0; i < proxylist.length; i++) {
+				var proxy = proxylist[i];
+				if (proxy.pattern == 'http://' + req.headers.host + req.url || new RegExp(proxy.pattern).test('http://' + req.headers.host + req.url)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	function catchProxy(req, res) {
+		if (req.method == 'GET') {
+			r.get('http://' + req.headers.host + req.url).pipe(res);
+		} else if (req.method == 'POST') {
+			var body = '';
+			req.on('data', function(data) {
+				body += data;
+			});
+			req.on('end', function() {
+				var post = qs.parse(body);
+				r.post('http://' + req.headers.host + req.url).form(post).pipe(res);
+			});
+		}
+	}
 
 	function _start(path, port, options) {
 		//启动server
 		var fileServer = new SS.Server(path, options);
 		var server = http.createServer(function(request, response) {
+			if (matchProxy(request)) {
+				catchProxy(request, response);
+				return;
+			}
 			if (Path.extname(request.url) == '.node') {
 				var file = Path.join(path, request.url);
-				if(fs.existsSync(file)){
-					var code = fs.readFileSync(file,'utf-8');
-					try{
-					vm.runInNewContext(code,{
-						logger:logger,
-						'__dirname':Path.dirname(file),
-						require:require,
-						route:function(run){
-							run(request,response)
-						}
-					});
-					}catch(e){
-						logger.debug(e);	
+				if (fs.existsSync(file)) {
+					var code = fs.readFileSync(file, 'utf-8');
+					try {
+						vm.runInNewContext(code, {
+							logger: logger,
+							'__dirname': Path.dirname(file),
+							require: require,
+							route: function(run) {
+								run(request, response);
+							}
+						});
+					} catch(e) {
+						logger.debug(e);
 					}
 					return;
 				}
@@ -108,8 +148,8 @@ function startServer(path, cb, options) {
 		server.on("close", function() {
 			logger.debug("static server closed~! " + path);
 		});
-		server.on("error",function(err){
-			logger.debug(err);	
+		server.on("error", function(err) {
+			logger.debug(err);
 		});
 
 		server.listen(port);
@@ -126,89 +166,92 @@ function startServer(path, cb, options) {
 *@description 启动/更新服务
 *@param list {Array} 要启动的服务列表
 */
-function update(list){
-    logger.debug("vhosts update: " + JSON.stringify(list));
-    if(list && list instanceof Array && list.length > 0){
-        var newQueue = {}, newQueue_num = 0;//存放需要新开启的服务路径列表
-        var i = 0, item, path, domain, result;
-        
-        routeList = {};//初始路由列表
-        for(; i < list.length; i++){
-            item = list[i];
-            path = item.path;
-            domain = item.domain;
-            
-            //通过路径判断，该路径是否存在已开启了静态服务。
-            //若存在，则标识并将域名指向添加到路由列表中；
-            //若不存在，则将路径及域名信息放入到newQueue中
-            if(path && domain){
-                if(staticPaths[path]){
-                    staticPaths[path].enabled = true;
-                    routeList[domain] = staticPaths[path].port;
-                }else{
-                    if(newQueue[path]){
-                        newQueue[path].push(domain);
-                    }else{
-                        newQueue[path] = [domain];
-                        newQueue_num++;
-                    }
-                }
-            }
-            //仅添加路由服务，需要指定域名和端口。
-            if(item.onlyRoute){
-                routeList[domain] = item.port;
-            }
-            
-        }
-        
-        clearNoneedServer();
-        logger.debug("newQueue" + JSON.stringify(newQueue));
-        //开启新增的服务
-        if(newQueue_num > 0){
-            for(path in newQueue){
-                startServer(path, (function(path){
-                    return function (result){
-                        if(!result || result.err){
-                            logger.warn("static-server start fail~! path: " + path + ". " + (result&&result.err));
-                        }else{
-                            staticPaths[path] = result;
-                            for(var i = 0; i < newQueue[path].length; i++){
-                                routeList[newQueue[path][i]] = result.port;
-                            }
-                        }
-                        if(--newQueue_num === 0){
-                            routeStart();
-                        }
-                    };
-                })(path));
-            }
-        }else{
-            routeStart();
-        }
-    }else{
-        close();
-    }
-    
-    //关闭清除不需要的服务
-    function clearNoneedServer(){
-        var _paths = {}, k, item;
-        for(k in staticPaths){
-            item = staticPaths[k];
-            if(item.enabled){
-                delete item.enabled;
-                _paths[k] = item;
-            }else{
-                close(item.server);
-            }
-        }
-        staticPaths = _paths;
-    }
+function update(list) {
+	logger.debug("vhosts update: " + JSON.stringify(list));
+	if (list && list instanceof Array && list.length > 0) {
+		var newQueue = {},
+		newQueue_num = 0; //存放需要新开启的服务路径列表
+		var i = 0,
+		item, path, domain, result;
+
+		routeList = {}; //初始路由列表
+		for (; i < list.length; i++) {
+			item = list[i];
+			path = item.path;
+			domain = item.domain;
+
+			//通过路径判断，该路径是否存在已开启了静态服务。
+			//若存在，则标识并将域名指向添加到路由列表中；
+			//若不存在，则将路径及域名信息放入到newQueue中
+			if (path && domain) {
+				if (staticPaths[path]) {
+					staticPaths[path].enabled = true;
+					routeList[domain] = staticPaths[path].port;
+				} else {
+					if (newQueue[path]) {
+						newQueue[path].push(domain);
+					} else {
+						newQueue[path] = [domain];
+						newQueue_num++;
+					}
+				}
+			}
+			//仅添加路由服务，需要指定域名和端口。
+			if (item.onlyRoute) {
+				routeList[domain] = item.port;
+			}
+
+		}
+
+		clearNoneedServer();
+		logger.debug("newQueue" + JSON.stringify(newQueue));
+		//开启新增的服务
+		if (newQueue_num > 0) {
+			for (path in newQueue) {
+				startServer(path, (function(path) {
+					return function(result) {
+						if (!result || result.err) {
+							logger.warn("static-server start fail~! path: " + path + ". " + (result && result.err));
+						} else {
+							staticPaths[path] = result;
+							for (var i = 0; i < newQueue[path].length; i++) {
+								routeList[newQueue[path][i]] = result.port;
+							}
+						}--newQueue_num;
+						if (newQueue_num === 0) {
+							routeStart();
+						}
+					};
+				})(path));
+			}
+		} else {
+			routeStart();
+		}
+	} else {
+		close();
+	}
+
+	//关闭清除不需要的服务
+	function clearNoneedServer() {
+		var _paths = {},
+		k, item;
+		for (k in staticPaths) {
+			item = staticPaths[k];
+			if (item.enabled) {
+				delete item.enabled;
+				_paths[k] = item;
+			} else {
+				close(item.server);
+			}
+		}
+		staticPaths = _paths;
+	}
 }
 
 //启动/重启 路由
-function routeStart(){
-    logger.debug("routeStart: " + JSON.stringify(routeList));
-    route.start(routeList);
+function routeStart() {
+	logger.debug("routeStart: " + JSON.stringify(routeList));
+	route.start(routeList);
 }
 
 /**
@@ -220,7 +263,8 @@ function close(server) {
 		server.close();
 	} else {
 		var ports = "";
-		for (var k in staticPaths) {
+		var k;
+		for (k in staticPaths) {
 			staticPaths[k].server.close();
 			ports += staticPaths[k].port + ",";
 		}
@@ -228,7 +272,7 @@ function close(server) {
 
 		var rlist = routeList;
 		routeList = {};
-		for (var k in rlist) {
+		for (k in rlist) {
 			if (!new RegExp(rlist[k] + ",").test(ports)) {
 				routeList[k] = rlist[k];
 			}
@@ -265,11 +309,14 @@ function vhosts(type, options) {
 }
 
 //出现异常时，打印错误信息，退出并告知父进程。
-process.on('uncaughtException', function(err){
-  logger.error('vhosts uncaughtException  ' + err.message);
-  logger.error(err);
-  process.send({type: "exit", message: "uncaughtException"});
-  exitProcess("uncaughtException");
+process.on('uncaughtException', function(err) {
+	logger.error('vhosts uncaughtException  ' + err.message);
+	logger.error(err);
+	process.send({
+		type: "exit",
+		message: "uncaughtException"
+	});
+	exitProcess("uncaughtException");
 });
 
 process.on("message", function(m) {
