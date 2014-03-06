@@ -7,6 +7,7 @@ var fs = require('fs');
 var express = require('express');
 var routes = require('../routes');
 var saveHosts = require('../routes/saveHosts');
+var showlog = require('../routes/showlog');
 var http = require('http');
 var path = require('path');
 var flash = require('connect-flash');
@@ -43,6 +44,7 @@ app.configure('production', function(){
 })
 
 app.get('/index', routes.index);
+app.get('/log', showlog.show);
 app.post('/saveHosts', saveHosts.list);
 
 //供外部调用打开端口
