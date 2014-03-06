@@ -8,6 +8,7 @@ var http = require('http');
 var url = require('url');
 var Path = require('path');
 var vm = require('vm');
+var qs = require('querystring');
 var route = require("./route");
 var listFilePath = Path.join(__dirname, "proxy_list.js");
 var requestUrl = require('request');
@@ -94,7 +95,14 @@ function startServer(path, cb, options) {
 		if (req.method == 'GET') {
 			r.get('http://' + req.headers.host + req.url).pipe(res);
 		} else if (req.method == 'POST') {
-			r.post('http://' + req.headers.host + req.url).form(req.body).pipe(res);
+			var body = '';
+			req.on('data',function(data){
+				body += data;	
+			});
+			req.on('end',function(){
+				var post = qs.parse(body);
+				r.post('http://' + req.headers.host + req.url).form(post).pipe(res);
+			});
 		}
 	}
 
