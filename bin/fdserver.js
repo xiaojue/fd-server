@@ -39,7 +39,7 @@ program.parse(process.argv);
 if (program.log){
     fds({
 		type: "setLogPath",
-        options: program.log
+        args: [program.log]
 	});
 }else if (!program.args.length) {
     program.help();
