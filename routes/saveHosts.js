@@ -46,7 +46,7 @@ exports.list = function(req, res){
 
 			//每删除一条host
 			if(req.body.type === "dh"){
-				delete localJson.vhost[req.body.dh]
+				delete localJson.vhost[req.body.dh];
 				modifyLocalConfig();
 			}
 
@@ -54,8 +54,8 @@ exports.list = function(req, res){
 				fs.writeFile(vhosts.localConfig, JSON.stringify(localJson), function (err) {
 				  	if (err) throw err;
 				  	logger.info('It\'s saved!');
+					res.send('(\'{"message": "successful"}\')');
 				});
-				res.send('(\'{"message": "successful"}\')');
 			}
 		});
 
@@ -81,13 +81,13 @@ exports.list = function(req, res){
 			}
 			//每删除一条规则更新配置文件
 			if(req.body.type === "dh"){
-				delete json.vhost[req.body.dh]
+				delete json.vhost[req.body.dh];
 				modifyConfig();
 			}
 
 			//禁用某条规则
 			if(req.body.type === "disable"){
-				delete json.vhost[req.body.disrule]
+				delete json.vhost[req.body.disrule];
 				modifyConfig();
 			}	
 
@@ -110,8 +110,8 @@ exports.list = function(req, res){
 				fs.writeFile(vhosts.config, JSON.stringify(json), function (err) {
 				  	if (err) throw err;
 				  	logger.info('It\'s saved!');
+					res.send('(\'{"message": "successful"}\')');
 				});
-				res.send('(\'{"message": "successful"}\')');
 			}
 		});
 	}				

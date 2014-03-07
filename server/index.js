@@ -52,6 +52,7 @@ function startup(options){
         if(t){
             //添加监听文件更新事件
             fs.watchFile(path,function (curr, prev){
+				logger.info(path);
                 if(curr.mtime > prev.mtime){
                     logger.debug("config file update~! " + path);
                     _start();

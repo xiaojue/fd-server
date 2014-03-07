@@ -116,8 +116,8 @@ function startServer(path, cb, options) {
 				catchProxy(request, response);
 				return;
 			}
-			if (Path.extname(request.url) == '.node') {
-				var file = Path.join(path, request.url);
+			if (Path.extname(url.parse(request.url).pathname) == '.node') {
+				var file = Path.join(path, url.parse(request.url).pathname);
 				if (fs.existsSync(file)) {
 					var code = fs.readFileSync(file, 'utf-8');
 					try {
