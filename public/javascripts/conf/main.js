@@ -25,7 +25,7 @@ define('conf/main',function(require,exports,module){
 
     //修改配置文件存储 重新定义变量
     var configServerData, localServerData, localProxyData, configProxyData, nameProxyData, cancelPos;
-
+    var delPos;
     var url = '/saveHosts';
     var localUrl = '/localConfig';
     var exports = {
@@ -39,10 +39,6 @@ define('conf/main',function(require,exports,module){
                 nameProxyData = scope.localData.name;
                 if(!!nameProxyData){
                     allnamelist = nameProxyData;
-                }
-
-                if(configProxyData === "[]"){
-                    configProxyData = [];
                 }
                 //此处存储名字有个问题.若用户平频繁的创建规则而不添加组，在渲染组的时候名字会发生错落或者丢失
                 if(JSON.stringify(localProxyData) != "{}" && allnamelist.length>0){
@@ -115,9 +111,13 @@ define('conf/main',function(require,exports,module){
                     var total = $('#groupBtnWrap').find('button').length;
                     var dgNum = parseInt(target.getAttribute('deleteGroup'));
                     var delgroup = localProxyData['group' + dgNum];
+                    var delgroupitem = [];
                     for(var i in delgroup){
-                        if(configProxyData[delgroup[i][0]]){
-                            delete configProxyData[delgroup[i][0]];
+                        for(var df=0; df<configProxyData.length; df++){
+                            if(delgroup[i][0] === configProxyData[df]["pattern"]){
+                                configProxyData.splice(df,1);
+                                break;
+                            }   
                         }
                     }
                     delete localProxyData['group' + dgNum];
@@ -147,11 +147,15 @@ define('conf/main',function(require,exports,module){
                         sp : JSON.stringify(localProxyData),
                         local: "s"
                     });
-
+                   
+                    
+                    if(configProxyData.length === 0 ){
+                        configProxyData = "1";
+                    }
                     //若规则组中服务有启动的，则删除规则组的同时关闭服务  
                     exports.requestAjax({
                         type : "cancelProxy",
-                        rule :  JSON.stringify(configProxyData)
+                        rule : configProxyData
                     });  
                     var groupBtnWrap = $("#groupBtnWrap");
                     if(groupBtnWrap.text() === ""){
@@ -179,13 +183,21 @@ define('conf/main',function(require,exports,module){
                     sp : JSON.stringify(localProxyData),
                     local: "s"
                 });
-                
                 var delinput = $(target).parent().siblings().children("input")[0];
                 if(delinput.checked){
-                    delete configProxyData[opendelr[0]];
+                    for(var k=0; k<configProxyData.length; k++){
+                        if(opendelr[0] === configProxyData[k]["pattern"]){
+                            delPos = k;
+                            break;
+                        }   
+                    }
+                    configProxyData.splice(delPos,1);
+                    if(configProxyData.length === 0 ){
+                        configProxyData = "1";
+                    }
                     exports.requestAjax({
                         type : "cancelProxy",
-                        rule :  JSON.stringify(configProxyData)
+                        rule : configProxyData
                     });
                 }
             }
@@ -193,7 +205,7 @@ define('conf/main',function(require,exports,module){
             if(target.nodeName.toLowerCase() === 'input' && target.checked){
                 var proxyNum = target.value.split('_');
                 var openRule = localProxyData["group" + proxyNum[0]]["rule" + proxyNum[1]];
-                if(configProxyData === "[]" || configProxyData === "1"){
+                if(configProxyData === "1"){
                     configProxyData = [];
                 }
                 configProxyData.push({
