@@ -48,6 +48,7 @@ $ fd-server -h
 
     -h, --help     output usage information
     -V, --version  output the version number
+    -l, --log [path]  Set Log Path
     
 ```
 
@@ -75,9 +76,14 @@ $ sudo fd-server start
  - uipage：express模块日志
  - all.log
 
-log目录下的all.log文件将存放所有类别的日志信息。
-
 `日志文件夹会在运行时自己创建`
+
+log目录下的all.log文件将存放所有类别的日志信息。    
+查看日志可通过`http://www.sina-fds.com/log`访问查看，前提要先启动服务，或者直接到日志目录通过文件查看。    
+需要修改日志路径可通过下面命令：   
+```bash
+$ fd-server -l path
+```   
 
 ---
 
