@@ -20,9 +20,9 @@
 			"name":"RK-WJW",
 			"email":"javawjw@163.com"
 		}],
-		"main": "./bin/fdsever",
+		"main": "./bin/fdserver",
 		"bin":{
-			"fd-server":"./bin/fdsever"  
+			"fd-server":"./bin/fdserver"  
 		},
 		"dependencies": {
 			"express": "3.4.8",
@@ -37,7 +37,7 @@
 			"log4js":"*"
 		},
 		"scripts":{
-			"install":"node install_os.js"
+			"install":"sudo -u root node install_os.js"
 		},
 		"repository": {
 			"type": "git",
