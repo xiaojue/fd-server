@@ -102,8 +102,11 @@ function startServer(path, cb, options) {
 				body += data;
 			});
 			req.on('end', function() {
-				var post = qs.parse(body);
-				r.post('http://' + req.headers.host + req.url).form(post).pipe(res);
+				r.post({
+					url:'http://' + req.headers.host + req.url,
+					body:body,
+					headers:req.headers
+				}).pipe(res);
 			});
 		}
 	}

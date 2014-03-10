@@ -32,7 +32,7 @@
 			"hostile":"git://github.com/xiaojue/hostile.git#4cedbe1cf7b3eca7bdb3b6cab1090e7034b26c4c",
 			"bouncy": "git://github.com/xiaojue/bouncy.git#ec314733a5ebbade5a30232f45fcf4c95c4fb198",
 			"node-static": ">= 0.7.3",
-			"nproxy":">= 1.4.3",
+			"nproxy":"git://github.com/xiaojue/nproxy.git#301fc96ce8cf31730a0d81deab55276e8ac6c783",
 			"commander":"*",
 			"log4js":"*"
 		},
