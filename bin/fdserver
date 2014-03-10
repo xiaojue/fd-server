@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var fds = require("../lib/fdServer.js");
+var fds = require("../lib/commanders.js");
 var pkg = require('../package.json');
 var program = require('commander');
 
@@ -7,31 +7,21 @@ program.version(pkg.version);
 
 program.usage('[command]');
 
-var commandConfig = {
-	'install': 'install the fd-server service',
-	'start': 'start the fd-server service',
-	'stop': 'stop the fd-server service',
-	'restart': 'restart the fd-server service',
-	'uninstall': 'uninstall the fd-server service'
-};
+var key;
 
-for (var command in commandConfig) {
-	program.command(command).description(commandConfig[command]).action(function() {
-		fds({
-			type: command
-		});
-	});
+for (key in fds.commanders) {
+	var commander = fds.commanders[key];
+	program.command(key).description(commander['description']).action(commander['exec']);
 }
 
-program.option('-l, --log [path]', 'set log filepath');
+for (key in fds.options){
+	var option = fds.options[key];
+	program.option(option['command'],option['description']);
+}
+
 program.parse(process.argv);
 
-if (program.log) {
-	fds({
-		type: "setLogPath",
-		args: [program.log]
-	});
-} else if (!program.args.length) {
+if (!fds.optionsChecks(program) && !program.args.length){
 	program.help();
 }
 
