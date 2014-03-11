@@ -17,6 +17,7 @@
 .jumbotron h4{font-size: 18px;}
 .jumbotron td{font-size: 14px;border: 1px solid #ddd;word-wrap:break-word; overflow:hidden; max-width: 380px;}
 
+#groupBtnWrap button{margin-right: 5px;}
 /*遮罩层*/
 .black_overlay{position: absolute;top: 0%;left: 0%;width: 100%;height: 100%;background-color: black;z-index:1001;
 -moz-opacity: 0.8;opacity:.80;filter: alpha(opacity=80);}

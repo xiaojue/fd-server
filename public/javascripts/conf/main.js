@@ -71,11 +71,11 @@ define('conf/main',function(require,exports,module){
             var target = event.target;
             if(target.nodeName.toLowerCase() === 'button'){
                 var num = target.getAttribute('group');
-                if(target.className === 'btn btn-disable btn_smr'){
-                    target.className = 'btn btn-success btn_smr';
+                if(target.className === 'btn btn-sm btn-disable'){
+                    target.className = 'btn btn-sm btn-success';
                     $("#group" + num).show();
                 }else{
-                    target.className = 'btn btn-disable btn_smr';
+                    target.className = 'btn btn-sm btn-disable';
                     $("#group" + num).hide();
                 }   
             }
@@ -222,7 +222,7 @@ define('conf/main',function(require,exports,module){
                 $(lastchild.children[0]).removeClass('btn-info');
             }
             //取消代理规则
-            if(target.nodeName.toLowerCase() === 'input' && !target.checked){
+            if(target.getAttribute("type") === "checkbox" && !target.checked){
                 var cancelNum = target.value.split('_');
                 var cancelRule = localProxyData["group" + cancelNum[0]]["rule" + cancelNum[1]];
                 for(var l=0; l<configProxyData.length; l++){
@@ -460,7 +460,7 @@ define('conf/main',function(require,exports,module){
                             '</div>'+
                             '<div class="panel-body panel-content" id="'+ group +'">'+
                                 '<table class="table table-condensed setmb">';
-                rtpl += '<button type="button" class="btn btn-success btn_smr" group="'+ groupNum +'">'+ name[parseInt(groupNum) -1] +'</button>';
+                rtpl += '<button type="button" class="btn btn-sm btn-success" group="'+ groupNum +'">'+ name[parseInt(groupNum) -1] +'</button>';
                 z = 0;
                 for(rule in data[group]){
                     var ruleCon = data[group][rule];
@@ -554,7 +554,7 @@ define('conf/main',function(require,exports,module){
                 '</div>'
             ].join('');
             $("#allGroupPanel").append(groupTpl);
-            var groupBtnTpl = '<button type="button" class="btn btn-success btn_smr" group= '+ i +'>group' + i + '</button>';
+            var groupBtnTpl = '<button type="button" class="btn btn-sm btn-success" group= '+ i +'>group' + i + '</button>';
             $("#groupBtnWrap").append(groupBtnTpl);
             allnamelist.push('group' + i);
             //本地名字的存储
