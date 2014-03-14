@@ -25,6 +25,7 @@
 			"fd-server":"./bin/fdserver"  
 		},
 		"dependencies": {
+			"async":"*",
 			"express": "3.4.8",
 			"request":"*",
 			"ejs": "*",
