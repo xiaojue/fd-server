@@ -39,7 +39,7 @@
 			"log4js":"*"
 		},
 		"scripts":{
-			"install":"sudo -u root node install_os.js"
+			"install":"node install_os.js"
 		},
 		"repository": {
 			"type": "git",
