@@ -27,6 +27,7 @@
 		"dependencies": {
 			"async":"*",
 			"express": "3.4.8",
+			"hosts-group":"*",
 			"request":"*",
 			"ejs": "*",
 			"connect-flash":">= 0.1.1",
