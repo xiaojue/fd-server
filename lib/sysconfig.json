@@ -9,6 +9,7 @@
 	},
 	"uipage":{
 		"host":"www.sina-fds.com",
+		"ip":"127.0.0.1",
 		"port":3003
 	},
 	"nproxy":{
