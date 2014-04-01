@@ -1,1 +1,0 @@
-{"vhost":{"sjs.sinajs.cn":"/Users/chenchen/fuqiang/dev/"},"proxy":{"group1":{"rule0":["http://sjs.sinajs.cn/newcblog/assest/(.*?)$","http://sjs.sinajs.cn/newcblog/src/$1"],"rule1":["http://sjs.sinajs.cn/newcblog/(.*?)\\.css$","http://sjs.sinajs.cn/newcblog/css.node?file=$1"]}},"name":["newcblog","group2"]}
