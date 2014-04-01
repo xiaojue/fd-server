@@ -21,7 +21,7 @@
 
 #groupBtnWrap button{margin-right: 5px;}
 /*遮罩层*/
-.black_overlay{position: absolute;top: 0%;left: 0%;width: 100%;height: 100%;background-color: black;z-index:1001;
+.black_overlay{position:fixed;top: 0%;left: 0%;width: 100%;height: 100%;background-color: black;z-index:1001;
 -moz-opacity: 0.8;opacity:.80;filter: alpha(opacity=80);}
 
 /* 对话框样式 */
