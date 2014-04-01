@@ -1,1 +1,0 @@
-{"vhost":{"sjs.sinajs.cn":"/Users/chenchen/fuqiang/dev/"},"proxy":[{"pattern":"http://sjs.sinajs.cn/newcblog/(.*?)\\.css$","responder":"http://sjs.sinajs.cn/newcblog/css.node?file=$1"}],"port":8989}
