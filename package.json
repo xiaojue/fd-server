@@ -1,49 +1,54 @@
 {
-	"name": "fd-server",
-		"version": "0.0.8",
-		"description": "a simple, efficient, convenient RIA development environment",
-		"keywords": [
-			"static",
-			"proxy",
-			"front-end"
-		],
-		"homepage": "https://github.com/liuxiaoyue/fd-server",
-		"author": [{
-			"name": "weixiao909",
-			"email": "weixiao909@gmail.com",
-			"url": "http://weibo.com/xiaoyue909"
-		},{
-			"name":"xiaojue",
-			"email":"designsor@gmail.com",
-			"url":"http://www.tuer.me"
-		},{
-			"name":"RK-WJW",
-			"email":"javawjw@163.com"
-		}],
-		"main": "./bin/fdserver",
-		"bin":{
-			"fd-server":"./bin/fdserver"  
-		},
-		"dependencies": {
-			"async":"*",
-			"express": "3.4.8",
-			"hosts-group":"*",
-			"request":"*",
-			"ejs": "*",
-			"connect-flash":">= 0.1.1",
-			"hostile":"git://github.com/xiaojue/hostile.git#4cedbe1cf7b3eca7bdb3b6cab1090e7034b26c4c",
-			"bouncy": "git://github.com/xiaojue/bouncy.git#ec314733a5ebbade5a30232f45fcf4c95c4fb198",
-			"node-static": ">= 0.7.3",
-			"nproxy":"git://github.com/xiaojue/nproxy.git#301fc96ce8cf31730a0d81deab55276e8ac6c783",
-			"commander":"*",
-			"log4js":"*"
-		},
-		"scripts":{
-			"install":"node install_os.js"
-		},
-		"repository": {
-			"type": "git",
-			"url": "https://github.com/liuxiaoyue/fd-server"
-		},
-		"license": "MIT"
+  "name": "fd-server",
+  "version": "0.0.9",
+  "description": "a simple, efficient, convenient RIA development environment",
+  "keywords": [
+    "static",
+    "proxy",
+    "front-end"
+  ],
+  "homepage": "https://github.com/liuxiaoyue/fd-server",
+  "author": [
+    {
+      "name": "weixiao909",
+      "email": "weixiao909@gmail.com",
+      "url": "http://weibo.com/xiaoyue909"
+    },
+    {
+      "name": "xiaojue",
+      "email": "designsor@gmail.com",
+      "url": "http://www.tuer.me"
+    },
+    {
+      "name": "RK-WJW",
+      "email": "javawjw@163.com"
+    }
+  ],
+  "main": "./bin/fdserver",
+  "bin": {
+    "fd-server": "./bin/fdserver"
+  },
+  "dependencies": {
+    "async": "*",
+    "bouncy": "git://github.com/xiaojue/bouncy.git#ec314733a5ebbade5a30232f45fcf4c95c4fb198",
+    "commander": "*",
+    "connect-flash": ">= 0.1.1",
+    "ejs": "*",
+    "express": "3.4.8",
+    "hostile": "git://github.com/xiaojue/hostile.git#4cedbe1cf7b3eca7bdb3b6cab1090e7034b26c4c",
+    "hosts-group": "*",
+    "log4js": "*",
+    "node-static": ">= 0.7.3",
+    "nproxy": "git://github.com/xiaojue/nproxy.git#301fc96ce8cf31730a0d81deab55276e8ac6c783",
+    "rekuire": "^0.1.5",
+    "request": "*"
+  },
+  "scripts": {
+    "install": "node install_os.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liuxiaoyue/fd-server"
+  },
+  "license": "MIT"
 }
