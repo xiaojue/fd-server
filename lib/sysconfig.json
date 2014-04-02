@@ -8,20 +8,12 @@
 		"host":"127.0.0.1"
 	},
 	"uipage":{
-		"host":"www.sina-fds.com",
+		"host":"fd.server",
 		"ip":"127.0.0.1",
 		"port":3003
 	},
 	"nproxy":{
 		"host":"127.0.0.1",
 		"port":8989
-	},
-	"STATUS":{
-		"run":1,
-		"runing":2,
-		"stop":3,
-		"stoping":4,
-		"install":5,
-		"uninstal":6
 	}
 }
