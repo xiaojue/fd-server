@@ -35,13 +35,12 @@ describe('utils', function (){
     describe('#mkdirsSync(dirname, mode)', function(){
         it('应该返回一个创建目录成功的真值true', function (){
             var dir = path.join(__dirname, "./test1/test2/");
-            if(fs.existsSync(dir)){
-                fs.rmdirSync(dir);
-                fs.rmdirSync(path.join(dir, '..'));
-            }
             
             var r = utils.mkdirsSync(dir);
-            assert.ok(r && fs.existsSync(dir));
+            assert.ok(r);//true
+            assert.ok(fs.existsSync(dir));//true
+            fs.rmdirSync(dir);
+            fs.rmdirSync(path.join(dir, '..'));
         });
     });
 
