@@ -21,7 +21,8 @@
     },
     {
       "name": "RK-WJW",
-      "email": "javawjw@163.com"
+      "email": "javawjw@163.com",
+      "url": "http://weibo.com/miss714"
     }
   ],
   "main": "./bin/fdserver",
