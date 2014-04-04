@@ -10,3 +10,4 @@ lib/server/proxy_list.js
 log/*
 config.json
 localConfig.json
+lib/daemon/*
