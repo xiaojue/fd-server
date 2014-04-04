@@ -27,7 +27,7 @@
 -moz-opacity: 0.8;opacity:.80;filter: alpha(opacity=80);}
 
 /* 对话框样式 */
-.dialogOuter{position:fixed; top:50%; left:50%; margin-left: -230px;margin-top: -180px; width:460px; height:360px;background-color:#EEF4FF;padding:5px; z-index:1002;overflow: auto;}
+.dialogOuter{position:fixed; background-color:#EEF4FF;padding:5px; z-index:1002;overflow: auto;}
 .dialogClose{float:right; font-size: 12px; padding: 5px 10px 0 0; cursor: hand;}
 .dialogTitle{font-size: 12px; font-weight: bold;padding: 10px;}
 .dialogT{font-size: 12px;padding-left: 15px; display: inline-block; width:80px;}
