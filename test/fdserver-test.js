@@ -13,6 +13,7 @@ var fdserverService = {
     script: path.join(__dirname, '../lib/master.js')
 };
 var svc = null;
+var noop = function (){};
 
 describe("fdserver", function (){
     this.timeout(30000);
@@ -32,9 +33,9 @@ describe("fdserver", function (){
         });
         svc.start();
     });
-    //等待2s
+    //等待5s
     before(function (done){
-        setTimeout(done, 2000);
+        setTimeout(done, 5000);
     });
     
     describe("fd-server should be enabled without error", function (){
@@ -42,11 +43,16 @@ describe("fdserver", function (){
         
         //测试服务web页面是否可以正常访问
         it("GET " + uipage + "return 200", function (done){
+            var _cb = function (err){
+                _cb = noop;
+                done(err);
+            };
             http.get(uipage, function (res){
                 assert.equal(200, res.statusCode);
-                done();
+                _cb();
             }).on("error", function (err){
-                done(err); 
+                // console.log(uipage + ": " + err);
+                _cb(err); 
             });
         });
         //测试静态服务和路由功能
@@ -67,21 +73,31 @@ describe("fdserver", function (){
                 done();
             });
             
-            it("GET bouncy " + test_host1 + " return 404", function (done){
+            it("GET " + test_host1 + " return 404", function (done){
+                var _cb = function (err){
+                    _cb = noop;
+                    done(err);
+                };
                 http.get("http://" + test_host1, function (res){
                     assert.equal(404, res.statusCode);
-                    done();
+                    _cb();
                 }).on("error", function (err){
-                    done(err); 
+                    // console.log(test_host1 + ": " + err);
+                    _cb(err); 
                 });
             });
             
-            it("GET bouncy " + test_host2 + " return 200", function (done){
+            it("GET " + test_host2 + " return 200", function (done){
+                var _cb = function (err){
+                    _cb = noop;
+                    done(err);
+                };
                 http.get("http://" + test_host2 + "/tmp/hello.txt", function (res){
                     assert.equal(200, res.statusCode);
-                    done();
+                    _cb();
                 }).on("error", function (err){
-                    done(err); 
+                    // console.log(test_host2 + ": " + err);
+                    _cb(err); 
                 });
             });
             
@@ -91,28 +107,62 @@ describe("fdserver", function (){
                 done();
             });
         });
-        
-        /**
-        测试代理功能，因为代理需要设置浏览器代理，暂时想不出怎么处理
+        //测试代理服务功能
         describe("#nproxy", function (){
+            var simpleServer;
+            before(function (done){
+                simpleServer = http.createServer(function(request, response) {
+                    response.writeHead(200, {"Content-Type": "text/html"});
+                    response.write("Hello World!");
+                    response.end();
+                });
+                simpleServer.on("listening", done);
+                simpleServer.listen(3303);
+            });
             
+            it("GET http://localhost:8989/http://localhost:3303/ return 200", function (done){
+                http.request({
+                    host: "localhost",
+                    port: "8989",
+                    path: "http://localhost:3303/",
+                    method: "GET"
+                }, function(res){
+                    assert.equal(200, res.statusCode);
+                    done();
+                }).on("error", function (err){
+                    // console.log("nproxy: " + err); //卸载时会触发这里
+                }).end();
+            });
+            
+            after(function (done){
+                simpleServer.close();
+                simpleServer.once('close', done);
+            });
         });
-        */
         
     });
     
+    //关闭服务
     after(function (done){
         assert.ok(svc);
-        svc.on("stop", done);
+        //这里必须用once，不然在卸载的时候也会触发这里绑定的事件回调。。。
+        svc.once('stop', done);
         svc.stop();
     });
-    /** 
-    最后卸载服务，存在问题尚未解决 
+     
+    //卸载服务 
     after(function (done){
-        setTimeout(done, 15000);
+        var _cb = function (){
+            _cb = noop;
+            done();
+        };
+        assert.ok(svc && svc.exists);
+        svc.on("uninstall",function (){
+            _cb();
+        });
+        svc.on("error", function(){
+            _cb();
+        });
+        svc.uninstall();
     });
-    after(function(done){
-        assert.ok(svc);
-        ss.remove(fdserverService, done);
-    }); */
 });

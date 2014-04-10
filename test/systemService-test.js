@@ -8,9 +8,8 @@ describe('systemService', function (){
     var opt = {
         "name": "fdserverTest",
         "description": "fd-server service test",
-        "script": path.join(__dirname, './tmp/ss_test.js')
+        "script": path.join(__dirname, './support/simpleServer.js')
     };
-    this.timeout(10000);
     
     describe("#getService(options, cb)", function (){
         it("should without error", function (done){
