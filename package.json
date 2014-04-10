@@ -42,7 +42,6 @@
     "hostile": "git://github.com/xiaojue/hostile.git#4cedbe1cf7b3eca7bdb3b6cab1090e7034b26c4c",
     "hosts-group": "*",
     "log4js": "*",
-    "mocha": "^1.18.2",
     "node-linux": "git://github.com/xiaojue/node-linux.git#5bd49b078e3342752ed14642e78922ac2cab27ba",
     "node-mac": "*",
     "node-static": ">= 0.7.3",
@@ -50,6 +49,9 @@
     "nproxy": "git://github.com/xiaojue/nproxy.git#301fc96ce8cf31730a0d81deab55276e8ac6c783",
     "rekuire": "^0.1.5",
     "request": "*"
+  },
+  "devDependencies": {
+    "mocha": "*"
   },
   "repository": {
     "type": "git",

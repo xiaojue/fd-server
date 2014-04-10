@@ -16,7 +16,6 @@ var svc = null;
 var noop = function (){};
 
 describe("fdserver", function (){
-    this.timeout(30000);
     //安装服务
     before(function (done){
         ss.getService(fdserverService, function (err, server){
