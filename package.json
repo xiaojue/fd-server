@@ -30,7 +30,8 @@
     "fd-server": "./bin/fdserver"
   },
   "scripts": {
-    "test": "mocha ./test"
+    "test": "mocha ./test",
+    "preinstall": "mocha grunt"
   },
   "dependencies": {
     "async": "*",
