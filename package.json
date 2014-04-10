@@ -30,7 +30,7 @@
     "fd-server": "./bin/fdserver"
   },
   "scripts": {
-    "test": "make test"
+    "test": "mocha ./test"
   },
   "dependencies": {
     "async": "*",
