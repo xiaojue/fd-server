@@ -30,8 +30,8 @@
     "fd-server": "./bin/fdserver"
   },
   "scripts": {
-    "test": "mocha ./test",
-    "preinstall": "mocha grunt"
+    "install": "node install.js",
+    "test": "mocha ./test"
   },
   "dependencies": {
     "async": "*",
@@ -43,13 +43,11 @@
     "hostile": "git://github.com/xiaojue/hostile.git#4cedbe1cf7b3eca7bdb3b6cab1090e7034b26c4c",
     "hosts-group": "*",
     "log4js": "*",
-    "node-linux": "git://github.com/xiaojue/node-linux.git#5bd49b078e3342752ed14642e78922ac2cab27ba",
-    "node-mac": "*",
     "node-static": ">= 0.7.3",
-    "node-windows": "*",
     "nproxy": "git://github.com/xiaojue/nproxy.git#301fc96ce8cf31730a0d81deab55276e8ac6c783",
     "rekuire": "^0.1.5",
-    "request": "*"
+    "request": "*",
+    "sudo": "^1.0.3"
   },
   "devDependencies": {
     "mocha": "*"
