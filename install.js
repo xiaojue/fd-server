@@ -3,7 +3,7 @@ var os = require('os');
 var sys = os.platform();
 var child;
 if (sys === 'win32') {
-	child = spawn('npm',['install','node-windows','-g']);
+	child = spawn('npm.cmd',['install','node-windows','-g']);
 } else if (sys == 'linux') {
 	child = spawn('npm',['install','git://github.com/xiaojue/node-linux.git#5bd49b078e3342752ed14642e78922ac2cab27ba','-g']);
 } else if (sys == 'darwin') {
