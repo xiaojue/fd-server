@@ -30,7 +30,7 @@
     "fd-server": "./bin/fdserver"
   },
   "scripts": {
-    "install": "node install.js",
+    "install": "node ./install.js",
     "test": "mocha ./test"
   },
   "dependencies": {
