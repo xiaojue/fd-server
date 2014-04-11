@@ -1,6 +1,6 @@
 {
   "name": "fd-server",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "a simple, efficient, convenient RIA development environment",
   "keywords": [
     "static",
@@ -30,7 +30,7 @@
     "fd-server": "./bin/fdserver"
   },
   "scripts": {
-    "install": "node ./install.js",
+    "preinstall": "node ./install.js",
     "test": "mocha ./test"
   },
   "dependencies": {
@@ -46,8 +46,7 @@
     "node-static": ">= 0.7.3",
     "nproxy": "git://github.com/xiaojue/nproxy.git#301fc96ce8cf31730a0d81deab55276e8ac6c783",
     "rekuire": "^0.1.5",
-    "request": "*",
-    "sudo": "^1.0.3"
+    "request": "*"
   },
   "devDependencies": {
     "mocha": "*"
