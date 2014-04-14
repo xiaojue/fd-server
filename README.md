@@ -10,10 +10,7 @@ fd-server 是一个多功能的前端开发环境，它支持以下几大功能�
 
 ### 下载安装
 
-```bash
-$ npm install fd-server -g
-$ sudo fd-server install
-```
+[安装wiki](https://github.com/liuxiaoyue/fd-server/wiki/fd-server-install)
 
 如果使用debian系统，安装后报`start-stop-daemon command not found`错误，则需要手动安装`start-stop-daemon`命令。
 
