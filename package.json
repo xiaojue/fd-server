@@ -1,6 +1,6 @@
 {
   "name": "fd-server",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "a simple, efficient, convenient RIA development environment",
   "keywords": [
     "static",
@@ -28,9 +28,6 @@
   "main": "./bin/fdserver",
   "bin": {
     "fd-server": "./bin/fdserver"
-  },
-  "scripts": {
-    "test": "mocha ./test"
   },
   "dependencies": {
     "async": "*",
