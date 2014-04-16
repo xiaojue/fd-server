@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "async": "*",
-    "bouncy": "git://github.com/xiaojue/bouncy.git#36cc43f1fcae1657dfa9709f7b2a552651b57d36",
+    "bouncy": "git://github.com/xiaojue/bouncy.git#384b22dcb62edd589a0b2f057612835b69ff1d93",
     "commander": "*",
     "connect-flash": ">= 0.1.1",
     "ejs": "*",
