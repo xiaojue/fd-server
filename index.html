@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Fd-server : Front-end development server" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Fd-server</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/liuxiaoyue/fd-server">View on GitHub</a>
+
+          <h1 id="project_title">Fd-server</h1>
+          <h2 id="project_tagline">Front-end development server</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/liuxiaoyue/fd-server/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/liuxiaoyue/fd-server/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="fd-server" class="anchor" href="#fd-server"><span class="octicon octicon-link"></span></a>fd-server</h1>
+
+<p><a href="https://travis-ci.org/liuxiaoyue/fd-server"><img src="https://travis-ci.org/liuxiaoyue/fd-server.png?branch=master" alt="Build Status"></a> 
+<a href="http://david-dm.org/liuxiaoyue/fd-server"><img src="https://david-dm.org/liuxiaoyue/fd-server.png" alt="依赖模块状态"></a>
+<a href="https://sourcegraph.com/github.com/liuxiaoyue/fd-server"><img src="https://sourcegraph.com/api/repos/github.com/liuxiaoyue/fd-server/counters/views.png?no-count" alt="浏览数"></a></p>
+
+<p>fd-server 是一个多功能的前端开发环境，它支持以下几大功能，快速建立静态服务，代理服务，hosts分组以及动态接口的扩展。且夸平台可在win，linux，mac平台上以命令行方式运行,并注册到系统服务中。</p>
+
+<hr><h3>
+<a name="%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85" class="anchor" href="#%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85"><span class="octicon octicon-link"></span></a>下载安装</h3>
+
+<p><a href="https://github.com/liuxiaoyue/fd-server/wiki/fd-server-install">安装wiki</a></p>
+
+<p>如果使用debian系统，安装后报<code>start-stop-daemon command not found</code>错误，则需要手动安装<code>start-stop-daemon</code>命令。</p>
+
+<div class="highlight highlight-bash"><pre><span class="nv">$ </span>wget http://developer.axis.com/download/distribution/apps-sys-utils-start-stop-daemon-IR1_9_18-2.tar.gz
+<span class="nv">$ </span>tar zxf apps-sys-utils-start-stop-daemon-IR1_9_18-2.tar.gz
+<span class="nv">$ </span>mv apps/sys-utils/start-stop-daemon-IR1_9_18-2/ ./
+<span class="nv">$ </span>rm -rf apps
+<span class="nv">$ </span><span class="nb">cd </span>start-stop-daemon-IR1_9_18-2/
+<span class="nv">$ </span>cc start-stop-daemon.c -o start-stop-daemon
+<span class="nv">$ </span>cp start-stop-daemon /usr/local/bin/start-stop-daemon
+</pre></div>
+
+<hr><h3>
+<a name="%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7" class="anchor" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7"><span class="octicon octicon-link"></span></a>命令行工具</h3>
+
+<div class="highlight highlight-bash"><pre><span class="nv">$ </span>fd-server -h
+
+  Usage: fd-server <span class="o">[</span><span class="nb">command</span><span class="o">]</span>
+
+  Commands:
+
+    install                install the fd-server service
+    start                  start the fd-server server
+    stop                   stop the fd-server server
+    restart                restart the fd-server server
+    uninstall              uninstall the fd-server service
+
+  Options:
+
+    -h, --help     output usage information
+    -V, --version  output the version number
+    -l, --log <span class="o">[</span>path<span class="o">]</span>  Set Log Path
+
+</pre></div>
+
+<hr><h3>
+<a name="%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B" class="anchor" href="#%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B"><span class="octicon octicon-link"></span></a>快速上手</h3>
+
+<p>安装成功后，使用start命令开启服务。</p>
+
+<div class="highlight highlight-bash"><pre><span class="nv">$ </span>sudo fd-server start
+</pre></div>
+
+<p>启动完成之后可访问 <code>http://fd.server</code> 访问服务配置页面。</p>
+
+<p><a href="https://github.com/liuxiaoyue/fd-server/wiki/%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AE%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A3%E7%90%86">浏览器代理配置帮助</a></p>
+
+<hr><h3>
+<a name="%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86" class="anchor" href="#%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86"><span class="octicon octicon-link"></span></a>日志管理</h3>
+
+<p>使用<a href="https://github.com/nomiddlename/log4js-node">log4js</a>统一管理，日志文件存放于项目跟目录的log文件夹下。</p>
+
+<ul>
+<li>log：日志文件根目录
+
+<ul>
+<li>vhosts：存放静态服务运行日志目录 </li>
+<li>proxy：存放代理服务运行日志目录</li>
+<li>operate：存放服务操作控制相关的日志目录</li>
+<li>uipage：express模块日志</li>
+<li>all.log</li>
+</ul>
+</li>
+</ul><p><code>日志文件夹会在运行时自己创建</code></p>
+
+<p>log目录下的all.log文件将存放所有类别的日志信息。<br>
+查看日志可通过<code>http://www.sina-fds.com/log</code>访问查看，前提要先启动服务，或者直接到日志目录通过文件查看。<br>
+需要修改日志路径可通过下面命令：   </p>
+
+<div class="highlight highlight-bash"><pre><span class="nv">$ </span>fd-server -l path
+</pre></div>
+
+<hr><h3>
+<a name="%E6%89%A9%E5%B1%95%E6%8E%A5%E5%8F%A3" class="anchor" href="#%E6%89%A9%E5%B1%95%E6%8E%A5%E5%8F%A3"><span class="octicon octicon-link"></span></a>扩展接口</h3>
+
+<p>有的时候我们往往需要模拟一些后端接口，或者做一些动态解析的功能，或者扩展动态路由。fd-server支持给vhost的静态服务扩展路由。
+只需要在静态目录下放置 <code>.node</code> 的扩展名文件，代码书写如下：</p>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">//someroute.node</span>
+<span class="nx">route</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="nx">res</span><span class="p">){</span>
+   <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,{</span><span class="s1">'Content-Type'</span><span class="o">:</span><span class="s1">'text/plain'</span><span class="p">});</span>
+   <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">'someroute'</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>那么当你访问对应host域名下得<code>/someroute.node</code>地址则会自动转入当前文件的route函数路由中，可随意扩展。</p>
+
+<hr><h3>
+<a name="%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" class="anchor" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="octicon octicon-link"></span></a>注意事项</h3>
+
+<p><code>install</code> <code>uninstall</code> <code>stop</code> <code>start</code> <code>restart</code> 命令都需要管理员权限，linux or mac下使用 <code>sudo fd-server start</code> win下会有权限的窗口提醒，需要确认。 </p>
+
+<hr><h3>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h3>
+
+<p>MIT license</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Fd-server maintained by <a href="https://github.com/liuxiaoyue">liuxiaoyue</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
