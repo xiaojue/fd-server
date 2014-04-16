@@ -30,22 +30,19 @@
     "fd-server": "./bin/fdserver"
   },
   "scripts": {
-    "preinstall": "node ./install.js",
     "test": "mocha ./test"
   },
   "dependencies": {
     "async": "*",
-    "bouncy": "git://github.com/xiaojue/bouncy.git#ec314733a5ebbade5a30232f45fcf4c95c4fb198",
+    "bouncy": "git://github.com/xiaojue/bouncy.git#36cc43f1fcae1657dfa9709f7b2a552651b57d36",
     "commander": "*",
     "connect-flash": ">= 0.1.1",
     "ejs": "*",
     "express": "3.4.8",
-    "hostile": "git://github.com/xiaojue/hostile.git#4cedbe1cf7b3eca7bdb3b6cab1090e7034b26c4c",
     "hosts-group": "*",
     "log4js": "*",
     "node-static": ">= 0.7.3",
     "nproxy": "git://github.com/xiaojue/nproxy.git#301fc96ce8cf31730a0d81deab55276e8ac6c783",
-    "rekuire": "^0.1.5",
     "request": "*"
   },
   "devDependencies": {
