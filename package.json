@@ -1,6 +1,6 @@
 {
   "name": "fd-server",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "a simple, efficient, convenient RIA development environment",
   "keywords": [
     "static",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "async": "*",
-    "bouncy": "git://github.com/xiaojue/bouncy.git#384b22dcb62edd589a0b2f057612835b69ff1d93",
+    "bouncy": "git://github.com/xiaojue/bouncy.git#dc0f3021f25f000c9eadc5c7fe1091fb97089918",
     "commander": "*",
     "connect-flash": ">= 0.1.1",
     "ejs": "*",
