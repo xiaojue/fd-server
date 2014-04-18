@@ -1,0 +1,32 @@
+{
+	"source":"content",
+	"output":"./",
+	"permalink":"{{filename}}.html",
+	"sitename":"FdServer",
+	"navigation":[{
+		"title":"FdServer",
+		"link":"/"
+	},
+	{
+		"title":"快速上手",
+		"link":"/start.html"
+	},
+	{
+		"title":"文档",
+		"link":"/wiki.html"
+	},
+	{
+		"title":"安装",
+		"link":"/install.html"
+	},
+	{
+		"title":"关于",
+		"link":"about.html"
+	}],
+	"theme":"_themes/one",
+	"writers":[
+		"nico.PostWriter",
+		"nico.StaticWriter",
+		"nico.FileWriter"
+	]
+}
