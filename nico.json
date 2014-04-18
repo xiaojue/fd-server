@@ -3,6 +3,11 @@
 	"output":"./",
 	"permalink":"{{filename}}.html",
 	"sitename":"FdServer",
+	"url":"http://fd-server.org",
+	"name":"fd-server",
+	"version":"0.0.1",
+	"duoshuo":"fdserver.duoshuo.com",
+	"github":"https://github.com/liuxiaoyue/fd-server",
 	"navigation":[{
 		"title":"FdServer",
 		"link":"./"

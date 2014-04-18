@@ -55,13 +55,12 @@
       {{config.footer}}
       {%- endif %}
       {%- if not config.hideNico %}
-      <p class="copyright">powered by <a href="{{system.url}}">{{system.name}}</a> {{system.version}}</p>
+      <p class="copyright">powered by <a href="{{config.url}}">{{config.name}}</a> {{config.version}}</p>
       {%- endif %}
     </div>
     {%- if config.github %}
-    <div class="github"><a class="github-link" href="{{config.github}}">Fork me on GitHub</a></div>
+    <div class="github"><a target="_blank" class="github-link" href="{{config.github}}">Fork me on GitHub</a></div>
     {%- endif %}
     <script src="{{ static_url('one.js') }}"></script>
-	<a href="https://github.com/liuxiaoyue/fd-server" target="_blank"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
   </body>
 </html>
