@@ -1,6 +1,7 @@
 # 快速上手
 
 - template: page
+- pubdate: 2014-04-18
 
 -----------
 
