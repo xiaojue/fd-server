@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="generator" content="{{system.name}} {{system.version}}">
+    <meta name="theme" content="{{theme.name}} {{theme.version}}">
+    <title>{% block title%}{% endblock %}</title>
+    {%- if config.touchIcon %}
+    <link rel="apple-touch-icon" href="{{ config.touchIcon }}" />
+    {%- endif %}
+    {%- if config.feedurl %}
+    <link rel="alternate" type="application/rss+xml" href="{{config.feedurl}}" title="{{config.sitename}}" />
+    {%- endif %}
+    <link rel="stylesheet" href="{{static_url('one.css')}}" />
+    {%- block afterstyle %}{% endblock %}
+    {%- if config.google %}
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', '{{config.google}}']);
+      _gaq.push(['_trackPageview']);
+      _gaq.push(['_trackPageLoadTime']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = 'https://ssl.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    {%- endif %}
+  </head>
+  <body>
+    <div class="header">
+      <div class="container">
+        <div class="brand">
+          <a class="home" href="{{content_url('index.html')}}">{{config.sitename}}</a>
+          {%- if config.tagline %}
+          - <span class="tagline">{{ config.tagline }}</span>
+          {%- endif %}
+        </div>
+        {%- if config.navigation %}
+        <div class="menu" role="navigation">
+          {%- for item in config.navigation %}
+          <a href="{{content_url(item.link)}}">{{item.title}}</a>
+          {%- endfor %}
+        </div>
+        {%- endif %}
+      </div>
+    </div>
+    <div class="document yue">
+      {%- block document %}
+      {%- endblock %}
+    </div>
+    <div class="footer">
+      {%- if config.footer %}
+      {{config.footer}}
+      {%- endif %}
+      {%- if not config.hideNico %}
+      <p class="copyright">powered by <a href="{{system.url}}">{{system.name}}</a> {{system.version}}</p>
+      {%- endif %}
+    </div>
+    {%- if config.github %}
+    <div class="github"><a class="github-link" href="{{config.github}}">Fork me on GitHub</a></div>
+    {%- endif %}
+    <script src="{{ static_url('one.js') }}"></script>
+	<a href="https://github.com/liuxiaoyue/fd-server" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+  </body>
+</html>

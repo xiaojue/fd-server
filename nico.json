@@ -23,7 +23,7 @@
 		"title":"关于",
 		"link":"about.html"
 	}],
-	"theme":"_themes/one",
+	"theme":"_themes/fd",
 	"writers":[
 		"nico.PostWriter",
 		"nico.StaticWriter",
