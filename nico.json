@@ -5,19 +5,19 @@
 	"sitename":"FdServer",
 	"navigation":[{
 		"title":"FdServer",
-		"link":"/"
+		"link":"./"
 	},
 	{
 		"title":"快速上手",
-		"link":"/start.html"
+		"link":"start.html"
 	},
 	{
 		"title":"文档",
-		"link":"/wiki.html"
+		"link":"wiki.html"
 	},
 	{
 		"title":"安装",
-		"link":"/install.html"
+		"link":"install.html"
 	},
 	{
 		"title":"关于",
