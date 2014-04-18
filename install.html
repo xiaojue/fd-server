@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="generator" content="nico 0.5.0">
     <meta name="theme" content="fd 0.1">
-    <title>安装FdServer</title>
+    <title>安装 FdServer</title>
     <link rel="stylesheet" href="./static/one.css" />
   </head>
   <body>
@@ -25,8 +25,32 @@
     </div>
     <div class="document yue">
 <div class="hentry" itemscope itemtype="http://schema.org/Article">
-  <h1 class="entry-title" itemprop="name">安装FdServer</h1>
-  <div class="entry-content" itemprop="articleBody"><p>安装</p>
+  <h1 class="entry-title" itemprop="name">安装 FdServer</h1>
+  <div class="entry-content" itemprop="articleBody"><h4 id="node版本需要在0-10以上">node版本需要在0.10以上</h4><p><a href="http://nodejs.org/download/">http://nodejs.org/download/</a></p>
+<h4 id="1-安装cnpm加快安装速度-可选，npm速度快的可不用">1.安装cnpm加快安装速度(可选，npm速度快的可不用)</h4><div class="highlight"><pre><code class="bash">npm install -g cnpm --registry=http://r.cnpmjs.org</code></pre></div><h4 id="2-安装git命令行工具">2.安装git命令行工具</h4><h5 id="windows">windows</h5><p><a href="http://msysgit.github.io/">http://msysgit.github.io/</a></p>
+<h5 id="ubuntu">ubuntu</h5><div class="highlight"><pre><code class="bash"><span class="built_in">sudo</span> apt-get install git</code></pre></div><h5 id="mac">mac</h5><pre>sudo brew install git</pre><h4 id="3-修改github的hosts，防止git-clone时报错">3.修改github的hosts，防止git clone时报错</h4><div class="highlight"><pre><code class="bash"><span class="number">192.30</span>.<span class="number">252.131</span> github.com</code></pre></div><h4 id="4-1-windows下安装过程：">4.1 windows下安装过程：</h4><ol>
+<li>管理员身份运行cmd。</li>
+<li>cnpm下载fd-server和windows依赖。<div class="highlight"><pre><code class="bash">cnpm install node-windows -g
+cnpm install fd-server -g</code></pre></div></li>
+</ol>
+<h4 id="4-2-mac下安装过程：">4.2 mac下安装过程：</h4><div class="highlight"><pre><code class="bash"><span class="built_in">sudo</span> cnpm install node-mac -g
+<span class="built_in">sudo</span> cnpm install fd-server -g</code></pre></div><h4 id="4-3-ubuntu下或者其他linux版本安装：">4.3 ubuntu下或者其他linux版本安装：</h4><ol>
+<li>下载源码.<div class="highlight"><pre><code class="bash">git clone https://github.com/liuxiaoyue/fd-server
+<span class="built_in">cd</span> fd-server</code></pre></div></li>
+<li><p>手动安装.</p>
+<div class="highlight"><pre><code class="bash"><span class="built_in">sudo</span> node install.js
+cnpm install -g</code></pre></div></li>
+<li><p>如果使用debian系统，安装后报<code>start-stop-daemon command not found</code>错误，则需要手动安装<code>start-stop-daemon</code>命令。</p>
+</li>
+</ol>
+<div class="highlight"><pre><code class="bash">$ wget http://developer.axis.com/download/distribution/apps-sys-utils-start-stop-daemon-IR1_9_18-<span class="number">2</span>.tar.gz
+$ tar zxf apps-sys-utils-start-stop-daemon-IR1_9_18-<span class="number">2</span>.tar.gz
+$ mv apps/sys-utils/start-stop-daemon-IR1_9_18-<span class="number">2</span>/ ./
+$ rm -rf apps
+$ <span class="built_in">cd</span> start-stop-daemon-IR1_9_18-<span class="number">2</span>/
+$ cc start-stop-daemon.c -o start-stop-daemon
+$ cp start-stop-daemon /usr/local/bin/start-stop-daemon</code></pre></div><h4 id="5-启动fd-server服务">5.启动fd-server服务</h4><div class="highlight"><pre><code class="bash"><span class="built_in">sudo</span> fd-server install
+<span class="built_in">sudo</span> fd-server start</code></pre></div><p>之后打开浏览器访问<a href="http://fd.server">http://fd.server</a> 进行配置即可！</p>
 </div>
 </div>
 </div>

@@ -26,7 +26,48 @@
     <div class="document yue">
 <div class="hentry" itemscope itemtype="http://schema.org/Article">
   <h1 class="entry-title" itemprop="name">文档</h1>
-  <div class="entry-content" itemprop="articleBody"><p>文档</p>
+  <div class="entry-content" itemprop="articleBody"><h3 id="命令行工具">命令行工具</h3><div class="highlight"><pre><code class="bash">$ fd-server -h
+
+  Usage: fd-server [command]
+
+  Commands:
+
+    install                install the fd-server service
+    start                  start the fd-server server
+    stop                   stop the fd-server server
+    restart                restart the fd-server server
+    uninstall              uninstall the fd-server service
+
+  Options:
+
+    -h, --help     output usage information
+    -V, --version  output the version number
+    <span class="operator">-l</span>, --log [path]  Set Log Path</code></pre></div><hr>
+<h3 id="日志管理">日志管理</h3><p>使用<a href="https://github.com/nomiddlename/log4js-node">log4js</a>统一管理，日志文件存放于项目跟目录的log文件夹下。</p>
+<ul>
+<li>log：日志文件根目录<ul>
+<li>vhosts：存放静态服务运行日志目录 </li>
+<li>proxy：存放代理服务运行日志目录</li>
+<li>operate：存放服务操作控制相关的日志目录</li>
+<li>uipage：express模块日志</li>
+<li>all.log</li>
+</ul>
+</li>
+</ul>
+<p><code>日志文件夹会在运行时自己创建</code></p>
+<p>log目录下的all.log文件将存放所有类别的日志信息。<br>查看日志可通过<code>http://www.sina-fds.com/log</code>访问查看，前提要先启动服务，或者直接到日志目录通过文件查看。<br>需要修改日志路径可通过下面命令：   </p>
+<div class="highlight"><pre><code class="bash">$ fd-server <span class="operator">-l</span> path</code></pre></div><hr>
+<h3 id="扩展接口">扩展接口</h3><p>有的时候我们往往需要模拟一些后端接口，或者做一些动态解析的功能，或者扩展动态路由。fd-server支持给vhost的静态服务扩展路由。
+只需要在静态目录下放置 <code>.node</code> 的扩展名文件，代码书写如下：</p>
+<div class="highlight"><pre><code class="javascript"><span class="comment">//someroute.node</span>
+route(<span class="function"><span class="keyword">function</span><span class="params">(req,res)</span>{</span>
+   res.writeHead(<span class="number">200</span>,{<span class="string">'Content-Type'</span>:<span class="string">'text/plain'</span>});
+   res.end(<span class="string">'someroute'</span>);
+});</code></pre></div><p>那么当你访问对应host域名下得<code>/someroute.node</code>地址则会自动转入当前文件的route函数路由中，可随意扩展。</p>
+<hr>
+<h3 id="注意事项">注意事项</h3><p><code>install</code> <code>uninstall</code> <code>stop</code> <code>start</code> <code>restart</code> 命令都需要管理员权限，linux or mac下使用 <code>sudo fd-server start</code> win下会有权限的窗口提醒，需要确认。 </p>
+<p><a href="https://github.com/liuxiaoyue/fd-server/wiki/%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AE%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A3%E7%90%86">浏览器代理配置帮助</a></p>
+<hr>
 </div>
 </div>
 </div>
