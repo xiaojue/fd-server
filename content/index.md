@@ -1,8 +1,6 @@
 # Fd-server
 
-- pubdate: 2014-04-18
 - template: page
-- navigation: index
 
 ----------
 
