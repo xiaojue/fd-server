@@ -15,6 +15,18 @@ fd-server 是一个多功能的前端开发环境，它支持以下几大功能�
 
 ---
 
+#### 演示视频
+
+<iframe height=498 width=510 src="http://player.youku.com/embed/XNzAwMDU2OTAw" frameborder=0 allowfullscreen></iframe>
+
+---
+
+#### 论坛
+
+[github issues](https://github.com/liuxiaoyue/fd-server/issues)
+
+---
+
 ### License
 
 MIT license
