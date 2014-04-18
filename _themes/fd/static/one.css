@@ -72,7 +72,10 @@
   margin: 0.2em 0;
 }
 .yue hr {
-  border: 0 none;
+  height:1px;
+  border:0 none;
+  background:#ccc;
+  overflow:hidden;
   margin-bottom: 1em;
 }
 .yue hr:after {
