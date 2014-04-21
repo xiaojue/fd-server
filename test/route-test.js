@@ -5,6 +5,7 @@ var index = require('../lib/server/routes/index.js');
 var assert = require('assert');
 var path = require('path');
 var fs = require('fs');
+var http = require('http');
 
 describe('route-index', function (){
     var resExtend = {
@@ -14,7 +15,7 @@ describe('route-index', function (){
     //添加一个vhost
     describe('#scope save(req, res)', function (){
         var data =  {"vhost":{"test.sina.com.cn":{"path":"d:\\workspace","status":true}}}
-        it('添加vhost scope', function (){
+        it('获取vhost scope', function (){
             var req = {body:{}}
             index.scope(req, resExtend);
             var newdata = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../', 'config.json'), 'utf-8'));
