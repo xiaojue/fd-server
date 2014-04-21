@@ -5,11 +5,9 @@
 
 -----------
 
-这里将介绍如何快速使用fdserver开始你的前端开发工作，并使你可以独立开发动态扩展。
+这里将介绍如何快速使用fds开始你的前端开发工作，并使你可以独立开发动态扩展。
 
-下面是2个已经开发好的例子:
+下面是一个开发的简单例子:
 
+下载我们的项目源码，然后导入目录中的配置文件，即可！
 
-* https://github.com/xiaojue/ssocombine
-
-* https://github.com/xiaojue/blogcombine
