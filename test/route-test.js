@@ -19,7 +19,7 @@ describe('route-index', function (){
             var req = {body:{}}
             index.scope(req, resExtend);
             var newdata = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../', 'config.json'), 'utf-8'));
-            assert.ok(typeof newdata.hosts);            
+            assert.ok(!!newdata.hosts);            
         });   
 
         it('添加vhost save', function (){
@@ -27,7 +27,7 @@ describe('route-index', function (){
             var req = {body: body}
             index.save(req, resExtend);
             var newdata = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../', 'config.json'), 'utf-8'));
-            assert.ok(typeof newdata.vhost['test.sina.com.cn']);            
+            assert.ok(!!newdata.vhost['test.sina.com.cn']);            
         });    
     });
 
@@ -52,7 +52,7 @@ describe('route-index', function (){
             index.onlineProxy(req, resExtend);
             var newdata = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../', 'config.json'), 'utf-8'));
             var newstatus = newdata.vhost['test.sina.com.cn']['openOnlineProxy'];
-            assert.ok(typeof newstatus);          
+            assert.ok(!newstatus);          
         });    
     });
 
@@ -62,7 +62,7 @@ describe('route-index', function (){
             var req = {body:{domain:'test.sina.com.cn'}}
             index.removeHost(req, resExtend);
             var newdata = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../', 'config.json'), 'utf-8'));
-            assert.ok(!newdata.vhost['test.sina.com.cn']);            
+            assert.ok(!newdata.vhost['test.sina.com.cn']);           
         });    
     });
 
@@ -88,7 +88,7 @@ describe('route-index', function (){
             var req = {body: data};
             index.save(req,resExtend);
             var newdata = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../', 'config.json'), 'utf-8'));
-            assert.ok(typeof newdata.proxy[0]);            
+            assert.equal(newdata.proxy[0]['pattern'],'http://baidu.com');            
         }); 
 
         it('#editProxy(req, res)', function (){
@@ -109,7 +109,7 @@ describe('route-index', function (){
             var req = {body: data}
             index.disabledProxy(req, resExtend);
             var newdata = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../', 'config.json'), 'utf-8'));
-            assert.ok(newdata.proxy[0].disabled);            
+            assert.ok(!!newdata.proxy[0].disabled);            
         }); 
 
         it('#removeProxy(req, res)', function (){
@@ -117,7 +117,7 @@ describe('route-index', function (){
             var req = {body: data}
             index.removeProxy(req, resExtend);
             var newdata = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../', 'config.json'), 'utf-8'));
-            assert.ok(typeof !newdata.proxy[0]);            
+            assert.ok(!newdata.proxy[0]);            
         }); 
 
         it('#removeGroup(req, res)', function (){
@@ -125,7 +125,7 @@ describe('route-index', function (){
             var req = {body: data}
             index.removeGroup(req, resExtend);
             var newdata = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../', 'config.json'), 'utf-8'));
-            assert.ok(typeof !newdata.proxyGroup[0]);            
+            assert.ok(!newdata.proxyGroup[0]);            
         }); 
     });
 });

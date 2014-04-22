@@ -17,19 +17,21 @@ describe('route-hostgroup-test', function (){
         it('#addGroup(req, res)', function (){
             var req = {body:{type:"addGroup", data:{groupname:"testhostgroup"}}};
             hostFunc.host(req, resExtend);
-            assert.ok(typeof hostFile.get()['testhostgroup']);            
+            assert.equal(hostFile.get()['testhostgroup'].length, 0); 
+            assert.ok(!!hostFile.get()['testhostgroup']);           
         }); 
 
         it('#editgroup(req, res)', function (){
             var req = {body:{type:"en", data:{oldname:"testhostgroup",newname:"newtestgroup"}}};
             hostFunc.host(req, resExtend);
-            assert.ok(typeof hostFile.get()['newtestgroup']);            
+            assert.equal(hostFile.get()['newtestgroup'].length, 0); 
+            assert.ok(!!hostFile.get()['newtestgroup']);               
         }); 
 
         it('#addrule(req, res)', function (){
             var req = {body:{type:"editrule", data:{domain:"test.host.com",ip:"127.0.0.1",disabled:false, groupname:"newtestgroup"}}}
             hostFunc.host(req, resExtend);
-            assert.ok(typeof hostFile.get()['newtestgroup'][0]);            
+            assert.equal(hostFile.get()['newtestgroup'][0]['ip'],'127.0.0.1');            
         }); 
 
         it('#editrule(req, res)', function (){
@@ -80,13 +82,13 @@ describe('route-hostgroup-test', function (){
         it('#deleterule(req, res)', function (){
             var req = {body:{type:"deleterule", data:{domain:"test.host.com",ip:"127.1.1.1",groupname:"newtestgroup"}}};
             hostFunc.host(req, resExtend);
-            assert.ok(typeof !hostFile.get()['newtestgroup'][0]);            
+            assert.equal(hostFile.get()['newtestgroup'].length, 0);            
         }); 
 
         it('#removeGroup(req, res)', function (){
             var req = {body:{type:"removeGroup", data:{groupname:"newtestgroup"}}};
             hostFunc.host(req, resExtend);
-            assert.ok(typeof !hostFile.get()['newtestgroup']);            
+            assert.ok(!hostFile.get()['newtestgroup']);            
         }); 
     });
 });
