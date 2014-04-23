@@ -5,10 +5,9 @@
 
 ----------
 
-[![Build Status](https://travis-ci.org/liuxiaoyue/fd-server.png?branch=master)](https://travis-ci.org/liuxiaoyue/fd-server) 
-[![依赖模块状态](https://david-dm.org/liuxiaoyue/fd-server.png)](http://david-dm.org/liuxiaoyue/fd-server)
-[![浏览数](https://sourcegraph.com/api/repos/github.com/liuxiaoyue/fd-server/counters/views.png?no-count)](https://sourcegraph.com/github.com/liuxiaoyue/fd-server)
-
+[![Build Status](https://travis-ci.org/SinaBlogFE/fd-server.png?branch=master)](https://travis-ci.org/SinaBlogFE/fd-server) 
+[![依赖模块状态](https://david-dm.org/SinaBlogFE/fd-server.png)](http://david-dm.org/SinaBlogFE/fd-server)
+[![浏览数](https://sourcegraph.com/api/repos/github.com/SinaBlogFE/fd-server/counters/views.png?no-count)](https://sourcegraph.com/github.com/SinaBlogFE/fd-server)
 
 #### Fd-server 
 
