@@ -1,7 +1,7 @@
 # fd-server
-[![Build Status](https://travis-ci.org/liuxiaoyue/fd-server.png?branch=master)](https://travis-ci.org/liuxiaoyue/fd-server) 
-[![依赖模块状态](https://david-dm.org/liuxiaoyue/fd-server.png)](http://david-dm.org/liuxiaoyue/fd-server)
-[![浏览数](https://sourcegraph.com/api/repos/github.com/liuxiaoyue/fd-server/counters/views.png?no-count)](https://sourcegraph.com/github.com/liuxiaoyue/fd-server)
+[![Build Status](https://travis-ci.org/SinaBlogFE/fd-server.png?branch=master)](https://travis-ci.org/SinaBlogFE/fd-server) 
+[![依赖模块状态](https://david-dm.org/SinaBlogFE/fd-server.png)](http://david-dm.org/SinaBlogFE/fd-server)
+[![浏览数](https://sourcegraph.com/api/repos/github.com/SinaBlogFE/fd-server/counters/views.png?no-count)](https://sourcegraph.com/github.com/SinaBlogFE/fd-server)
 
 
 fd-server 是一个多功能的前端开发环境，它支持以下几大功能，快速建立静态服务，代理服务，hosts分组以及动态接口的扩展。且跨平台可在win，linux，mac平台上以命令行方式运行,并注册到系统服务中。
@@ -10,7 +10,7 @@ fd-server 是一个多功能的前端开发环境，它支持以下几大功能�
 
 ### 下载安装
 
-[安装wiki](https://github.com/liuxiaoyue/fd-server/wiki/fd-server-install)
+[安装wiki](https://github.com/SinaBlogFE/fd-server/wiki/fd-server-install)
 
 ---
 
