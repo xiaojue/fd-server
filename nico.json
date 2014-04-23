@@ -7,7 +7,7 @@
 	"name":"fd-server",
 	"version":"0.0.1",
 	"duoshuo":"fdserver.duoshuo.com",
-	"github":"https://github.com/liuxiaoyue/fd-server",
+	"github":"https://github.com/SinaBlogFE/fd-server",
 	"navigation":[{
 		"title":"FdServer",
 		"link":"./"
