@@ -32,7 +32,24 @@
 <p>下面以一个简单的hello world项目为事例，开始上手fds。</p>
 <div class="highlight"><pre><code class="bash">git clone https://github.com/litheModule/litheExample
 <span class="built_in">cd</span> litheExample/
-npm install <span class="operator">-d</span></code></pre></div><p>之后根据项目目录来简单介绍一下如何上手开发一个项目，并使用到fds。</p>
+npm install <span class="operator">-d</span></code></pre></div><p>安装完依赖，使用grunt 命令可以进行打包操作，更多关于grunt和lithe的使用方法可查看我们的另外一个开源项目lithe的文档: <a href="https://github.com/litheModule/lithe">https://github.com/litheModule/lithe</a></p>
+<p>下面简单介绍下demo的目录结构：</p>
+<p><img src="https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/src.png" alt=""></p>
+<p>此目录为开发目录，放置松散的开发模块。</p>
+<p><img src="https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/assest.png" alt=""></p>
+<p>此目录为上线目录，放置grunt合并打包过后的文件。</p>
+<p>下面进入fd.server 开始配置vhost，proxy和hosts，分别如图：</p>
+<p><img src="https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/vhost.png" alt="">
+<img src="https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/proxy.png" alt="">
+<img src="https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/hosts.png" alt=""></p>
+<p>就是这么简答，配置完成了本地的项目环境！</p>
+<p>访问项目地址: <a href="http://lithe.example/app.html">http://lithe.example/app.html</a></p>
+<p>勾选proxy规则时得请求如下：</p>
+<p><img src="https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/dev.png" alt=""></p>
+<p>不勾选规则时请求如下:</p>
+<p><img src="https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/online.png" alt=""></p>
+<p>当然这只是一个简单的例子。</p>
+<p>更多高级用法详见其它例子文章。</p>
 </div>
 </div>
 </div>

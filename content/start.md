@@ -19,6 +19,36 @@ cd litheExample/
 npm install -d
 ```
 
-之后根据项目目录来简单介绍一下如何上手开发一个项目，并使用到fds。
+安装完依赖，使用grunt 命令可以进行打包操作，更多关于grunt和lithe的使用方法可查看我们的另外一个开源项目lithe的文档: https://github.com/litheModule/lithe
 
+下面简单介绍下demo的目录结构：
 
+![](https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/src.png)
+
+此目录为开发目录，放置松散的开发模块。
+
+![](https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/assest.png)
+
+此目录为上线目录，放置grunt合并打包过后的文件。
+
+下面进入fd.server 开始配置vhost，proxy和hosts，分别如图：
+
+![](https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/vhost.png)
+![](https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/proxy.png)
+![](https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/hosts.png)
+
+就是这么简答，配置完成了本地的项目环境！
+
+访问项目地址: http://lithe.example/app.html
+
+勾选proxy规则时得请求如下：
+
+![](https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/dev.png)
+
+不勾选规则时请求如下:
+
+![](https://raw.githubusercontent.com/SinaBlogFE/fd-server/gh-pages/img/online.png)
+
+当然这只是一个简单的例子。
+
+更多高级用法详见其它例子文章。
