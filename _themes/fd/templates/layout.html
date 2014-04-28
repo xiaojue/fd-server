@@ -12,7 +12,9 @@
     {%- if config.feedurl %}
     <link rel="alternate" type="application/rss+xml" href="{{config.feedurl}}" title="{{config.sitename}}" />
     {%- endif %}
-    <link rel="stylesheet" href="{{static_url('one.css')}}" />
+    <link rel="stylesheet" href="{{static_url('css/style.css')}}" />
+    <link rel="stylesheet" href="{{static_url('yue.css')}}" />
+    <link rel="stylesheet" href="{{static_url('syntax.css')}}" />
     {%- block afterstyle %}{% endblock %}
     {%- if config.google %}
     <script type="text/javascript">
@@ -29,38 +31,36 @@
     {%- endif %}
   </head>
   <body>
-    <div class="header">
-      <div class="container">
-        <div class="brand">
-          <a class="home" href="{{content_url('index.html')}}">{{config.sitename}}</a>
-          {%- if config.tagline %}
-          - <span class="tagline">{{ config.tagline }}</span>
-          {%- endif %}
-        </div>
-        {%- if config.navigation %}
-        <div class="menu" role="navigation">
-          {%- for item in config.navigation %}
-          <a href="{{content_url(item.link)}}">{{item.title}}</a>
-          {%- endfor %}
-        </div>
-        {%- endif %}
-      </div>
-    </div>
-    <div class="document yue">
-      {%- block document %}
-      {%- endblock %}
-    </div>
-    <div class="footer">
-      {%- if config.footer %}
-      {{config.footer}}
-      {%- endif %}
-      {%- if not config.hideNico %}
-      <p class="copyright">powered by <a href="{{config.url}}">{{config.name}}</a> {{config.version}}</p>
-      {%- endif %}
-    </div>
-    {%- if config.github %}
-    <div class="github"><a target="_blank" class="github-link" href="{{config.github}}">Fork me on GitHub</a></div>
-    {%- endif %}
-    <script src="{{ static_url('one.js') }}"></script>
+	<div class="auto-wrapper clearfix">
+		{%- if config.github %}
+			<a target="_blank" href="{{config.github}}" class="triangle-topright"></a>
+		{%- endif %}
+		<div class="wrapper">
+			<header class="header">
+				{%- if config.navigation %}
+				<nav>
+					<ul class="nav_item clearfix">
+					{%- for item in config.navigation %}
+				  	  <li><a href="{{content_url(item.link)}}">{{item.title}}</a></li>
+        		  	{%- endfor %}
+					</ul>
+				<nav>
+        		{%- endif %}
+			</header>
+
+			{%- block document %}
+			{%- endblock %}
+
+
+			<footer class="footer">
+				{%- if config.footer %}
+					{{config.footer}}
+      			{%- endif %}
+				{%- if not config.hideNico %}
+					<div class="version">powered by <a href="{{config.url}}">{{config.name}}</a> {{config.version}}</div>
+      			{%- endif %}
+			</footer>
+		</div>
+	<div>
   </body>
 </html>

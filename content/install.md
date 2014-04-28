@@ -42,7 +42,9 @@ sudo brew install git
 #### 4.1 windows下安装过程：
 
 1. 管理员身份运行cmd。
+
 2. cnpm下载fd-server和windows依赖。
+
 ```bash
 cnpm install node-windows -g
 cnpm install fd-server -g
@@ -58,11 +60,14 @@ sudo cnpm install fd-server -g
 #### 4.3 ubuntu下或者其他linux版本安装：
 
 1. 下载源码.
+
 ```bash
 git clone https://github.com/liuxiaoyue/fd-server
 cd fd-server
 ```
+
 2. 手动安装.
+
 ```bash
 sudo node install.js
 cnpm install -g

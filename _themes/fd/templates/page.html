@@ -2,16 +2,18 @@
 {%- block title %}{{post.title}}{% endblock %}
 
 {%- block document %}
-<div class="hentry" itemscope itemtype="http://schema.org/Article">
-  <h1 class="entry-title" itemprop="name">{{post.title}}</h1>
-  {%- if post.description %}
-  <blockquote class="entry-description" itemprop="description">{{post.description}}</blockquote>
-  {%- endif %}
-  <div class="entry-content" itemprop="articleBody">{{post.html}}</div>
-  {%- if post.meta.source %}
-  <div class="entry-meta">
-    <a class="source sep" href="{{ post.meta.source }}">{{ post.meta.source }}</a>
+<div class="main-server yue">
+  <div class="introduce">
+  	<div class="title_con">
+		<p>Fds 是一套统一的本地开发环境，面向工程化的前端开发项目。简化开发人员生产时对服务配置的依赖，提高前端开发人员的开发效率。面向自动化的项目流程管理，交付，测试。减少复杂的人工操作。自身包含的扩展机制，也能够提供给开发者灵活多变的个性化服务定制方案, 同时Fds也是一套跨平台的本地开发环境，完美支持win,linux,mac os。</p>
+  	</div>
   </div>
-  {%- endif %}
+  <div class="title_ms">
+	<p>
+		<span class="title_tm">{{post.meta.title}}</span>
+		<span class="detai_tm">FDS-专门写给前端人员用的服务器</span>
+	</p>
+  </div>
+  {{post.html}}
 </div>
 {% endblock -%}

@@ -6,53 +6,107 @@
     <meta name="generator" content="nico 0.5.0">
     <meta name="theme" content="fd 0.1">
     <title>Fd-server</title>
-    <link rel="stylesheet" href="./static/one.css" />
+    <link rel="stylesheet" href="./static/css/style.css" />
+    <link rel="stylesheet" href="./static/yue.css" />
+    <link rel="stylesheet" href="./static/syntax.css" />
   </head>
   <body>
-    <div class="header">
-      <div class="container">
-        <div class="brand">
-          <a class="home" href="./">FdServer</a>
+	<div class="auto-wrapper clearfix">
+			<a target="_blank" href="https://github.com/SinaBlogFE/fd-server" class="triangle-topright"></a>
+		<div class="wrapper">
+			<header class="header">
+				<nav>
+					<ul class="nav_item clearfix">
+				  	  <li><a href="./">FdServer</a></li>
+				  	  <li><a href="start.html">快速上手</a></li>
+				  	  <li><a href="wiki.html">文档</a></li>
+				  	  <li><a href="install.html">安装</a></li>
+				  	  <li><a href="about.html">关于</a></li>
+					</ul>
+				<nav>
+			</header>
+<div class="main-server yue">
+  <div class="introduce">
+  	<div class="title_con">
+		<p>Fds 是一套统一的本地开发环境，面向工程化的前端开发项目。简化开发人员生产时对服务配置的依赖，提高前端开发人员的开发效率。面向自动化的项目流程管理，交付，测试。减少复杂的人工操作。自身包含的扩展机制，也能够提供给开发者灵活多变的个性化服务定制方案, 同时Fds也是一套跨平台的本地开发环境，完美支持win,linux,mac os。</p>
+  	</div>
+  </div>
+  <div class="title_ms">
+	<p>
+		<span class="title_tm">Fd-server</span>
+		<span class="detai_tm">FDS-专门写给前端人员用的服务器</span>
+	</p>
+  </div>
+  <div class="server-item">
+    <ul class="item-wrapper clearfix">
+        <li>
+            <div class="install_si">
+                <div class="content_im">
+                    <h2>安装配置</h2>
+                    <p>快速搭建项目开发环境，不同域名的本地server，提供灵活的路由扩展方法和grunt插件套件。</p>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="auto_si">
+                <div class="content_im">
+                    <h2>自动化</h2>
+                    <p>通过我们提供的扩展路由，可实现自动化的打包构建，压缩，合并，优化，同时可处理如less，coffeejs，combine，css Import等动态解析功能。</p>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="debug_si">
+                <div class="content_im">
+                    <h2>调试</h2>
+                    <p>有一套完整的报错和调试机制，拥有自己的独立的日志系统。</p>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="extend_si">
+                <div class="content_im">
+                    <h2>扩展</h2>
+                    <p>灵活的插件和脚手架扩展机制，只要你会nodejs，就可以开发属于个性化的扩展插件。</p>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="other-item clearfix">
+    <div class="video-item">
+        <div class="title_ms video_vi">
+            <p>
+                <span class="title_tm">视频演示</span>
+                <span class="detai_tm">Video Demo</span>
+            </p>
         </div>
-        <div class="menu" role="navigation">
-          <a href="./">FdServer</a>
-          <a href="start.html">快速上手</a>
-          <a href="wiki.html">文档</a>
-          <a href="install.html">安装</a>
-          <a href="about.html">关于</a>
+        <div class="video_con">
+            <iframe width=312 height=253 src="http://player.youku.com/embed/XNzAwMzczNzM2" frameborder=0 allowfullscreen></iframe>
         </div>
-      </div>
     </div>
-    <div class="document yue">
-<div class="hentry" itemscope itemtype="http://schema.org/Article">
-  <h1 class="entry-title" itemprop="name">Fd-server</h1>
-  <div class="entry-content" itemprop="articleBody"><p><a href="https://travis-ci.org/SinaBlogFE/fd-server"><img src="https://travis-ci.org/SinaBlogFE/fd-server.png?branch=master" alt="Build Status"></a> 
-<a href="http://david-dm.org/SinaBlogFE/fd-server"><img src="https://david-dm.org/SinaBlogFE/fd-server.png" alt="依赖模块状态"></a>
-<a href="https://sourcegraph.com/github.com/SinaBlogFE/fd-server"><img src="https://sourcegraph.com/api/repos/github.com/SinaBlogFE/fd-server/counters/views.png?no-count" alt="浏览数"></a></p>
-<h4 id="fd-server">Fd-server</h4><p>Front-end development server.</p>
-<p>Fds 是一套统一的本地开发环境，面向工程化的前端开发项目。简化开发人员生产时对服务配置的依赖，提高前端开发人员的开发效率。面向自动化的项目流程管理，交付，测试。减少复杂的人工操作。自身包含的扩展机制，也能够提供给开发者灵活多变的个性化服务定制方案, 同时Fds也是一套跨平台的本地开发环境，完美支持win,linux,mac os。</p>
-<hr>
-<h4 id="安装配置">安装配置</h4><p>快速搭建项目开发环境，不同域名的本地server，提供灵活的路由扩展方法和grunt插件套件。</p>
-<hr>
-<h4 id="自动化">自动化</h4><p>通过我们提供的扩展路由，可实现自动化的打包构建，压缩，合并，优化，同时可处理如less，coffeejs，combine，css Import等动态解析功能。</p>
-<hr>
-<h4 id="调试">调试</h4><p>有一套完整的报错和调试机制，拥有自己的独立的日志系统。</p>
-<hr>
-<h4 id="扩展">扩展</h4><p>灵活的插件和脚手架扩展机制，只要你会nodejs，就可以开发属于个性化的扩展插件。</p>
-<hr>
-<h4 id="演示视频">演示视频</h4><iframe height=498 width=510 src="http://player.youku.com/embed/XNzAwMzczNzM2" frameborder=0 allowfullscreen></iframe>
+    <div class="forum-item">
+        <div class="title_ms video_vi">
+            <p>
+                <span class="title_tm">论坛</span>
+                <span class="detai_tm">Github Issues</span>
+            </p>
+        </div>
+        <div class="con_fi"><a href="https://github.com/liuxiaoyue/fd-server/issues" target="_blank">github issues</a></div>
+        <div class="title_ms video_vi">
+            <p>
+                <span class="title_tm">License</span>
+                <span class="detai_tm">MIT license</span>
+            </p>
+        </div>
+    </div>    
+</div>
 
-<hr>
-<h4 id="论坛">论坛</h4><p><a href="https://github.com/liuxiaoyue/fd-server/issues">github issues</a></p>
-<hr>
-<h3 id="license">License</h3><p>MIT license</p>
 </div>
-</div>
-</div>
-    <div class="footer">
-      <p class="copyright">powered by <a href="http://fd-server.org">fd-server</a> 0.0.1</p>
-    </div>
-    <div class="github"><a target="_blank" class="github-link" href="https://github.com/SinaBlogFE/fd-server">Fork me on GitHub</a></div>
-    <script src="./static/one.js"></script>
+<footer class="footer">
+					<div class="version">powered by <a href="http://fd-server.org">fd-server</a> 0.0.1</div>
+			</footer>
+		</div>
+	<div>
   </body>
 </html>
