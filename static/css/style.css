@@ -120,7 +120,7 @@ input, select {
 body{background-color: #1771eb;}
 .auto-wrapper{background:url(../image/header_bg.png) repeat-x 0 49px;}
 .wrapper{width: 1024px;margin: 0 auto; background-color: #1771eb;}
-.wrapper img{max-width: 800px;}
+.wrapper img{max-width: 600px;text-align:center;}
 .wrapper p{line-height: 200%;color:#fff;}
 .header{height: 50px;}
 .nav_item{padding-left: 12px;}
