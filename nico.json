@@ -1,0 +1,37 @@
+{
+	"source":"content",
+	"output":"./",
+	"permalink":"{{filename}}.html",
+	"sitename":"FdServer",
+	"url":"http://fd-server.org",
+	"name":"fd-server",
+	"version":"0.0.1",
+	"duoshuo":"fdserver.duoshuo.com",
+	"github":"https://github.com/SinaBlogFE/fd-server",
+	"navigation":[{
+		"title":"FdServer",
+		"link":"./"
+	},
+	{
+		"title":"快速上手",
+		"link":"start.html"
+	},
+	{
+		"title":"文档",
+		"link":"wiki.html"
+	},
+	{
+		"title":"安装",
+		"link":"install.html"
+	},
+	{
+		"title":"关于",
+		"link":"about.html"
+	}],
+	"theme":"_themes/fd",
+	"writers":[
+		"nico.PostWriter",
+		"nico.StaticWriter",
+		"nico.FileWriter"
+	]
+}

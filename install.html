@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="generator" content="nico 0.5.0">
+    <meta name="theme" content="fd 0.1">
+    <title>安装 FdServer</title>
+    <link rel="stylesheet" href="./static/css/style.css" />
+    <link rel="stylesheet" href="./static/yue.css" />
+    <link rel="stylesheet" href="./static/syntax.css" />
+  </head>
+  <body>
+	<div class="auto-wrapper clearfix">
+			<a target="_blank" href="https://github.com/SinaBlogFE/fd-server" class="triangle-topright"></a>
+		<div class="wrapper">
+			<header class="header">
+				<nav>
+					<ul class="nav_item clearfix">
+				  	  <li><a href="./">FdServer</a></li>
+				  	  <li><a href="start.html">快速上手</a></li>
+				  	  <li><a href="wiki.html">文档</a></li>
+				  	  <li><a href="install.html">安装</a></li>
+				  	  <li><a href="about.html">关于</a></li>
+					</ul>
+				<nav>
+			</header>
+<div class="main-server yue">
+  <div class="introduce">
+  	<div class="title_con">
+	<p>
+		Fds 是一套统一的本地开发环境，面向工程化的前端开发项目。简化开发人员生产时对服务配置的依赖，提高前端开发人员的开发效率。面向自动化的项目流程管理，交付，测试。减少复杂的人工操作。自身包含的扩展机制，也能够提供给开发者灵活多变的个性化服务定制方案, 同时Fds也是一套跨平台的本地开发环境，完美支持win,linux,mac os。
+		<br>
+		<a href="https://travis-ci.org/SinaBlogFE/fd-server"><img src="https://camo.githubusercontent.com/cfca60ddbb05c8fcdc40d5efa11830b090cbe169/68747470733a2f2f7472617669732d63692e6f72672f53696e61426c6f6746452f66642d7365727665722e706e673f6272616e63683d6d6173746572" alt="Build Status" data-canonical-src="https://travis-ci.org/SinaBlogFE/fd-server.png?branch=master" style="max-width:100%;"></a> 
+		<a href="http://david-dm.org/SinaBlogFE/fd-server"><img src="https://camo.githubusercontent.com/914e2c37544a247d804da5cd88cb896eda9eb1a5/68747470733a2f2f64617669642d646d2e6f72672f53696e61426c6f6746452f66642d7365727665722e706e67" alt="依赖模块状态" data-canonical-src="https://david-dm.org/SinaBlogFE/fd-server.png" style="max-width:100%;"></a>
+		<a href="https://sourcegraph.com/github.com/SinaBlogFE/fd-server"><img src="https://camo.githubusercontent.com/1b41b25d3a3a83b769cdbe11c03764f734038463/68747470733a2f2f736f7572636567726170682e636f6d2f6170692f7265706f732f6769746875622e636f6d2f53696e61426c6f6746452f66642d7365727665722f636f756e746572732f76696577732e706e673f6e6f2d636f756e74" alt="浏览数" data-canonical-src="https://sourcegraph.com/api/repos/github.com/SinaBlogFE/fd-server/counters/views.png?no-count" style="max-width:100%;"></a>
+    </p>
+  	</div>
+  </div>
+  <div class="title_ms">
+	<p>
+		<span class="title_tm">安装 FdServer</span>
+		<span class="detai_tm">FDS-专门写给前端人员用的服务器</span>
+	</p>
+  </div>
+  <h4 id="node版本需要在0-10以上">node版本需要在0.10以上</h4><p><a href="http://nodejs.org/download/">http://nodejs.org/download/</a></p>
+<h4 id="1-安装cnpm加快安装速度-可选，npm速度快的可不用">1.安装cnpm加快安装速度(可选，npm速度快的可不用)</h4><div class="highlight"><pre><code class="bash">npm install -g cnpm --registry=http://r.cnpmjs.org</code></pre></div><h4 id="2-安装git命令行工具">2.安装git命令行工具</h4><h5 id="windows">windows</h5><p><a href="http://msysgit.github.io/">http://msysgit.github.io/</a></p>
+<h5 id="ubuntu">ubuntu</h5><div class="highlight"><pre><code class="bash"><span class="built_in">sudo</span> apt-get install git</code></pre></div><h5 id="mac">mac</h5><pre>sudo brew install git</pre><h4 id="3-修改github的hosts，防止git-clone时报错">3.修改github的hosts，防止git clone时报错</h4><div class="highlight"><pre><code class="bash"><span class="number">192.30</span>.<span class="number">252.131</span> github.com</code></pre></div><h4 id="4-1-windows下安装过程：">4.1 windows下安装过程：</h4><ol>
+<li><p>管理员身份运行cmd。</p>
+</li>
+<li><p>cnpm下载fd-server和windows依赖。</p>
+</li>
+</ol>
+<div class="highlight"><pre><code class="bash">cnpm install node-windows -g
+cnpm install fd-server -g</code></pre></div><h4 id="4-2-mac下安装过程：">4.2 mac下安装过程：</h4><div class="highlight"><pre><code class="bash"><span class="built_in">sudo</span> cnpm install node-mac -g
+<span class="built_in">sudo</span> cnpm install fd-server -g</code></pre></div><h4 id="4-3-ubuntu下或者其他linux版本安装：">4.3 ubuntu下或者其他linux版本安装：</h4><ol>
+<li>下载源码.</li>
+</ol>
+<div class="highlight"><pre><code class="bash">git clone https://github.com/liuxiaoyue/fd-server
+<span class="built_in">cd</span> fd-server</code></pre></div><ol>
+<li>手动安装.</li>
+</ol>
+<div class="highlight"><pre><code class="bash"><span class="built_in">sudo</span> node install.js
+cnpm install -g</code></pre></div><ol>
+<li>如果使用debian系统，安装后报<code>start-stop-daemon command not found</code>错误，则需要手动安装<code>start-stop-daemon</code>命令。</li>
+</ol>
+<div class="highlight"><pre><code class="bash">$ wget http://developer.axis.com/download/distribution/apps-sys-utils-start-stop-daemon-IR1_9_18-<span class="number">2</span>.tar.gz
+$ tar zxf apps-sys-utils-start-stop-daemon-IR1_9_18-<span class="number">2</span>.tar.gz
+$ mv apps/sys-utils/start-stop-daemon-IR1_9_18-<span class="number">2</span>/ ./
+$ rm -rf apps
+$ <span class="built_in">cd</span> start-stop-daemon-IR1_9_18-<span class="number">2</span>/
+$ cc start-stop-daemon.c -o start-stop-daemon
+$ cp start-stop-daemon /usr/local/bin/start-stop-daemon</code></pre></div><h4 id="5-启动fd-server服务">5.启动fd-server服务</h4><div class="highlight"><pre><code class="bash"><span class="built_in">sudo</span> fd-server install
+<span class="built_in">sudo</span> fd-server start</code></pre></div><p>之后打开浏览器访问<a href="http://fd.server">http://fd.server</a> 进行配置即可！</p>
+
+</div>
+<footer class="footer">
+					<div class="version">powered by <a href="http://fd-server.org">fd-server</a> 0.0.1</div>
+			</footer>
+		</div>
+	<div>
+  </body>
+</html>

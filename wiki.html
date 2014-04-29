@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="generator" content="nico 0.5.0">
+    <meta name="theme" content="fd 0.1">
+    <title>文档</title>
+    <link rel="stylesheet" href="./static/css/style.css" />
+    <link rel="stylesheet" href="./static/yue.css" />
+    <link rel="stylesheet" href="./static/syntax.css" />
+  </head>
+  <body>
+	<div class="auto-wrapper clearfix">
+			<a target="_blank" href="https://github.com/SinaBlogFE/fd-server" class="triangle-topright"></a>
+		<div class="wrapper">
+			<header class="header">
+				<nav>
+					<ul class="nav_item clearfix">
+				  	  <li><a href="./">FdServer</a></li>
+				  	  <li><a href="start.html">快速上手</a></li>
+				  	  <li><a href="wiki.html">文档</a></li>
+				  	  <li><a href="install.html">安装</a></li>
+				  	  <li><a href="about.html">关于</a></li>
+					</ul>
+				<nav>
+			</header>
+<div class="main-server yue">
+  <div class="introduce">
+  	<div class="title_con">
+	<p>
+		Fds 是一套统一的本地开发环境，面向工程化的前端开发项目。简化开发人员生产时对服务配置的依赖，提高前端开发人员的开发效率。面向自动化的项目流程管理，交付，测试。减少复杂的人工操作。自身包含的扩展机制，也能够提供给开发者灵活多变的个性化服务定制方案, 同时Fds也是一套跨平台的本地开发环境，完美支持win,linux,mac os。
+		<br>
+		<a href="https://travis-ci.org/SinaBlogFE/fd-server"><img src="https://camo.githubusercontent.com/cfca60ddbb05c8fcdc40d5efa11830b090cbe169/68747470733a2f2f7472617669732d63692e6f72672f53696e61426c6f6746452f66642d7365727665722e706e673f6272616e63683d6d6173746572" alt="Build Status" data-canonical-src="https://travis-ci.org/SinaBlogFE/fd-server.png?branch=master" style="max-width:100%;"></a> 
+		<a href="http://david-dm.org/SinaBlogFE/fd-server"><img src="https://camo.githubusercontent.com/914e2c37544a247d804da5cd88cb896eda9eb1a5/68747470733a2f2f64617669642d646d2e6f72672f53696e61426c6f6746452f66642d7365727665722e706e67" alt="依赖模块状态" data-canonical-src="https://david-dm.org/SinaBlogFE/fd-server.png" style="max-width:100%;"></a>
+		<a href="https://sourcegraph.com/github.com/SinaBlogFE/fd-server"><img src="https://camo.githubusercontent.com/1b41b25d3a3a83b769cdbe11c03764f734038463/68747470733a2f2f736f7572636567726170682e636f6d2f6170692f7265706f732f6769746875622e636f6d2f53696e61426c6f6746452f66642d7365727665722f636f756e746572732f76696577732e706e673f6e6f2d636f756e74" alt="浏览数" data-canonical-src="https://sourcegraph.com/api/repos/github.com/SinaBlogFE/fd-server/counters/views.png?no-count" style="max-width:100%;"></a>
+    </p>
+  	</div>
+  </div>
+  <div class="title_ms">
+	<p>
+		<span class="title_tm">文档</span>
+		<span class="detai_tm">FDS-专门写给前端人员用的服务器</span>
+	</p>
+  </div>
+  <p>fds 简化了开发者对命令行和配置文件的依赖，很多功能都可以web管理界面中直接操作完成配置。</p>
+<p>所以文档只包括三个方面：</p>
+<ol>
+<li>命令行工具的使用。</li>
+<li>日志管理和调试。</li>
+<li>如何编写.node扩展。</li>
+</ol>
+<h4 id="命令行工具">命令行工具</h4><div class="highlight"><pre><code class="bash">$ fd-server -h
+
+  Usage: fd-server [command]
+
+  Commands:
+
+    install                install the fd-server service
+    start                  start the fd-server server
+    stop                   stop the fd-server server
+    restart                restart the fd-server server
+    uninstall              uninstall the fd-server service
+
+  Options:
+
+    -h, --help     output usage information
+    -V, --version  output the version number
+    <span class="operator">-l</span>, --log [path]  Set Log Path</code></pre></div><hr>
+<h4 id="日志管理">日志管理</h4><p>使用<a href="https://github.com/nomiddlename/log4js-node">log4js</a>统一管理，日志文件存放于项目跟目录的log文件夹下。</p>
+<ul>
+<li>log：日志文件根目录<ul>
+<li>vhosts：存放静态服务运行日志目录 </li>
+<li>proxy：存放代理服务运行日志目录</li>
+<li>operate：存放服务操作控制相关的日志目录</li>
+<li>uipage：express模块日志</li>
+<li>all.log</li>
+</ul>
+</li>
+</ul>
+<p><code>日志文件夹会在运行时自己创建</code></p>
+<p>log目录下的all.log文件将存放所有类别的日志信息。<br>查看日志可通过<code>http://www.sina-fds.com/log</code>访问查看，前提要先启动服务，或者直接到日志目录通过文件查看。<br>需要修改日志路径可通过下面命令：   </p>
+<div class="highlight"><pre><code class="bash">$ fd-server <span class="operator">-l</span> path</code></pre></div><hr>
+<h4 id="扩展接口">扩展接口</h4><p>有的时候我们往往需要模拟一些后端接口，或者做一些动态解析的功能，或者扩展动态路由。fd-server支持给vhost的静态服务扩展路由。
+只需要在静态目录下放置 <code>.node</code> 的扩展名文件，代码书写如下：</p>
+<div class="highlight"><pre><code class="javascript"><span class="comment">//someroute.node</span>
+route(<span class="function"><span class="keyword">function</span><span class="params">(req,res)</span>{</span>
+   res.writeHead(<span class="number">200</span>,{<span class="string">'Content-Type'</span>:<span class="string">'text/plain'</span>});
+   res.end(<span class="string">'someroute'</span>);
+});</code></pre></div><p>那么当你访问对应host域名下得<code>/someroute.node</code>地址则会自动转入当前文件的route函数路由中，可随意扩展。</p>
+<hr>
+<h3 id="注意事项">注意事项</h3><p><code>install</code> <code>uninstall</code> <code>stop</code> <code>start</code> <code>restart</code> 命令都需要管理员权限，linux or mac下使用 <code>sudo fd-server start</code> win下会有权限的窗口提醒，需要确认。 </p>
+<p><a href="https://github.com/liuxiaoyue/fd-server/wiki/%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AE%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A3%E7%90%86">浏览器代理配置帮助</a></p>
+<hr>
+
+</div>
+<footer class="footer">
+					<div class="version">powered by <a href="http://fd-server.org">fd-server</a> 0.0.1</div>
+			</footer>
+		</div>
+	<div>
+  </body>
+</html>

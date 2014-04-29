@@ -1,0 +1,168 @@
+/**
+ * html5doctor.com Reset Stylesheet v1.6.1 (http://html5doctor.com/html-5-reset-stylesheet/)
+ * Richard Clark (http://richclarkdesign.com)
+ * http://cssreset.com
+ */
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+body {
+    line-height:1;
+}
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section {
+    display:block;
+}
+ul {
+    list-style:none;
+}
+ol {
+	margin-left:20px;
+}
+h1{
+	font-size:30px;
+}
+h2{
+	font-size:28px;
+}
+h3{
+	font-size:24px;
+}
+h4{
+	font-size:18px;
+}
+h5{
+	font-size:14px;
+}
+h6{
+	font-size:12px;
+}
+h1,h2,h3,h4,h5,h6 {
+	font-weight:bold;
+}
+p,li,h1,h2,h3,h4,h5,h6 {
+	color:#fff;
+	line-height:300%;
+}
+blockquote, q {
+    quotes:none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content:'';
+    content:none;
+}
+a {
+    margin:0;
+    padding:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+/* change colours to suit your needs */
+ins {
+    background-color:#ff9;
+    color:#000;
+    text-decoration:none;
+}
+/* change colours to suit your needs */
+mark {
+    background-color:#ff9;
+    color:#000;
+    font-style:italic;
+    font-weight:bold;
+}
+del {
+    text-decoration: line-through;
+}
+abbr[title], dfn[title] {
+    border-bottom:1px dotted;
+    cursor:help;
+}
+table {
+    border-collapse:collapse;
+    border-spacing:0;
+}
+/* change border colour to suit your needs */
+hr {
+    display:block;
+    height:1px;
+    border:0;
+    border-top:1px solid #cccccc;
+    margin:1em 0;
+    padding:0;
+}
+input, select {
+    vertical-align:middle;
+}
+
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+.clearfix{*+height:1%;}
+
+
+body{background-color: #1771eb;}
+.auto-wrapper{background:url(../image/header_bg.png) repeat-x 0 49px;}
+.wrapper{width: 1024px;margin: 0 auto; background-color: #1771eb;}
+.wrapper img{max-width: 600px;text-align:center;}
+.wrapper p{line-height: 200%;color:#fff;}
+.header{height: 50px;}
+.nav_item{padding-left: 12px;}
+.nav_item li{float: left; padding:0 12px;}
+.nav_item li a{font:14px "微软雅黑"; color: #fff; line-height: 50px; text-decoration: none;}
+.introduce{height: 356px;background:url(../image/bg1.png) no-repeat; padding-left: 278px;}
+.title_con{padding-top: 173px;}
+.title_con h1{margin: 74px 0 0 7px; width:313px; height:69px; background:url(../image/big_title.png) no-repeat; text-indent: -999px;}
+.title_con p{ width: 535px; padding: 7px 0 7px 7px; font-size: 14px; line-height: 25px; color: #fff;border-top: 1px solid #71acf7;border-bottom: 1px solid #71acf7;}
+.title_ms{margin-bottom:25px;margin-left: 278px; height: 85px;}
+.title_ms p{width: 286px;height: 85px; background:url(../image/title_box.png) no-repeat;}
+.title_tm{display: block; height: 42px; padding: 7px 0 0 15px; font:22px "微软雅黑";color: #fff;}
+.detai_tm{display: block; height: 43px; font:14px sans-serif; color: #c6defe; padding: 7px 0 0 38px;}
+.server-item{padding: 65px 10px 0 32px;}
+.item-wrapper li{float: left;width: 220px;padding-right: 22px;}
+.install_si{padding-top: 142px; background:url(../image/icon_lock.png) no-repeat 57px 0px; }
+.auto_si{padding-top: 142px; background:url(../image/icon_auto.png) no-repeat 57px 0px;}
+.debug_si{padding-top: 142px; background:url(../image/icon_debug.png) no-repeat 57px 0px;}
+.extend_si{padding-top: 142px; background:url(../image/icon_extend.png) no-repeat 57px 0px;}
+
+.content_im{padding:0 20px; width: 185px; height: 245px; border-radius:5px; color: #fff; background-color: #035acf;box-shadow:1px 1px rgba(0,0,0,.3);}
+.content_im h2{display: inline-block; font: 20px "微软雅黑"; padding-top:26px; padding-bottom: 22px; width: 100%; text-align: center;}
+.content_im p{line-height:30px;}
+.auto_si .content_im p{line-height:25px;}
+
+.other-item{margin-top: 60px; padding: 0 32px;}
+.video-item{float:left; padding-left: 100px; width: 310px;}
+.video_vi{margin:0;}
+.forum-item{float:left; padding-left: 140px;}
+.video_con{padding-top: 30px;}
+.con_fi{margin: 34px 0 45px 0 ; font:24px sans-serif; color: #fff; padding-left: 35px;}
+
+.footer{height: 136px;}
+.version{padding-top: 87px;font:14px Serif; color: #fff;width: 270px; margin: 0 auto;}
+.triangle-topright {float: right; width: 140px; height: 140px; margin-top: 51px; background: url(../image/fork.png) top right;}
+a{
+	color:#fff!important;
+	text-decoration:none;
+}
+a:hover{
+	color:#eee;
+}
+body{
+	color:#fff;
+}

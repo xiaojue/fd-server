@@ -1,0 +1,76 @@
+/**
+ * yue.css
+ *
+ * yue.css is designed for readable content.
+ *
+ * Copyright (c) 2013 by Hsiaoming Yang.
+ */
+
+.yue ::selection {
+  background-color: rgba(0,0,0,0.2);
+}
+.yue em,
+.yue i {
+  font-style: italic;
+  color: #222;
+}
+.yue img {
+  margin: 0.2em 0;
+}
+.yue blockquote {
+  padding-left: 20px;
+  border-left: 4px solid #dadada;
+  margin: 0 0 1.64em -24px;
+  color: #666664;
+}
+.yue .unstyled {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.yue code,
+.yue tt {
+  color: #808080;
+  font-size: 0.96em;
+  background-color: #f9f9f7;
+  padding: 1px 2px;
+  border: 1px solid #dadada;
+  border-radius: 3px;
+  font-family: "Inconsolata", "Menlo", monospace;
+}
+.yue pre {
+  padding: 7px;
+  border: 1px solid #dadada;
+  border-radius: 4px;
+  overflow: auto;
+  line-height: 1.5;
+  font-size: 0.96em;
+  font-family: "Inconsolata", "Menlo", monospace;
+  color: #4c4c4c;
+  background-color: #f9f9f7;
+}
+.yue pre code,
+.yue pre tt {
+  color: #4c4c4c;
+  border: none;
+  background-color: none;
+  padding: auto;
+}
+.yue table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 1.5em;
+  font-size: 0.96em;
+}
+.yue th,
+.yue td {
+  text-align: left;
+  padding: 4px 8px 4px 10px;
+  border: 1px solid #dadada;
+}
+.yue td {
+  vertical-align: top;
+}
+.yue tr:nth-child(even) {
+  background-color: #efefee;
+}
