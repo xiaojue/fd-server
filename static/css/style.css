@@ -136,10 +136,10 @@ body{background-color: #1771eb;}
 .detai_tm{display: block; height: 43px; font:14px sans-serif; color: #c6defe; padding: 7px 0 0 38px;}
 .server-item{padding: 65px 10px 0 32px;}
 .item-wrapper li{float: left;width: 220px;padding-right: 22px;}
-.install_si{padding-top: 142px; background:url(../image/icon_lock.png) no-repeat 57px 0px; }
-.auto_si{padding-top: 142px; background:url(../image/icon_auto.png) no-repeat 57px 0px;}
-.debug_si{padding-top: 142px; background:url(../image/icon_debug.png) no-repeat 57px 0px;}
-.extend_si{padding-top: 142px; background:url(../image/icon_extend.png) no-repeat 57px 0px;}
+.install_si{padding-top: 142px; background:url(../image/icon_lock.png) no-repeat 65px 0px; }
+.auto_si{padding-top: 142px; background:url(../image/icon_auto.png) no-repeat 47px 0px;}
+.debug_si{padding-top: 142px; background:url(../image/icon_debug.png) no-repeat 39px 0px;}
+.extend_si{padding-top: 142px; background:url(../image/icon_extend.png) no-repeat 46px 0px;}
 
 .content_im{padding:0 20px; width: 185px; height: 245px; border-radius:5px; color: #fff; background-color: #035acf;box-shadow:1px 1px rgba(0,0,0,.3);}
 .content_im h2{display: inline-block; font: 20px "微软雅黑"; padding-top:26px; padding-bottom: 22px; width: 100%; text-align: center;}
