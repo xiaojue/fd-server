@@ -11,3 +11,4 @@ log/*
 config.json
 localConfig.json
 lib/daemon/*
+forever.log
