@@ -37,7 +37,6 @@
     "ejs": "*",
     "express": "3.4.8",
     "forever": "*",
-    "forever-monitor": "^1.2.3",
     "hosts-group": "*",
     "log4js": "*",
     "node-static": ">= 0.7.3",
