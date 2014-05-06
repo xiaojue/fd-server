@@ -51,27 +51,7 @@
 <li><p>cnpm下载fd-server和windows依赖。</p>
 </li>
 </ol>
-<div class="highlight"><pre><code class="bash">cnpm install node-windows -g
-cnpm install fd-server -g</code></pre></div><h4 id="4-2-mac下安装过程：">4.2 mac下安装过程：</h4><div class="highlight"><pre><code class="bash"><span class="built_in">sudo</span> cnpm install node-mac -g
-<span class="built_in">sudo</span> cnpm install fd-server -g</code></pre></div><h4 id="4-3-ubuntu下或者其他linux版本安装：">4.3 ubuntu下或者其他linux版本安装：</h4><ol>
-<li>下载源码.</li>
-</ol>
-<div class="highlight"><pre><code class="bash">git clone https://github.com/liuxiaoyue/fd-server
-<span class="built_in">cd</span> fd-server</code></pre></div><ol>
-<li>手动安装.</li>
-</ol>
-<div class="highlight"><pre><code class="bash"><span class="built_in">sudo</span> node install.js
-cnpm install -g</code></pre></div><ol>
-<li>如果使用debian系统，安装后报<code>start-stop-daemon command not found</code>错误，则需要手动安装<code>start-stop-daemon</code>命令。</li>
-</ol>
-<div class="highlight"><pre><code class="bash">$ wget http://developer.axis.com/download/distribution/apps-sys-utils-start-stop-daemon-IR1_9_18-<span class="number">2</span>.tar.gz
-$ tar zxf apps-sys-utils-start-stop-daemon-IR1_9_18-<span class="number">2</span>.tar.gz
-$ mv apps/sys-utils/start-stop-daemon-IR1_9_18-<span class="number">2</span>/ ./
-$ rm -rf apps
-$ <span class="built_in">cd</span> start-stop-daemon-IR1_9_18-<span class="number">2</span>/
-$ cc start-stop-daemon.c -o start-stop-daemon
-$ cp start-stop-daemon /usr/local/bin/start-stop-daemon</code></pre></div><h4 id="5-启动fd-server服务">5.启动fd-server服务</h4><div class="highlight"><pre><code class="bash"><span class="built_in">sudo</span> fd-server install
-<span class="built_in">sudo</span> fd-server start</code></pre></div><p>之后打开浏览器访问<a href="http://fd.server">http://fd.server</a> 进行配置即可！</p>
+<div class="highlight"><pre><code class="bash">cnpm install fd-server -g</code></pre></div><h4 id="4-2-mac-ubunt-linux下安装过程：">4.2 mac,ubunt,linux下安装过程：</h4><div class="highlight"><pre><code class="bash"><span class="built_in">sudo</span> cnpm install fd-server -g</code></pre></div><h4 id="5-启动fd-server服务">5.启动fd-server服务</h4><div class="highlight"><pre><code class="bash"><span class="built_in">sudo</span> fd-server start</code></pre></div><p>之后打开浏览器访问<a href="http://fd.server">http://fd.server</a> 进行配置即可！</p>
 
 </div>
 <footer class="footer">
