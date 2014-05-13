@@ -42,7 +42,8 @@
     "node-static": ">= 0.7.3",
     "nproxy": "git://github.com/xiaojue/nproxy.git#301fc96ce8cf31730a0d81deab55276e8ac6c783",
     "request": "*",
-    "dstruc" : "*"
+    "dstruc" : "*",
+    "file-size": "*"
   },
   "devDependencies": {
     "mocha": "*"
