@@ -42,12 +42,13 @@
     "node-static": ">= 0.7.3",
     "nproxy": "git://github.com/xiaojue/nproxy.git#10bcbd07624fb36fda261508f43f83c25f247ff3",
     "request": "*",
-    "sheller": "0.0.3",
+    "sheller": "*",
     "request": "*",
     "dstruc" : "*",
     "file-size": "*",
     "file-size-watcher":"*",
-    "rimraf":"*"
+    "rimraf":"*",
+    "socket.io": "*"
   },
   "devDependencies": {
     "mocha": "*"
