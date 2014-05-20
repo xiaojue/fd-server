@@ -23,17 +23,14 @@ $ fd-server -h
 
   Commands:
 
-    install                install the fd-server service
     start                  start the fd-server server
     stop                   stop the fd-server server
     restart                restart the fd-server server
-    uninstall              uninstall the fd-server service
 
   Options:
 
     -h, --help     output usage information
     -V, --version  output the version number
-    -l, --log [path]  Set Log Path
     
 ```
 
@@ -49,28 +46,6 @@ $ sudo fd-server start
 启动完成之后可访问 `http://fd.server` 访问服务配置页面。
 
 [浏览器代理配置帮助](https://github.com/liuxiaoyue/fd-server/wiki/%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AE%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A3%E7%90%86)
-
----
-### 日志管理
-使用[log4js](https://github.com/nomiddlename/log4js-node)统一管理，日志文件存放于项目跟目录的log文件夹下。
-
-- log：日志文件根目录
- - vhosts：存放静态服务运行日志目录 
- - proxy：存放代理服务运行日志目录
- - operate：存放服务操作控制相关的日志目录
- - uipage：express模块日志
- - all.log
-
-`日志文件夹会在运行时自己创建`
-
-log目录下的all.log文件将存放所有类别的日志信息。    
-查看日志可通过`http://www.sina-fds.com/log`访问查看，前提要先启动服务，或者直接到日志目录通过文件查看。    
-需要修改日志路径可通过下面命令：   
-```bash
-$ fd-server -l path
-```   
-
----
 
 ### 扩展接口
 
@@ -89,7 +64,7 @@ route(function(req,res){
 ---
 ### 注意事项
 
-`install` `uninstall` `stop` `start` `restart` 命令都需要管理员权限，linux or mac下使用 `sudo fd-server start` win下会有权限的窗口提醒，需要确认。 
+`stop` `start` `restart` 命令都需要管理员权限，linux or mac下使用 `sudo fd-server start` win下会有权限的窗口提醒，需要确认。 
 
 ---
 
