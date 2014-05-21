@@ -1,6 +1,6 @@
 {
   "name": "fd-server",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "description": "a simple, efficient, convenient RIA development environment",
   "keywords": [
     "static",

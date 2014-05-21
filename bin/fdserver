@@ -14,14 +14,9 @@ for (key in fds.commanders) {
 	program.command(key).description(commander['description']).action(commander['exec']);
 }
 
-for (key in fds.options){
-	var option = fds.options[key];
-	program.option(option['command'],option['description']);
-}
-
 program.parse(process.argv);
 
-if (!fds.optionsChecks(program) && !program.args.length){
+if (!program.args.length){
 	program.help();
 }
 
