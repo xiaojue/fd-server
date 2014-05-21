@@ -69,6 +69,26 @@ route(function(req,res){
 
 ---
 
+---
+### 贡献
+
+ project  : fd-server
+ repo age : 3 months
+ active   : 58 days
+ commits  : 370
+ files    : 155
+ authors  : 
+   127	fu                      34.3%
+    70	liuxiaoyue              18.9%
+    67	RK-WJW                  18.1%
+    46	Your Name               12.4%
+    41	xiaojue                 11.1%
+    17	Xiaojue                 4.6%
+     1	myluluy                 0.3%
+     1	root                    0.3%
+
+---
+
 ### License
 
 MIT license
