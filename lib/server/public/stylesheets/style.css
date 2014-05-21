@@ -43,6 +43,9 @@
 .dialogB{padding:15px 15px 0;}
 .errorTips{color: red; padding-left: 80px; font-size: 12px;font-weight: bold; margin: 0;}
 
+#task .path_error{margin-left:10px;color:red;}
+#task pre{background-color: #000000;color: wheat;height:400px;overflow:auto}
+#task .cpath{width:450px;}
 
 
 
