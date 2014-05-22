@@ -50,6 +50,10 @@
     "rimraf":"*",
     "socket.io": "*"
   },
+  "engines":{
+	  "npm":"~1.4.6",
+	  "node":"~0.10.0"
+  },
   "devDependencies": {
     "mocha": "*"
   },
