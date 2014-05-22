@@ -48,7 +48,7 @@
     "file-size": "*",
     "file-size-watcher":"*",
     "rimraf":"*",
-    "socket.io": "*"
+    "socket.io": "0.8.7"
   },
   "engines":{
 	  "npm":"~1.4.6",
