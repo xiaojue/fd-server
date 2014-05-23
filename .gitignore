@@ -12,3 +12,4 @@ config.json
 localConfig.json
 lib/daemon/*
 forever.log
+fdserver.log
