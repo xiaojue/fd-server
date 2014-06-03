@@ -24,7 +24,7 @@ $ fd-server -h
   Commands:
 
     start                  start the fd-server server
-    startDeamon            start with daemon
+    startDaemon            start with daemon
     stop                   stop the fd-server server
     restart                restart the fd-server server
 
@@ -65,7 +65,7 @@ route(function(req,res){
 ---
 ### 注意事项
 
-`startDeamon` `stop` `start` `restart` 命令都需要管理员权限，linux or mac下使用 `sudo fd-server start` win下会有权限的窗口提醒，需要确认。 
+`startDaemon` `stop` `start` `restart` 命令都需要管理员权限，linux or mac下使用 `sudo fd-server start` win下会有权限的窗口提醒，需要确认。 
 
 ---
 ### 贡献
