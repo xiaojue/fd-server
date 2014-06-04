@@ -40,7 +40,7 @@
     "file-size": "*",
     "file-size-watcher": "*",
     "forever": "*",
-    "gaze": "^0.6.4",
+    "gaze": "0.5.1",
     "hosts-group": "*",
     "log4js": "*",
     "node-sass": "^0.8.6",
@@ -48,8 +48,6 @@
     "nproxy": "git://github.com/xiaojue/nproxy.git#10bcbd07624fb36fda261508f43f83c25f247ff3",
     "request": "*",
     "rimraf": "*",
-    "sass": "^0.5.0",
-    "sass-wrapper": "0.0.4",
     "sheller": "*",
     "socket.io": "0.8.7"
   },
