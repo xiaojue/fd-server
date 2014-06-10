@@ -1,6 +1,6 @@
 {
   "name": "fd-server",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "a simple, efficient, convenient RIA development environment",
   "keywords": [
     "static",
@@ -43,7 +43,7 @@
     "gaze": "0.5.1",
     "hosts-group": "*",
     "log4js": "*",
-    "node-sass": "^0.8.6",
+    "node-sass": "0.8.6",
     "node-static": ">= 0.7.3",
     "nproxy": "git://github.com/xiaojue/nproxy.git#10bcbd07624fb36fda261508f43f83c25f247ff3",
     "request": "*",
