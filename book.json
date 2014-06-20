@@ -1,0 +1,14 @@
+{
+	"links":{
+		"home":"https://github.com/SinaBlogFE/fd-server",
+		"about":"https://github.com/SinaBlogFE/fd-server",
+		"issues":"https://github.com/SinaBlogFE/fd-server/issues"
+	},
+	"pluginsConfig":{
+		"fontSettings":{
+			"theme":"white",
+			"family":"sans",
+			"size":1
+		}
+	}
+}
