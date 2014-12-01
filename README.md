@@ -1,7 +1,7 @@
 # fd-server
-[![Build Status](https://travis-ci.org/SinaBlogFE/fd-server.png?branch=master)](https://travis-ci.org/SinaBlogFE/fd-server) 
-[![依赖模块状态](https://david-dm.org/SinaBlogFE/fd-server.png)](http://david-dm.org/SinaBlogFE/fd-server)
-[![浏览数](https://sourcegraph.com/api/repos/github.com/SinaBlogFE/fd-server/counters/views.png?no-count)](https://sourcegraph.com/github.com/SinaBlogFE/fd-server)
+[![Build Status](https://travis-ci.org/SBFE/fd-server.png?branch=master)](https://travis-ci.org/SBFE/fd-server) 
+[![依赖模块状态](https://david-dm.org/SBFE/fd-server.png)](http://david-dm.org/SBFE/fd-server)
+[![浏览数](https://sourcegraph.com/api/repos/github.com/SBFE/fd-server/counters/views.png?no-count)](https://sourcegraph.com/github.com/SBFE/fd-server)
 
 
 Fds 是一套统一的本地开发环境，面向工程化的前端开发项目。简化开发人员生产时对服务配置的依赖，提高前端开发人员的开发效率。面向自动化的项目流程管理，交付，测试。减少复杂的人工操作。自身包含的扩展机制，也能够提供给开发者灵活多变的个性化服务定制方案, 同时Fds也是一套跨平台的本地开发环境，完美支持win,linux,mac os。
@@ -10,7 +10,7 @@ Fds 是一套统一的本地开发环境，面向工程化的前端开发项目�
 
 ### 下载安装
 
-[安装wiki](https://github.com/SinaBlogFE/fd-server/wiki/fd-server-install)
+[安装wiki](https://github.com/SBFE/fd-server/wiki/fd-server-install)
 
 ---
 
@@ -46,7 +46,7 @@ $ sudo fd-server start
 ```
 启动完成之后可访问 `http://fd.server` 访问服务配置页面。
 
-[浏览器代理配置帮助](https://github.com/liuxiaoyue/fd-server/wiki/%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AE%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A3%E7%90%86)
+[浏览器代理配置帮助](https://github.com/SEFB/fd-server/wiki/%E5%A6%82%E4%BD%95%E8%AE%BE%E7%BD%AE%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A3%E7%90%86)
 
 ### 扩展接口
 
@@ -71,19 +71,20 @@ route(function(req,res){
 ### 贡献
 ```
  project  : fd-server
- repo age : 3 months
- active   : 58 days
- commits  : 370
- files    : 155
+ repo age : 10 months
+ active   : 65 days
+ commits  : 404
+ files    : 158
  authors  : 
-   127	fu                      34.3%
-    70	liuxiaoyue              18.9%
-    67	RK-WJW                  18.1%
-    46	Your Name               12.4%
-    41	xiaojue                 11.1%
-    17	Xiaojue                 4.6%
-     1	myluluy                 0.3%
-     1	root                    0.3%
+   127  fu                      31.4%
+    79  RK-WJW                  19.6%
+    70  liuxiaoyue              17.3%
+    59  xiaojue                 14.6%
+    46  Your Name               11.4%
+    19  Xiaojue                 4.7%
+     2  RK_CODER                0.5%
+     1  myluluy                 0.2%
+     1  root                    0.2%
 ```
 ---
 
