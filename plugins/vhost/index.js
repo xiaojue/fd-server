@@ -172,7 +172,6 @@ function setupVhost(cb) {
 }
 
 module.exports = function(fds) {
-
   return {
     start: function(cb) {
       var configManager = fds.configManager;
@@ -201,8 +200,21 @@ module.exports = function(fds) {
 
       setupVhost(cb);
     },
-    stop: function() {
-
+    stop: function(cb) {
+      if(!statics.length){
+        cb();
+        return; 
+      }
+      async.each(statics,function(server,callback){
+        staticsSockets.forEach(function(socket){
+          socket.destroy(); 
+        });
+        staticsSockets = [];
+        server.close(callback);
+      },function(){
+        statics = []; 
+        cb();
+      });
     }
   };
 };
