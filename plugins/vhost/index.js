@@ -23,7 +23,7 @@ var async = require("async");
 var vm = require('vm');
 var qs = require('querystring');
 var sass = require('node-sass');
-//var watch = require('./watch');
+var logger = require('../../lib/log/logger');
 var r;
 
 var portrange = 45032;
@@ -44,13 +44,11 @@ function getPort(cb) {
   });
 }
 
-function matchProxy(req) {
-  if (fs.existsSync(listFilePath)) {
-    var proxylist;
-    delete require.cache[require.resolve(listFilePath)];
-    proxylist = require(listFilePath);
+function matchProxy(fds,req) {
+    var proxylist = fds.configManager.getJson().proxy;
     for (var i = 0; i < proxylist.length; i++) {
       var proxy = proxylist[i];
+      if(proxy.disabled) continue;
       var url = 'http://' + req.headers.host + req.url;
       var matched = url.match(proxy.pattern);
       if (proxy.pattern == url || matched) {
@@ -62,7 +60,6 @@ function matchProxy(req) {
         }
       }
     }
-  }
   return false;
 }
 function catchProxy(req, res) {
@@ -88,12 +85,7 @@ function isNode(req) {
 function isSass(req) {
   return Path.extname(url.parse(req.url).pathname) == '.scss';
 }
-function isWatch(req) {
-  return req.url == '/watch';
-}
-function isLiveLoad(req) {
-  return req.url == '/liveload';
-}
+
 function runSass(file, req, res) {
   var dirname = Path.dirname(file);
   sass.render({
@@ -148,26 +140,28 @@ function readDirFile(req, files, dirs) {
   return responseStruc;
 }
 
-function bindStatic(fileServer, openOnlineProxy, req, res, path) {
+function bindStatic(fileServer, openOnlineProxy, req, res, path,fds) {
   req.addListener('end', function() {
     var filename = fileServer.resolve(decodeURI(url.parse(req.url).pathname));
     //缺少rewrite规则
-    if (matchProxy(req)) {
+    if (matchProxy(fds,req)) {
       catchProxy(req, res);
       return;
     }
-    if (isNode(req) && fs.existsSync(file)) {
+    if (isNode(req) && fs.existsSync(filename)) {
       runNode(filename, req, res);
       return;
     }
-    if (isSass(req) && fs.existsSync(file)) {
+    if (isSass(req) && fs.existsSync(filename)) {
       runSass(filename, req, res);
       return;
     }
+    /*
     if (isLiveLoad(req)) {
       runLiveLoad(req, res);
       return;
     }
+    */
     fileServer.serve(req, res, function(err, result) {
       if (err && (err.status === 404)) {
         if (openOnlineProxy === 0) {
@@ -248,7 +242,7 @@ function setupVhost(fds, cb) {
           });
           res.end(err.toString());
         });
-        bindStatic(fileServer, openOnlineProxy, req, res, path);
+        bindStatic(fileServer, openOnlineProxy, req, res, path,fds);
       });
       httpServer.on('error', function(err) {
         logger.error(err);
