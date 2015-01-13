@@ -1,5 +1,6 @@
 # fd-server
 [![Build Status](https://travis-ci.org/SBFE/fd-server.png?branch=master)](https://travis-ci.org/SBFE/fd-server) 
+[![NPM Version](http://img.shields.io/npm/v/fd-server.svg?style=flat)](https://www.npmjs.org/package/fd-server)
 [![依赖模块状态](https://david-dm.org/SBFE/fd-server.png)](http://david-dm.org/SBFE/fd-server)
 [![浏览数](https://sourcegraph.com/api/repos/github.com/SBFE/fd-server/counters/views.png?no-count)](https://sourcegraph.com/github.com/SBFE/fd-server)
 
