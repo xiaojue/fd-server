@@ -5,7 +5,6 @@
  */
 
 var vhosts = [],
-routeList = {},
 statics = [],
 staticsSockets = [];
 
@@ -17,6 +16,8 @@ var sys = os.platform();
 var http = require('http');
 var url = require('url');
 var Path = require("path");
+var dns = require("dns");
+var request = require('request');
 var async = require("async");
 
 var portrange = 45032;
@@ -41,7 +42,6 @@ function bindStatic(fileServer, openOnlineProxy, req, res, path) {
   req.addListener('end', function() {
     var filename = fileServer.resolve(decodeURI(url.parse(req.url).pathname));
     fileServer.serve(req, res, function(err, result) {
-      console.log(err);
       if (err && (err.status === 404)) {
         if (openOnlineProxy === 0) {
           var structure, files, dirs, flag, html;
@@ -96,7 +96,7 @@ function bindStatic(fileServer, openOnlineProxy, req, res, path) {
   }).resume();
 }
 
-function setupVhost(cb) {
+function setupVhost(fds,cb) {
   var len = vhosts.length;
   if (!len) {
     cb();
@@ -154,14 +154,14 @@ function setupVhost(cb) {
         });
       });
       getPort(function(port) {
-        routeList[domain] = port;
+        fds.addRouter(domain,port);
         statics.push(httpServer);
         //设置域名
         httpServer.listen(port, callback);
       });
     } else if (port) {
       //配置端口转发  
-      routeList[domain] = port;
+      fds.addRouter(domain,port);
       callback();
     } else {
       logger.error(path + ' 不存在');
@@ -183,6 +183,7 @@ module.exports = function(fds) {
       }
 
       vhosts = [];
+      fds.clearRouter();
 
       for (var i in config.vhost) {
         var v = config.vhost[i];
@@ -197,8 +198,7 @@ module.exports = function(fds) {
       vhosts = vhosts.filter(function(item) {
         return item.status;
       });
-
-      setupVhost(cb);
+      setupVhost(fds,cb);
     },
     stop: function(cb) {
       if(!statics.length){
