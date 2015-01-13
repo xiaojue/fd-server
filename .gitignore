@@ -7,6 +7,7 @@ node_modules/*
 .DS_Store
 lib/log/_conf.json
 lib/server/proxy_list.js
+plugins/proxy/proxy_list.js
 log/*
 config.json
 localConfig.json
