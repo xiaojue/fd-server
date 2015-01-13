@@ -18,29 +18,156 @@ var url = require('url');
 var Path = require("path");
 var dns = require("dns");
 var request = require('request');
+var dstruc = require('dstruc');
 var async = require("async");
+var vm = require('vm');
+var qs = require('querystring');
+var sass = require('node-sass');
+//var watch = require('./watch');
+var r;
 
 var portrange = 45032;
- 
-function getPort (cb) {
+
+function getPort(cb) {
   var port = portrange;
   portrange += 1;
- 
+
   var server = net.createServer();
-  server.on('error', function (err) {
+  server.on('error', function(err) {
     getPort(cb);
   });
-  server.listen(port, function (err) {
-    server.once('close', function () {
+  server.listen(port, function(err) {
+    server.once('close', function() {
       cb(port);
     });
     server.close();
   });
 }
 
+function matchProxy(req) {
+  if (fs.existsSync(listFilePath)) {
+    var proxylist;
+    delete require.cache[require.resolve(listFilePath)];
+    proxylist = require(listFilePath);
+    for (var i = 0; i < proxylist.length; i++) {
+      var proxy = proxylist[i];
+      var url = 'http://' + req.headers.host + req.url;
+      var matched = url.match(proxy.pattern);
+      if (proxy.pattern == url || matched) {
+        var target = url.replace(new RegExp(proxy.pattern), proxy.responder);
+        //看本地是否存在，否则会陷入代理死循环
+        if ((/^http|https/).test(target)) return true;
+        else {
+          return fs.existsSync(target);
+        }
+      }
+    }
+  }
+  return false;
+}
+function catchProxy(req, res) {
+  if (req.method == 'GET') {
+    r.get('http://' + req.headers.host + req.url).pipe(res);
+  } else if (req.method == 'POST') {
+    var body = '';
+    req.on('data', function(data) {
+      body += data;
+    });
+    req.on('end', function() {
+      r.post({
+        url: 'http://' + req.headers.host + req.url,
+        body: body,
+        headers: req.headers
+      }).pipe(res);
+    });
+  }
+}
+function isNode(req) {
+  return Path.extname(url.parse(req.url).pathname) == '.node';
+}
+function isSass(req) {
+  return Path.extname(url.parse(req.url).pathname) == '.scss';
+}
+function isWatch(req) {
+  return req.url == '/watch';
+}
+function isLiveLoad(req) {
+  return req.url == '/liveload';
+}
+function runSass(file, req, res) {
+  var dirname = Path.dirname(file);
+  sass.render({
+    file: file,
+    success: function(css) {
+      res.writeHeader(200, {
+        'Content-Type': 'text/css'
+      });
+      res.end(css);
+    },
+    error: function(error) {
+      res.writeHeader(500, {
+        'Content-Type': 'text/html'
+      });
+      res.end(error.toString());
+    },
+    includePaths: [dirname],
+    outputStyle: 'nested'
+  });
+}
+function runNode(file, req, res) {
+  var code = fs.readFileSync(file, 'utf-8');
+  var dirname = Path.dirname(file);
+  vm.runInNewContext(code, {
+    logger: logger,
+    Buffer: Buffer,
+    '__dirname': dirname,
+    addModule: function(mod) {
+      return require(dirname + '/node_modules/' + mod);
+    },
+    require: require,
+    route: function(run) {
+      run(req, res);
+    }
+  });
+}
+function readDirFile(req, files, dirs) {
+  var responseStruc = "<a href='../'>../</a><br/>",
+  path;
+  if (files && files.length > 0) {
+    for (var i = 0; i < files.length; i++) {
+      path = Path.join(req.url, files[i]);
+      responseStruc += '<a href="http://' + req.headers.host + path + '">' + files[i] + '</a><br/>';
+    }
+  }
+  if (dirs) {
+    for (var j = 0; j < dirs.length; j++) {
+      path = Path.join(req.url, dirs[j]);
+      responseStruc += '<a href ="http://' + req.headers.host + path + '/">' + dirs[j] + '/' + '</a><br/>';
+    }
+  }
+  return responseStruc;
+}
+
 function bindStatic(fileServer, openOnlineProxy, req, res, path) {
   req.addListener('end', function() {
     var filename = fileServer.resolve(decodeURI(url.parse(req.url).pathname));
+    //缺少rewrite规则
+    if (matchProxy(req)) {
+      catchProxy(req, res);
+      return;
+    }
+    if (isNode(req) && fs.existsSync(file)) {
+      runNode(filename, req, res);
+      return;
+    }
+    if (isSass(req) && fs.existsSync(file)) {
+      runSass(filename, req, res);
+      return;
+    }
+    if (isLiveLoad(req)) {
+      runLiveLoad(req, res);
+      return;
+    }
     fileServer.serve(req, res, function(err, result) {
       if (err && (err.status === 404)) {
         if (openOnlineProxy === 0) {
@@ -96,7 +223,7 @@ function bindStatic(fileServer, openOnlineProxy, req, res, path) {
   }).resume();
 }
 
-function setupVhost(fds,cb) {
+function setupVhost(fds, cb) {
   var len = vhosts.length;
   if (!len) {
     cb();
@@ -121,27 +248,6 @@ function setupVhost(fds,cb) {
           });
           res.end(err.toString());
         });
-        var file = Path.join(path, url.parse(req.url).pathname);
-        /*
-        //缺少rewrite规则
-        if (matchProxy(req)) {
-          catchProxy(req, res);
-          return;
-        }
-        if (isNode(req) && fs.existsSync(file)) {
-          runNode(file, req, res);
-          return;
-        }
-        if (isSass(req) && fs.existsSync(file)) {
-          runSass(file, req, res);
-          return;
-        }
-        if (isLiveLoad(req)) {
-          runLiveLoad(req,res);
-          return;
-        }
-        //透明代理
-        */
         bindStatic(fileServer, openOnlineProxy, req, res, path);
       });
       httpServer.on('error', function(err) {
@@ -154,14 +260,14 @@ function setupVhost(fds,cb) {
         });
       });
       getPort(function(port) {
-        fds.addRouter(domain,port);
+        fds.addRouter(domain, port);
         statics.push(httpServer);
         //设置域名
         httpServer.listen(port, callback);
       });
     } else if (port) {
       //配置端口转发  
-      fds.addRouter(domain,port);
+      fds.addRouter(domain, port);
       callback();
     } else {
       logger.error(path + ' 不存在');
@@ -176,6 +282,10 @@ module.exports = function(fds) {
     start: function(cb) {
       var configManager = fds.configManager;
       var config = configManager.getJson();
+      var sysconfig = configManager.sysconfig;
+      r = request.defaults({
+        'proxy': 'http://' + sysconfig.nproxy.host + ':' + sysconfig.nproxy.port
+      });
 
       if (!config.vhost) {
         config.vhost = {};
@@ -198,21 +308,22 @@ module.exports = function(fds) {
       vhosts = vhosts.filter(function(item) {
         return item.status;
       });
-      setupVhost(fds,cb);
+      setupVhost(fds, cb);
     },
     stop: function(cb) {
-      if(!statics.length){
+      if (!statics.length) {
         cb();
-        return; 
+        return;
       }
-      async.each(statics,function(server,callback){
-        staticsSockets.forEach(function(socket){
-          socket.destroy(); 
+      async.each(statics, function(server, callback) {
+        staticsSockets.forEach(function(socket) {
+          socket.destroy();
         });
         staticsSockets = [];
         server.close(callback);
-      },function(){
-        statics = []; 
+      },
+      function() {
+        statics = [];
         cb();
       });
     }
