@@ -7,9 +7,10 @@ var nproxy = require("nproxy");
 var fs = require('fs');
 var path = require('path');
 var async = require("async");
+var logger = require('../../lib/log/logger');
 
 var proxyListFilePath = path.join(__dirname, 'proxy_list.js');
-var proxyPort = 8989;
+var proxyPort = null;
 var proxyServer = null;
 var noop = function (){};
 /**
@@ -18,7 +19,7 @@ var noop = function (){};
 function runProxy(proxy, cb){
     var fileContent = "module.exports = " + JSON.stringify(proxy, null, 4) + ";";
     fs.writeFileSync(proxyListFilePath, fileContent);
-    proxyServer = nproxy(proxyPort, {
+    proxyServer = nproxy(proxyPort.port, {
         "responderListFilePath": proxyListFilePath,
         "debug": false
     });
@@ -49,7 +50,7 @@ function stopProxy(cb){
             }
         },
         function() {
-            self.proxyServer = null;
+            proxyServer = null;
             //fs.unlinkSync(listFilePath);
             if (cb) cb();
         });
@@ -57,37 +58,43 @@ function stopProxy(cb){
 }
 
 module.exports = function (fds){
-    var configManager = fds.configManager;
-    var config = configManager.getJson();
-
-    if(!config.proxy){
-        config.proxy = [];
-        configManager.set(config);
-    }
-
-    var getProxyList = function (proxylist){
-        var proxy = [], i, item;
-        for(i = 0; i < proxylist.length; i++){
-            item = proxylist[i];
-            if(!item.disabled){
-                proxy.push(item);
-            }
-        }
-        return proxy;
-    };
 
     return {
         start: function (cb){
+            logger.info("proxy start ...");
+            var configManager = fds.configManager;
+            var config = configManager.getJson();
+            var sysConfig = configManager.sysconfig;
+
+            if(!config.proxy){
+                config.proxy = [];
+                configManager.set(config);
+            }
+            proxyPort = sysConfig.nproxy || {
+                "host":"127.0.0.1",
+                "port":8989
+            };
+            var getProxyList = function (proxylist){
+                var proxy = [], i, item;
+                for(i = 0; i < proxylist.length; i++){
+                    item = proxylist[i];
+                    if(!item.disabled){
+                        proxy.push(item);
+                    }
+                }
+                return proxy;
+            };
             runProxy(getProxyList(config.proxy), cb);
 
-            configManager.on('change', function (json){
+            /*configManager.on('change', function (json){
                 // console.log(arguments);
                 stopProxy(function (){
                     runProxy(getProxyList(config.proxy), noop);
                 });
-            });
+            });*/
         },
         stop: function (cb){
+            logger.info("proxy stop ...");
             stopProxy(cb);
         }
     };
