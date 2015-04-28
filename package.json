@@ -37,7 +37,7 @@
     "dstruc": "*",
     "ejs": "*",
     "express": "3.4.8",
-    "file-size": "*",
+    "file-size": "0.0.3",
     "file-size-watcher": "*",
     "forever": "*",
     "gaze": "0.5.1",
